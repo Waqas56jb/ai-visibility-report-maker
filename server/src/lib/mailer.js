@@ -9,6 +9,10 @@ function smtpConfigured() {
   return Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
 }
 
+function smtpPass() {
+  return String(process.env.SMTP_PASS || '').replace(/[\s-]/g, '');
+}
+
 function getTransport() {
   if (transport !== undefined) return transport;
   if (!smtpConfigured()) {
@@ -22,12 +26,12 @@ function getTransport() {
   const port = Number(process.env.SMTP_PORT || 587);
   const secure = process.env.SMTP_SECURE === 'true' || port === 465;
   transport = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
     port,
     secure,
     auth: {
       user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+      pass: smtpPass(),
     },
   });
   return transport;
