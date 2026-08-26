@@ -37,7 +37,7 @@ export default function AppLayout() {
       .catch(() => setReportCount(0));
   }, [user, pathname]);
 
-  if (loading) {
+  if (loading && !user) {
     return (
       <div className="app-content">
         <Skeleton />

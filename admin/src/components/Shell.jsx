@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
-  BookOpen,
   FileBarChart,
   LayoutDashboard,
   LogOut,
@@ -9,6 +8,7 @@ import {
   RefreshCw,
   Search,
   Settings2,
+  UserRound,
   Users,
 } from 'lucide-react';
 import Brand from './Brand.jsx';
@@ -23,6 +23,7 @@ const TITLES = {
   '/': 'Dashboard',
   '/reports': 'Reports',
   '/leads': 'Leads',
+  '/users': 'Users',
   '/settings': 'Settings',
 };
 
@@ -33,7 +34,7 @@ export default function Shell() {
   const location = useLocation();
   const [sideOpen, setSideOpen] = useState(false);
   const [search, setSearch] = useState('');
-  const [counts, setCounts] = useState({ reports: 0, leads: 0 });
+  const [counts, setCounts] = useState({ reports: 0, leads: 0, users: 0 });
   const [refreshKey, setRefreshKey] = useState(0);
   const [drawerId, setDrawerId] = useState(null);
 
@@ -46,10 +47,14 @@ export default function Shell() {
 
   useEffect(() => {
     let live = true;
-    Promise.all([api.reports(), api.leads()])
-      .then(([r, l]) => {
+    Promise.all([api.reports(), api.leads(), api.users()])
+      .then(([r, l, u]) => {
         if (!live) return;
-        setCounts({ reports: r.total ?? r.items?.length ?? 0, leads: l.total ?? l.items?.length ?? 0 });
+        setCounts({
+          reports: r.total ?? r.items?.length ?? 0,
+          leads: l.total ?? l.items?.length ?? 0,
+          users: u.total ?? u.items?.length ?? 0,
+        });
       })
       .catch(() => {});
     return () => {
@@ -64,7 +69,7 @@ export default function Shell() {
 
   function onSearch(value) {
     setSearch(value);
-    if (location.pathname !== '/reports' && location.pathname !== '/leads') {
+    if (location.pathname !== '/reports' && location.pathname !== '/leads' && location.pathname !== '/users') {
       navigate('/reports');
     }
   }
@@ -97,22 +102,13 @@ export default function Shell() {
             <NavLink to="/leads">
               <Users className="lucide svg" /> Leads <span className="cnt">{counts.leads}</span>
             </NavLink>
+            <NavLink to="/users">
+              <UserRound className="lucide svg" /> Users <span className="cnt">{counts.users}</span>
+            </NavLink>
             <div className="sec">System</div>
             <NavLink to="/settings">
               <Settings2 className="lucide svg" /> Settings
             </NavLink>
-            <a
-              href="https://makeflow.com.au"
-              target="_blank"
-              rel="noreferrer"
-              onClick={(e) => {
-                e.preventDefault();
-                toast('Docs open in a new tab');
-                window.open('https://makeflow.com.au', '_blank', 'noreferrer');
-              }}
-            >
-              <BookOpen className="lucide svg" /> Documentation
-            </a>
           </nav>
           <div className="usr">
             {user?.avatar_url ? <img src={user.avatar_url} alt="" /> : <div className="av">{initials(name)}</div>}

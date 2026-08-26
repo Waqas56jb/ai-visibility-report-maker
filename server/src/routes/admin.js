@@ -4,6 +4,7 @@ import { requireUser, requireAdmin } from '../middleware/auth.js';
 import { startPipeline } from '../lib/pipeline.js';
 import { mapAdminReport, mapQueryRow, mapReport, domainOf, usageCost } from '../lib/map.js';
 import { defaultSettingsPayload, saveAdminSettings } from '../config/runtime.js';
+import { mergeSite, defaultSite } from '../config/site.js';
 import { buildPdfBuffer, pdfFilename, sendPdf } from '../lib/renderPdf.js';
 
 const router = Router();
@@ -45,16 +46,23 @@ router.get('/stats', async (_req, res, next) => {
     const d30 = new Date(now - 30 * 86400000).toISOString();
     const d60 = new Date(now - 60 * 86400000).toISOString();
 
-    const [{ data: reports, error: rErr }, { data: leads, error: lErr }] = await Promise.all([
+    const [{ data: reports, error: rErr }, { data: leads, error: lErr }, profilesRes] = await Promise.all([
       supabase
         .from('reports')
-        .select('id, status, progress_step, overall_score, score_band, metrics, token_usage, created_at, completed_at, business_name, website, error')
+        .select('id, status, progress_step, overall_score, score_band, metrics, token_usage, created_at, completed_at, business_name, website, error, industry, city_region, user_id')
         .order('created_at', { ascending: false })
         .limit(2000),
-      supabase.from('leads').select('id, business_name, created_at, email').order('created_at', { ascending: false }).limit(200),
+      supabase.from('leads').select('id, business_name, created_at, email, source, industry, location').order('created_at', { ascending: false }).limit(500),
+      supabase.from('profiles').select('id, created_at, role, blocked, email').limit(2000),
     ]);
     if (rErr) return res.status(400).json({ error: rErr.message });
     if (lErr) return res.status(400).json({ error: lErr.message });
+
+    let profiles = profilesRes.data || [];
+    if (profilesRes.error && String(profilesRes.error.message || '').includes('blocked')) {
+      const fallback = await supabase.from('profiles').select('id, created_at, role, email').limit(2000);
+      profiles = (fallback.data || []).map((p) => ({ ...p, blocked: false }));
+    }
 
     const rows = reports || [];
     const leadRows = leads || [];
@@ -62,10 +70,28 @@ router.get('/stats', async (_req, res, next) => {
     const prev30 = rows.filter((r) => r.created_at >= d60 && r.created_at < d30);
     const leads30 = leadRows.filter((l) => l.created_at >= d30);
     const done = last30.filter((r) => r.status === 'completed' && r.overall_score != null);
+    const failed30 = last30.filter((r) => r.status === 'failed');
+    const completed30 = last30.filter((r) => r.status === 'completed');
+    const processing = rows.filter((r) => r.status === 'processing' || r.status === 'queued').length;
     const avg = done.length ? Math.round(done.reduce((s, r) => s + r.overall_score, 0) / done.length) : 0;
     const spend = last30.reduce((s, r) => s + usageCost(r), 0);
     const avgCost = last30.filter((r) => usageCost(r) > 0);
     const avgPer = avgCost.length ? spend / avgCost.length : 0;
+    const users30 = profiles.filter((p) => p.created_at >= d30);
+    const prevUsers = profiles.filter((p) => p.created_at >= d60 && p.created_at < d30);
+
+    function topCounts(list, key, n = 6) {
+      const map = new Map();
+      list.forEach((row) => {
+        const k = String(row[key] || '').trim();
+        if (!k) return;
+        map.set(k, (map.get(k) || 0) + 1);
+      });
+      return [...map.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, n)
+        .map(([label, count]) => ({ label, count }));
+    }
 
     const days = [];
     for (let i = 13; i >= 0; i -= 1) {
@@ -76,13 +102,35 @@ router.get('/stats', async (_req, res, next) => {
         date: dayKey(d),
         label: ['S', 'M', 'T', 'W', 'T', 'F', 'S'][d.getDay()],
         count: 0,
+        completed: 0,
+        spend: 0,
+        leads: 0,
+        users: 0,
       });
+    }
+    function slotFor(iso) {
+      return days.find((x) => x.date === dayKey(iso));
     }
     rows
       .filter((r) => r.created_at >= d14)
       .forEach((r) => {
-        const slot = days.find((x) => x.date === dayKey(r.created_at));
-        if (slot) slot.count += 1;
+        const slot = slotFor(r.created_at);
+        if (!slot) return;
+        slot.count += 1;
+        if (r.status === 'completed') slot.completed += 1;
+        slot.spend += usageCost(r);
+      });
+    leadRows
+      .filter((l) => l.created_at >= d14)
+      .forEach((l) => {
+        const slot = slotFor(l.created_at);
+        if (slot) slot.leads += 1;
+      });
+    profiles
+      .filter((p) => p.created_at >= d14)
+      .forEach((p) => {
+        const slot = slotFor(p.created_at);
+        if (slot) slot.users += 1;
       });
 
     const bandOrder = ['Invisible', 'Barely visible', 'Getting there', 'Visible', 'Leading'];
@@ -128,6 +176,11 @@ router.get('/stats', async (_req, res, next) => {
       .slice(0, 8);
 
     const recent = rows.slice(0, 6);
+    const status_counts = [
+      { label: 'Completed', key: 'completed', count: rows.filter((r) => r.status === 'completed').length },
+      { label: 'In progress', key: 'processing', count: rows.filter((r) => r.status === 'processing' || r.status === 'queued').length },
+      { label: 'Failed', key: 'failed', count: rows.filter((r) => r.status === 'failed').length },
+    ];
 
     res.json({
       reports_30d: last30.length,
@@ -139,7 +192,20 @@ router.get('/stats', async (_req, res, next) => {
       avg_cost: Number(avgPer.toFixed(2)),
       reports_total: rows.length,
       leads_total: leadRows.length || rows.length,
-      per_day: days,
+      completed_30d: completed30.length,
+      failed_30d: failed30.length,
+      completion_rate: last30.length ? Math.round((completed30.length / last30.length) * 100) : 0,
+      in_progress: processing,
+      users_total: profiles.length,
+      users_30d: users30.length,
+      users_delta: pctChange(users30.length, prevUsers.length),
+      blocked_users: profiles.filter((p) => p.blocked).length,
+      admins: profiles.filter((p) => p.role === 'admin').length,
+      status_counts,
+      industries: topCounts(last30, 'industry'),
+      cities: topCounts(last30, 'city_region'),
+      lead_sources: topCounts(leadRows, 'source'),
+      per_day: days.map((d) => ({ ...d, spend: Number(d.spend.toFixed(2)) })),
       bands,
       recent,
       activity,
@@ -149,11 +215,38 @@ router.get('/stats', async (_req, res, next) => {
   }
 });
 
-router.get('/users', async (_req, res, next) => {
+router.get('/users', async (req, res, next) => {
   try {
-    const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false }).limit(200);
+    const q = String(req.query.search || '').toLowerCase().trim();
+    let { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false }).limit(500);
+    if (error && String(error.message || '').includes('blocked')) {
+      const fallback = await supabase.from('profiles').select('*').order('created_at', { ascending: false }).limit(500);
+      data = fallback.data;
+      error = fallback.error;
+    }
     if (error) return res.status(400).json({ error: error.message });
-    res.json({ items: data || [] });
+    const { data: reports } = await supabase.from('reports').select('user_id, status').limit(4000);
+    const counts = {};
+    const completed = {};
+    (reports || []).forEach((r) => {
+      counts[r.user_id] = (counts[r.user_id] || 0) + 1;
+      if (r.status === 'completed') completed[r.user_id] = (completed[r.user_id] || 0) + 1;
+    });
+    let items = (data || []).map((p) => ({
+      ...p,
+      blocked: Boolean(p.blocked),
+      reports_count: counts[p.id] || 0,
+      completed_count: completed[p.id] || 0,
+    }));
+    if (q) {
+      items = items.filter((p) =>
+        [p.email, p.first_name, p.last_name, p.company_name, p.role].join(' ').toLowerCase().includes(q)
+      );
+    }
+    if (req.query.role) items = items.filter((p) => p.role === req.query.role);
+    if (req.query.blocked === '1') items = items.filter((p) => p.blocked);
+    if (req.query.blocked === '0') items = items.filter((p) => !p.blocked);
+    res.json({ items, total: items.length });
   } catch (err) {
     next(err);
   }
@@ -161,11 +254,39 @@ router.get('/users', async (_req, res, next) => {
 
 router.patch('/users/:id', async (req, res, next) => {
   try {
-    const patch = {};
-    if (req.body.role) patch.role = req.body.role;
+    if (req.params.id === req.user.id && (req.body.blocked === true || req.body.role === 'user')) {
+      return res.status(400).json({ error: 'You cannot block or demote your own admin account.' });
+    }
+    const patch = { updated_at: new Date().toISOString() };
+    if (req.body.role === 'user' || req.body.role === 'admin') patch.role = req.body.role;
+    if (typeof req.body.blocked === 'boolean') {
+      patch.blocked = req.body.blocked;
+      patch.blocked_at = req.body.blocked ? new Date().toISOString() : null;
+    }
     const { data, error } = await supabase.from('profiles').update(patch).eq('id', req.params.id).select('*').single();
     if (error) return res.status(400).json({ error: error.message });
     res.json(data);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.delete('/users/:id', async (req, res, next) => {
+  try {
+    if (req.params.id === req.user.id) {
+      return res.status(400).json({ error: 'You cannot delete your own admin account.' });
+    }
+    const { data: profile, error: findErr } = await supabase.from('profiles').select('id, role').eq('id', req.params.id).maybeSingle();
+    if (findErr) return res.status(400).json({ error: findErr.message });
+    if (!profile) return res.status(404).json({ error: 'User not found.' });
+    await supabase.from('reports').delete().eq('user_id', req.params.id);
+    await supabase.from('competitors').delete().eq('user_id', req.params.id);
+    await supabase.from('businesses').delete().eq('user_id', req.params.id);
+    await supabase.from('leads').delete().eq('user_id', req.params.id);
+    await supabase.from('profiles').delete().eq('id', req.params.id);
+    const { error: authErr } = await supabase.auth.admin.deleteUser(req.params.id);
+    if (authErr) console.warn('auth delete', authErr.message);
+    res.json({ ok: true });
   } catch (err) {
     next(err);
   }
@@ -381,6 +502,7 @@ router.get('/settings', async (_req, res, next) => {
       services: data?.services || defaults.services,
       engine: { ...defaults.engine, ...(data?.engine || {}) },
       limits: { ...defaults.limits, ...(data?.limits || {}) },
+      site: mergeSite(defaultSite(), data?.site),
     });
   } catch (err) {
     next(err);

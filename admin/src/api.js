@@ -30,21 +30,44 @@ export function clearAuth() {
   localStorage.removeItem(USER_KEY);
 }
 
+export class ApiError extends Error {
+  constructor(message, status = 0) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+  }
+}
+
+function sessionExpired(session) {
+  const exp = Number(session?.expires_at);
+  if (!exp) return false;
+  return exp * 1000 < Date.now() + 20_000;
+}
+
+let refreshLock = null;
+
 async function refreshSession() {
   const session = getSession();
   if (!session?.refresh_token) return null;
-  const res = await fetch(`${BASE}/api/auth/refresh`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ refresh_token: session.refresh_token }),
-  });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok || !data.session) {
-    clearAuth();
-    return null;
-  }
-  setAuth(data.session, data.user);
-  return data;
+  if (refreshLock) return refreshLock;
+  refreshLock = (async () => {
+    try {
+      const res = await fetch(`${BASE}/api/auth/refresh`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh_token: session.refresh_token }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.session) return null;
+      setAuth(data.session, data.user || getUser());
+      return data;
+    } catch {
+      return null;
+    } finally {
+      refreshLock = null;
+    }
+  })();
+  return refreshLock;
 }
 
 export async function request(path, opts = {}) {
@@ -52,7 +75,12 @@ export async function request(path, opts = {}) {
   if (!opts.body || typeof opts.body === 'string' || opts.json !== false) {
     headers['Content-Type'] = 'application/json';
   }
-  const session = getSession();
+  let session = getSession();
+  if (sessionExpired(session)) {
+    const refreshed = await refreshSession();
+    if (refreshed?.session) session = refreshed.session;
+  }
+  session = getSession();
   if (session?.access_token) headers.Authorization = `Bearer ${session.access_token}`;
   const res = await fetch(`${BASE}${path}`, {
     method: opts.method || 'GET',
@@ -64,7 +92,7 @@ export async function request(path, opts = {}) {
     const refreshed = await refreshSession();
     if (refreshed) return request(path, { ...opts, _retry: true });
   }
-  if (!res.ok) throw new Error(data.error || 'Request failed');
+  if (!res.ok) throw new ApiError(data.error || 'Request failed', res.status);
   return data;
 }
 
@@ -73,6 +101,16 @@ export const api = {
   me: () => request('/api/auth/me'),
   logout: () => request('/api/auth/logout', { method: 'POST', body: {} }).catch(() => ({})),
   stats: () => request('/api/admin/stats'),
+  users: (params = {}) => {
+    const q = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== '' && v != null) q.set(k, v);
+    });
+    const qs = q.toString();
+    return request(`/api/admin/users${qs ? `?${qs}` : ''}`);
+  },
+  updateUser: (id, body) => request(`/api/admin/users/${id}`, { method: 'PATCH', body }),
+  deleteUser: (id) => request(`/api/admin/users/${id}`, { method: 'DELETE' }),
   reports: (params = {}) => {
     const q = new URLSearchParams();
     Object.entries(params).forEach(([k, v]) => {
@@ -95,13 +133,20 @@ export const api = {
   settings: () => request('/api/admin/settings'),
   saveSettings: (body) => request('/api/admin/settings', { method: 'PATCH', body }),
   downloadPdf: async (id, filename = 'MakeFlow-AI-Visibility-Report.pdf') => {
-    const session = getSession();
     const headers = {};
-    if (session?.access_token) headers.Authorization = `Bearer ${session.access_token}`;
-    const res = await fetch(`${BASE}/api/admin/reports/${id}/pdf`, { headers });
+    if (sessionExpired(getSession())) await refreshSession();
+    if (getSession()?.access_token) headers.Authorization = `Bearer ${getSession().access_token}`;
+    let res = await fetch(`${BASE}/api/admin/reports/${id}/pdf`, { headers });
+    if (res.status === 401) {
+      const refreshed = await refreshSession();
+      if (refreshed?.session) {
+        headers.Authorization = `Bearer ${getSession().access_token}`;
+        res = await fetch(`${BASE}/api/admin/reports/${id}/pdf`, { headers });
+      }
+    }
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
-      throw new Error(data.error || 'Download failed');
+      throw new ApiError(data.error || 'Download failed', res.status);
     }
     const blob = await res.blob();
     const a = document.createElement('a');

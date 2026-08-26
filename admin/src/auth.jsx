@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { api, clearAuth, getSession, getUser, setAuth } from './api.js';
+import { ApiError, api, clearAuth, getSession, getUser, setAuth } from './api.js';
 
 const AuthCtx = createContext(null);
 
@@ -9,8 +9,10 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     let live = true;
-    (async () => {
-      if (!getSession()?.access_token) {
+
+    async function hydrate() {
+      const session = getSession();
+      if (!session?.access_token && !session?.refresh_token) {
         if (live) setReady(true);
         return;
       }
@@ -24,17 +26,23 @@ export function AuthProvider({ children }) {
           setAuth(getSession(), data.user);
           setUser(data.user);
         }
-      } catch {
-        if (live) {
+      } catch (err) {
+        if (!live) return;
+        const status = err instanceof ApiError ? err.status : 0;
+        if (status === 401 || status === 403) {
           clearAuth();
           setUser(null);
         }
       } finally {
         if (live) setReady(true);
       }
-    })();
+    }
+
+    hydrate();
+    const id = window.setInterval(hydrate, 20 * 60 * 1000);
     return () => {
       live = false;
+      window.clearInterval(id);
     };
   }, []);
 

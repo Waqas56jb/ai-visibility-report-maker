@@ -15,7 +15,8 @@ export default function Login() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
-  if (ready && user) return <Navigate to="/" replace />;
+  if (user) return <Navigate to="/" replace />;
+  if (!ready) return <p className="loading">Checking session…</p>;
 
   async function submit(e) {
     e.preventDefault();

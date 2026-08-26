@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Play, ScanSearch, User } from 'lucide-react';
 import { goToCheck } from './Navbar.jsx';
+import { useSite } from '../store/site.jsx';
 
 const SIM_QS = [
   {
@@ -170,6 +171,8 @@ function Simulator() {
 
 export default function Hero() {
   const navigate = useNavigate();
+  const { content } = useSite();
+  const hero = content.hero || {};
 
   return (
     <section className="hero">
@@ -178,39 +181,35 @@ export default function Hero() {
       <div className="hero-grid" />
       <div className="wrap">
         <div className="hero-anim">
-          <span className="eyebrow">Free AI Visibility Report · Tested against ChatGPT</span>
+          <span className="eyebrow">{hero.eyebrow}</span>
           <h1>
-            When customers ask ChatGPT, does it <span className="hl">say your name?</span>
+            {hero.headline} <span className="hl">{hero.highlight}</span>
           </h1>
-          <p className="lead">
-            Thousands of Australians now ask AI assistants for recommendations before they search
-            Google. We run real customer questions through ChatGPT and show you exactly where your
-            business appears — and where your competitors do instead.
-          </p>
+          <p className="lead">{hero.lead}</p>
           <div className="hero-ctas">
             <button type="button" className="btn btn-grad" onClick={() => goToCheck(navigate, '/')}>
-              <ScanSearch className="lucide svg" /> Run my free report
+              <ScanSearch className="lucide svg" /> {hero.ctaPrimary}
             </button>
             <Link
               to="/report"
               className="btn btn-ghost"
               style={{ borderColor: 'rgba(255,255,255,.25)', color: '#fff' }}
             >
-              <Play className="lucide svg" /> See a sample report
+              <Play className="lucide svg" /> {hero.ctaSecondary}
             </Link>
           </div>
           <div className="hero-stats">
             <div>
-              <strong>40+</strong>
-              <span>real questions tested</span>
+              <strong>{hero.stat1n}</strong>
+              <span>{hero.stat1l}</span>
             </div>
             <div>
-              <strong>2 modes</strong>
-              <span>browsing & knowledge</span>
+              <strong>{hero.stat2n}</strong>
+              <span>{hero.stat2l}</span>
             </div>
             <div>
-              <strong>~3 min</strong>
-              <span>to your score & PDF</span>
+              <strong>{hero.stat3n}</strong>
+              <span>{hero.stat3l}</span>
             </div>
           </div>
         </div>

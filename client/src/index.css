@@ -38,7 +38,7 @@ svg.lucide{width:1em;height:1em;stroke-width:2;flex-shrink:0}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1;transform:none}
 .reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal,.hero-anim>*,.sim,.fade-in{opacity:1;transform:none}}
 :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
 
 /* NAV */
@@ -56,7 +56,7 @@ body.nav-open{overflow:hidden}
 .nav-links a{opacity:.8;transition:opacity .2s;white-space:nowrap}.nav-links a:hover{opacity:1}
 .nav-actions{display:flex;gap:10px;align-items:center;flex:none}
 .nav .btn-primary{background:#fff;color:var(--ink)}.nav.scrolled .btn-primary{background:var(--ink);color:#fff}
-.burger{display:none;font-size:22px;width:44px;height:44px;place-items:center;border-radius:12px;flex:none;flex-shrink:0;color:inherit}
+.burger{display:none;align-items:center;justify-content:center;font-size:22px;width:44px;height:44px;border-radius:12px;flex:none;flex-shrink:0;margin-left:auto;color:inherit}
 .nav.dark .burger{color:#fff}.nav.dark.scrolled .burger{color:var(--text)}
 .mobile-menu{display:none;position:fixed;inset:calc(72px + env(safe-area-inset-top,0px)) 0 0 0;background:var(--paper);z-index:49;padding:20px 20px max(24px,env(safe-area-inset-bottom));flex-direction:column;gap:4px;overflow-y:auto}
 .mobile-menu.open{display:flex}
@@ -64,7 +64,7 @@ body.nav-open{overflow:hidden}
 .mobile-menu a,.mobile-menu button:not(.btn){font-size:18px;font-weight:600;padding:14px 8px;border-bottom:1px solid var(--line);text-align:left;display:flex;align-items:center;gap:10px;width:100%;background:none}
 @media(max-width:1100px){
   .nav-links,.nav-actions{display:none!important}
-  .burger{display:grid}
+  .burger{display:flex}
   .nav .wrap{height:64px;gap:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
   .nav .logo{max-width:min(168px,calc(100vw - 92px))}
   .nav .logo img{height:26px;max-height:26px}

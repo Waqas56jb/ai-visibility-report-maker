@@ -3,6 +3,7 @@ import { applyEngineOverlay, settings } from './env.js';
 import { WEIGHTS } from './weights.js';
 import { EXCLUDED_NAMES } from './exclusions.js';
 import { SERVICES } from './services.js';
+import { defaultSite, mergeSite } from './site.js';
 
 export const WEIGHT_DEFS = [
   { key: 'mention', label: 'Mention rate' },
@@ -46,6 +47,7 @@ export function defaultSettingsPayload() {
       allowedOrigins: originsList(),
       exclusions: EXCLUDED_NAMES.map((n) => n.replace(/\b\w/g, (c) => c.toUpperCase())).join(', '),
     },
+    site: defaultSite(),
   };
 }
 
@@ -92,16 +94,39 @@ export async function loadAdminSettings() {
 }
 
 export async function saveAdminSettings(patch = {}) {
-  const current = defaultSettingsPayload();
+  const defaults = defaultSettingsPayload();
+  let existing = {};
+  try {
+    const { data } = await supabase.from('admin_settings').select('*').eq('id', 'default').maybeSingle();
+    existing = data || {};
+  } catch {
+    existing = {};
+  }
   const next = {
-    weights: patch.weights || current.weights,
-    services: patch.services || current.services,
-    engine: { ...current.engine, ...(patch.engine || {}) },
-    limits: { ...current.limits, ...(patch.limits || {}) },
+    weights: patch.weights || existing.weights || defaults.weights,
+    services: patch.services || existing.services || defaults.services,
+    engine: { ...defaults.engine, ...(existing.engine || {}), ...(patch.engine || {}) },
+    limits: { ...defaults.limits, ...(existing.limits || {}), ...(patch.limits || {}) },
+    site: mergeSite(defaults.site, existing.site, patch.site),
     updated_at: new Date().toISOString(),
   };
   applySaved(next);
   const { error } = await supabase.from('admin_settings').upsert({ id: 'default', ...next }).select('*').single();
   if (error) console.warn('admin_settings persist skipped:', error.message);
   return next;
+}
+
+export async function publicSitePayload() {
+  const defaults = defaultSite();
+  try {
+    const { data, error } = await supabase.from('admin_settings').select('site, updated_at').eq('id', 'default').maybeSingle();
+    if (error) throw error;
+    return {
+      ...mergeSite(defaults, data?.site),
+      updated_at: data?.updated_at || null,
+    };
+  } catch (err) {
+    console.warn('public site', err.message);
+    return { ...defaults, updated_at: null };
+  }
 }

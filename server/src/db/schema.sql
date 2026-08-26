@@ -10,6 +10,8 @@ create table if not exists public.profiles (
   avatar_url text,
   timezone text default 'Australia/Brisbane',
   role text default 'user' check (role in ('user', 'admin')),
+  blocked boolean default false,
+  blocked_at timestamptz,
   settings jsonb default '{}'::jsonb,
   accept_terms boolean default false,
   created_at timestamptz default now(),
@@ -115,8 +117,13 @@ create table if not exists public.admin_settings (
   services jsonb,
   engine jsonb,
   limits jsonb,
+  site jsonb,
   updated_at timestamptz default now()
 );
+
+alter table public.profiles add column if not exists blocked boolean default false;
+alter table public.profiles add column if not exists blocked_at timestamptz;
+alter table public.admin_settings add column if not exists site jsonb;
 
 create index if not exists reports_user_id_idx on public.reports (user_id, created_at desc);
 create index if not exists businesses_user_id_idx on public.businesses (user_id);

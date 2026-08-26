@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import Logo from './Logo.jsx';
 import { useAuth } from '../store/auth.js';
+import { useSite } from '../store/site.jsx';
 
 function scrollToId(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -34,6 +35,8 @@ export default function Navbar({ variant = 'landing' }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const user = useAuth((s) => s.user);
+  const { content } = useSite();
+  const navCta = content.navCta || 'Check my visibility';
   const dark = variant === 'landing';
 
   useEffect(() => {
@@ -102,7 +105,7 @@ export default function Navbar({ variant = 'landing' }) {
                 className="btn btn-primary btn-sm"
                 onClick={() => goToCheck(navigate, pathname)}
               >
-                Check my visibility
+                {navCta}
               </button>
             )}
           </div>
@@ -127,7 +130,7 @@ export default function Navbar({ variant = 'landing' }) {
               goToCheck(navigate, pathname);
             }}
           >
-            <ScanSearch className="lucide svg" /> Check my visibility
+            <ScanSearch className="lucide svg" /> {navCta}
           </button>
         )}
         <a href="#why" onClick={(e) => onSection(e, 'why')}>

@@ -1,17 +1,16 @@
 import { Link } from 'react-router-dom';
 import Logo from './Logo.jsx';
+import { useSite } from '../store/site.jsx';
 
 export default function Footer() {
+  const { content } = useSite();
   return (
     <footer>
       <div className="wrap">
         <div className="foot">
           <div>
             <Logo />
-            <p>
-              Australian AI studio. We make businesses visible to AI assistants and build the
-              chatbots and automations that turn that visibility into customers.
-            </p>
+            <p>{content.footerBlurb}</p>
           </div>
           <div>
             <h4>Product</h4>
@@ -57,8 +56,8 @@ export default function Footer() {
           </div>
         </div>
         <div className="foot-bottom">
-          <span>© 2026 MakeFlow Pty Ltd · makeflow.com.au</span>
-          <span>Results tested against ChatGPT · Scores vary over time</span>
+          <span>{content.footerCopy}</span>
+          <span>{content.footerNote}</span>
         </div>
       </div>
     </footer>

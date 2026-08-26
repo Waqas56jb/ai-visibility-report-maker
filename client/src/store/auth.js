@@ -1,47 +1,54 @@
 import { create } from 'zustand';
 import api from '../api/index.js';
-
-function persistSession(session, remember) {
-  const raw = JSON.stringify(session);
-  localStorage.removeItem('mf_session');
-  sessionStorage.removeItem('mf_session');
-  if (!session) return;
-  (remember ? localStorage : sessionStorage).setItem('mf_session', raw);
-}
+import { ApiError, getSession, getStoredUser, persistAuth, remembered, refreshSession } from '../api/client.js';
 
 export const useAuth = create((set, get) => ({
-  user: null,
-  session: null,
+  user: getStoredUser(),
+  session: getSession(),
   loading: true,
 
   async restore() {
-    const raw = localStorage.getItem('mf_session') || sessionStorage.getItem('mf_session');
-    if (!raw) {
+    const session = getSession();
+    const cached = getStoredUser();
+    if (!session?.access_token && !session?.refresh_token) {
+      persistAuth(null);
       set({ loading: false, user: null, session: null });
       return;
     }
+    if (cached) set({ user: cached, session, loading: true });
     try {
-      const session = JSON.parse(raw);
-      persistSession(session, Boolean(localStorage.getItem('mf_session')));
       const data = await api.me();
-      set({ user: data.user, session, loading: false });
-    } catch {
-      persistSession(null);
-      set({ user: null, session: null, loading: false });
+      const nextSession = getSession() || session;
+      persistAuth(nextSession, data.user, remembered());
+      set({ user: data.user, session: nextSession, loading: false });
+    } catch (err) {
+      const status = err instanceof ApiError ? err.status : 0;
+      if (status === 401 || status === 403) {
+        const recovered = await refreshSession();
+        if (recovered?.user) {
+          persistAuth(recovered.session, recovered.user, remembered());
+          set({ user: recovered.user, session: recovered.session, loading: false });
+          return;
+        }
+        persistAuth(null);
+        set({ user: null, session: null, loading: false });
+        return;
+      }
+      set({ user: cached || get().user, session, loading: false });
     }
   },
 
   async login(payload, remember = true) {
     const data = await api.login(payload);
-    persistSession(data.session, remember);
-    set({ user: data.user, session: data.session });
+    persistAuth(data.session, data.user, remember !== false);
+    set({ user: data.user, session: data.session, loading: false });
     return data.user;
   },
 
   async signup(payload) {
     const data = await api.signup(payload);
-    persistSession(data.session, true);
-    set({ user: data.user, session: data.session });
+    persistAuth(data.session, data.user, true);
+    set({ user: data.user, session: data.session, loading: false });
     return data.user;
   },
 
@@ -51,11 +58,13 @@ export const useAuth = create((set, get) => ({
     } catch {
       /* ignore */
     }
-    persistSession(null);
-    set({ user: null, session: null });
+    persistAuth(null);
+    set({ user: null, session: null, loading: false });
   },
 
   setUser(user) {
+    const session = getSession();
+    persistAuth(session, user, remembered());
     set({ user });
   },
 }));

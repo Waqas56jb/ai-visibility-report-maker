@@ -20,6 +20,7 @@ import Settings from './pages/app/Settings.jsx';
 import Help from './pages/app/Help.jsx';
 import { ToastProvider } from './lib/toast.jsx';
 import { useAuth } from './store/auth.js';
+import { SiteProvider } from './store/site.jsx';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -31,15 +32,22 @@ function ScrollToTop() {
 
 function AuthBoot() {
   const restore = useAuth((s) => s.restore);
+  const user = useAuth((s) => s.user);
   useEffect(() => {
     restore();
   }, [restore]);
+  useEffect(() => {
+    if (!user) return undefined;
+    const id = window.setInterval(() => restore(), 20 * 60 * 1000);
+    return () => window.clearInterval(id);
+  }, [user, restore]);
   return null;
 }
 
 export default function App() {
   return (
     <ToastProvider>
+      <SiteProvider>
       <BrowserRouter>
         <AuthBoot />
         <ScrollToTop />
@@ -67,6 +75,7 @@ export default function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      </SiteProvider>
     </ToastProvider>
   );
 }

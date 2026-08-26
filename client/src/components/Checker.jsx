@@ -5,6 +5,7 @@ import Reveal from './Reveal.jsx';
 import { useToast } from '../lib/toast.jsx';
 import { useAuth } from '../store/auth.js';
 import api from '../api/index.js';
+import { useSite } from '../store/site.jsx';
 
 const EMAIL_RE = /^\S+@\S+\.\S+$/;
 const URL_RE = /^https?:\/\/.+\..+/;
@@ -13,6 +14,8 @@ export default function Checker() {
   const navigate = useNavigate();
   const toast = useToast();
   const user = useAuth((s) => s.user);
+  const { content } = useSite();
+  const checker = content.checker || {};
   const [open, setOpen] = useState(false);
   const [bad, setBad] = useState({});
   const [values, setValues] = useState({
@@ -84,12 +87,11 @@ export default function Checker() {
     <section className="section checker" id="check">
       <div className="wrap">
         <Reveal>
-          <span className="eyebrow">Run the check</span>
-          <h2>Three details. One honest score.</h2>
+          <span className="eyebrow">{checker.eyebrow || 'Run the check'}</span>
+          <h2>{checker.title || 'Three details. One honest score.'}</h2>
           <p>
-            Tell us who you are and where your website lives. We crawl it, generate the questions
-            your customers really ask, test them against ChatGPT and hand you a full report — for
-            free.
+            {checker.lead ||
+              'Tell us who you are and where your website lives. We crawl it, generate the questions your customers really ask, test them against ChatGPT and hand you a full report — for free.'}
           </p>
           <ul>
             <li>
@@ -111,8 +113,8 @@ export default function Checker() {
           </ul>
         </Reveal>
         <Reveal delay="d1" className="form-card">
-          <h3>Check your AI visibility</h3>
-          <p className="sub">Takes about 3 minutes. No credit card, no spam.</p>
+          <h3>{checker.formTitle || 'Check your AI visibility'}</h3>
+          <p className="sub">{checker.formSub || 'Takes about 3 minutes. No credit card, no spam.'}</p>
           <form onSubmit={onSubmit} noValidate>
             <div className="field">
               <label>Business name</label>

@@ -6,11 +6,12 @@ import Login from './pages/Login.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Reports from './pages/Reports.jsx';
 import Leads from './pages/Leads.jsx';
+import Users from './pages/Users.jsx';
 import Settings from './pages/Settings.jsx';
 
 function Guard() {
   const { user, ready } = useAuth();
-  if (!ready) return <p className="loading">Checking session…</p>;
+  if (!ready && !user) return <p className="loading">Checking session…</p>;
   if (!user) return <Navigate to="/login" replace />;
   return <Outlet />;
 }
@@ -26,6 +27,7 @@ export default function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/leads" element={<Leads />} />
+              <Route path="/users" element={<Users />} />
               <Route path="/settings" element={<Settings />} />
             </Route>
           </Route>

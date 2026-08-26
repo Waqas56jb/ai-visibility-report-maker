@@ -31,7 +31,6 @@ svg.lucide{width:1em;height:1em;stroke-width:2;flex-shrink:0}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 4px rgba(79,70,229,.12)}
 .logo{display:flex;align-items:center;gap:10px;font-family:var(--font-d);font-weight:800;font-size:19px;min-width:0;max-width:min(220px,70vw)}
 .logo img{height:auto;width:auto;max-height:28px;max-width:100%;object-fit:contain;object-position:left center;display:block}
-.logo-on-dark{background:#fff;border-radius:10px;padding:6px 10px;max-width:min(200px,72vw)}
 .logo-admin{font-weight:500;opacity:.5;font-size:13px;margin-left:4px;font-family:var(--font-b)}
 .badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;white-space:nowrap}
 .badge.completed{background:#F0FDF4;color:#166534}.badge.failed{background:#FEF2F2;color:#B91C1C}.badge.queued{background:var(--paper);color:var(--text-2)}
@@ -196,4 +195,26 @@ td .lead strong{display:block;font-weight:500}td .lead span{font-size:12px;color
 .switch.on{background:var(--indigo)}.switch.on::after{left:21px}
 .opt{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px}
 .opt span{font-size:12px;color:var(--text-2);display:block}
-.loading{padding:40px;text-align:center;color:var(--text-2)}
+.page-tabs{margin-bottom:20px}
+.page-tabs button{display:inline-flex;align-items:center;gap:8px}
+.settings-stack{display:grid;grid-template-columns:1fr;gap:16px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.row2{grid-template-columns:1fr}}
+.faq-edit{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:12px;align-items:start}
+.faq-edit textarea,.faq-edit input{grid-column:1}
+.theme-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:700px){.theme-grid{grid-template-columns:1fr}}
+.swatch{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600}
+.swatch div{display:flex;gap:8px;align-items:center}
+.swatch input[type=color]{width:42px;height:36px;padding:0;border:1px solid var(--line-2);border-radius:8px;background:#fff}
+.swatch input[type=text],.swatch input:not([type=color]){flex:1;padding:10px 12px;border:1px solid var(--line-2);border-radius:10px;font-family:var(--font-m);font-size:13px}
+.theme-preview{margin-top:18px;border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:8px}
+.theme-preview em{align-self:flex-start;font-style:normal;color:#fff;padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600}
+.user-cell{display:flex;align-items:center;gap:10px}
+.user-cell .av,.user-cell img{width:36px;height:36px;border-radius:50%;object-fit:cover;background:var(--grad);display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff;flex:none}
+.role-pill{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:4px 8px;border-radius:6px;background:var(--paper)}
+.role-pill.admin{background:#EEF2FF;color:#3730A3}
+.row-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+tbody tr.no-click{cursor:default}
+tbody tr.no-click:hover{background:transparent}
+.field textarea{padding:12px 14px;border:1px solid var(--line-2);border-radius:10px;background:#fff;width:100%;resize:vertical;min-height:72px}

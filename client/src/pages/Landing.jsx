@@ -11,11 +11,15 @@ import FAQ from '../components/FAQ.jsx';
 import FinalCta from '../components/FinalCta.jsx';
 import Footer from '../components/Footer.jsx';
 import LandingStory from '../components/LandingStory.jsx';
+import { useSite } from '../store/site.jsx';
 
 export default function Landing() {
+  const { content } = useSite();
+  const cities = content.cities?.length ? content.cities : ['Brisbane', 'Sydney', 'Melbourne'];
+
   useEffect(() => {
-    document.title = 'MakeFlow — AI Visibility Report';
-  }, []);
+    document.title = content.documentTitle || 'MakeFlow — AI Visibility Report';
+  }, [content.documentTitle]);
 
   return (
     <>
@@ -24,13 +28,13 @@ export default function Landing() {
         <Hero />
         <div className="strip">
           <div className="wrap">
-            <span>Built on the same methodology used by AI search agencies</span>
+            <span>{content.strip}</span>
             <div className="marquee" aria-hidden="true">
               <div className="marquee-track">
-                {['Brisbane', 'Sydney', 'Melbourne', 'Perth', 'Adelaide', 'Gold Coast', 'Newcastle', 'Canberra'].map((c) => (
+                {cities.map((c) => (
                   <span key={c}>{c}</span>
                 ))}
-                {['Brisbane', 'Sydney', 'Melbourne', 'Perth', 'Adelaide', 'Gold Coast', 'Newcastle', 'Canberra'].map((c) => (
+                {cities.map((c) => (
                   <span key={`${c}-2`}>{c}</span>
                 ))}
               </div>

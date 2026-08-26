@@ -102,6 +102,9 @@ router.post('/login', async (req, res, next) => {
     });
     if (error) return res.status(401).json({ error: 'Invalid email or password.' });
     const profile = await upsertProfile(data.user);
+    if (profile?.blocked) {
+      return res.status(403).json({ error: 'This account has been blocked. Contact support.' });
+    }
     res.json(shapeUser(profile, data.session));
   } catch (err) {
     next(err);
@@ -161,6 +164,9 @@ router.post('/refresh', async (req, res, next) => {
     const { data, error } = await supabaseAnon.auth.refreshSession({ refresh_token });
     if (error) return res.status(401).json({ error: error.message });
     const { data: profile } = await supabase.from('profiles').select('*').eq('id', data.user.id).maybeSingle();
+    if (profile?.blocked) {
+      return res.status(403).json({ error: 'This account has been blocked. Contact support.' });
+    }
     res.json(shapeUser(profile, data.session));
   } catch (err) {
     next(err);

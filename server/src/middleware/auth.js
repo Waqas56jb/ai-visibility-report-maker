@@ -10,6 +10,9 @@ export async function requireUser(req, res, next) {
     if (error || !data?.user) return res.status(401).json({ error: 'Session expired. Please sign in again.' });
 
     const { data: profile } = await supabase.from('profiles').select('*').eq('id', data.user.id).maybeSingle();
+    if (profile?.blocked) {
+      return res.status(403).json({ error: 'This account has been blocked. Contact support.' });
+    }
     req.user = data.user;
     req.profile = profile;
     req.accessToken = token;

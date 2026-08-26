@@ -4,7 +4,8 @@ import cors from 'cors';
 import { supabase } from './supabase.js';
 import { mapReport } from './lib/map.js';
 import { resumeInFlight } from './lib/pipeline.js';
-import { loadAdminSettings } from './config/runtime.js';
+import { loadAdminSettings, publicSitePayload } from './config/runtime.js';
+import { ensureAdminColumns } from './db/ensure.js';
 import { buildPdfBuffer, pdfFilename, sendPdf } from './lib/renderPdf.js';
 import authRoutes from './routes/auth.js';
 import reportRoutes from './routes/reports.js';
@@ -40,6 +41,16 @@ app.use(
 app.use(express.json({ limit: '2mb' }));
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
+
+app.get('/api/public/site', async (_req, res, next) => {
+  try {
+    const site = await publicSitePayload();
+    res.set('Cache-Control', 'public, max-age=15');
+    res.json(site);
+  } catch (err) {
+    next(err);
+  }
+});
 
 app.use('/api/auth', authRoutes);
 app.use('/api/reports', reportRoutes);
@@ -88,11 +99,20 @@ app.use((err, _req, res, _next) => {
 });
 
 const port = Number(process.env.PORT) || 4000;
-loadAdminSettings()
+const onVercel = Boolean(process.env.VERCEL);
+
+ensureAdminColumns()
+  .then(() => loadAdminSettings())
   .catch((err) => console.warn('admin settings', err.message))
   .finally(() => {
+    if (onVercel) {
+      resumeInFlight();
+      return;
+    }
     app.listen(port, () => {
       console.log(`MakeFlow API on http://localhost:${port}`);
       resumeInFlight();
     });
   });
+
+export default app;

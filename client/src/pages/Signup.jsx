@@ -10,6 +10,7 @@ export default function Signup() {
   const navigate = useNavigate();
   const toast = useToast();
   const signup = useAuth((s) => s.signup);
+  const user = useAuth((s) => s.user);
   const submitting = useRef(false);
   const [values, setValues] = useState({
     first_name: '',
@@ -25,7 +26,8 @@ export default function Signup() {
 
   useEffect(() => {
     document.title = 'Create account — MakeFlow';
-  }, []);
+    if (user) navigate('/app/dashboard', { replace: true });
+  }, [user, navigate]);
 
   const set = (key) => (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
