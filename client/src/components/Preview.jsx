@@ -7,7 +7,7 @@ const CHIPS = [
   { icon: Table, label: 'Competitor share of voice' },
   { icon: AlertTriangle, label: 'Gap list with evidence' },
   { icon: ClipboardCheck, label: 'AI-readiness checklist' },
-  { icon: FileDown, label: 'Branded PDF' },
+  { icon: FileDown, label: 'Branded A4 PDF' },
 ];
 
 export default function Preview() {
@@ -23,10 +23,35 @@ export default function Preview() {
           </p>
         </Reveal>
         <Reveal delay="d1" className="preview-shot">
-          <img
-            src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1800&q=80"
-            alt="Report dashboard preview"
-          />
+          <div className="preview-paper" aria-hidden="true">
+            <div className="pp-head">
+              <span>MAKEFLOW</span>
+              <em>AI Visibility Report</em>
+              <b>Harbourview</b>
+            </div>
+            <div className="pp-hero">
+              <div className="pp-score">
+                <strong>23</strong>
+                <small>/100</small>
+              </div>
+              <div>
+                <span className="pp-band">Barely visible</span>
+                <p>Named in 11 of 42 opportunity questions. Competitors take discovery and comparison.</p>
+              </div>
+            </div>
+            <div className="pp-kpis">
+              <div><span>Mention</span><b>26%</b></div>
+              <div><span>Position</span><b>2.7</b></div>
+              <div><span>Citations</span><b>3</b></div>
+              <div><span>Readiness</span><b>44</b></div>
+            </div>
+            <div className="pp-rows">
+              <i style={{ width: '27%' }} />
+              <i style={{ width: '19%' }} />
+              <i style={{ width: '71%' }} />
+              <i style={{ width: '12%' }} />
+            </div>
+          </div>
         </Reveal>
         <Reveal delay="d2" className="chips">
           {CHIPS.map((c) => {
@@ -38,7 +63,7 @@ export default function Preview() {
             );
           })}
         </Reveal>
-        <Reveal delay="d3" style={{ textAlign: 'center', marginTop: 34 }}>
+        <Reveal delay="d3">
           <div style={{ textAlign: 'center', marginTop: 34 }}>
             <Link to="/report" className="btn btn-primary">
               <Eye className="lucide svg" /> Open the sample report

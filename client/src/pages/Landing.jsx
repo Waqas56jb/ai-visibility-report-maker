@@ -10,6 +10,7 @@ import Testimonials from '../components/Testimonials.jsx';
 import FAQ from '../components/FAQ.jsx';
 import FinalCta from '../components/FinalCta.jsx';
 import Footer from '../components/Footer.jsx';
+import LandingStory from '../components/LandingStory.jsx';
 
 export default function Landing() {
   useEffect(() => {
@@ -24,17 +25,20 @@ export default function Landing() {
         <div className="strip">
           <div className="wrap">
             <span>Built on the same methodology used by AI search agencies</span>
-            <div className="names">
-              <span>Brisbane</span>
-              <span>Sydney</span>
-              <span>Melbourne</span>
-              <span>Perth</span>
-              <span>Adelaide</span>
-              <span>Gold Coast</span>
+            <div className="marquee" aria-hidden="true">
+              <div className="marquee-track">
+                {['Brisbane', 'Sydney', 'Melbourne', 'Perth', 'Adelaide', 'Gold Coast', 'Newcastle', 'Canberra'].map((c) => (
+                  <span key={c}>{c}</span>
+                ))}
+                {['Brisbane', 'Sydney', 'Melbourne', 'Perth', 'Adelaide', 'Gold Coast', 'Newcastle', 'Canberra'].map((c) => (
+                  <span key={`${c}-2`}>{c}</span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
         <Checker />
+        <LandingStory />
         <HowItWorks />
         <Measure />
         <Preview />

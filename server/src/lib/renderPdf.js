@@ -4,16 +4,20 @@ import { settings } from '../config/env.js';
 import { SERVICES } from '../config/services.js';
 
 const INK = '#0B1020';
-const PAPER = '#F4F5FA';
-const LINE = '#E6E9F2';
+const PAPER = '#F3F4F8';
+const LINE = '#D9DEEA';
 const TEXT = '#0F172A';
-const MUTED = '#475569';
+const MUTED = '#5B6578';
 const CYAN = '#06B6D4';
 const INDIGO = '#4F46E5';
 const CORAL = '#F0625A';
 const AMBER = '#F5B84B';
 const MINT = '#22C55E';
 const WHITE = '#FFFFFF';
+const ML = 36;
+const MR = 36;
+const MT = 58;
+const MB = 46;
 
 function t(value) {
   return String(value ?? '')
@@ -32,357 +36,428 @@ function scoreColor(n) {
   return MINT;
 }
 
-function left(doc) {
-  return doc.page.margins.left;
+function cw(doc) {
+  return doc.page.width - ML - MR;
 }
 
-function innerWidth(doc) {
-  return doc.page.width - doc.page.margins.left - doc.page.margins.right;
-}
-
-function remaining(doc) {
-  return doc.page.height - doc.page.margins.bottom - doc.y;
+function rest(doc) {
+  return doc.page.height - MB - doc.y;
 }
 
 function need(doc, h) {
-  if (remaining(doc) < h) doc.addPage();
+  if (rest(doc) < h) doc.addPage();
 }
+
+function tx(doc, str, x, y, opts = {}) {
+  doc.font(opts.bold ? 'Helvetica-Bold' : 'Helvetica')
+    .fontSize(opts.size || 9)
+    .fillColor(opts.color || TEXT)
+    .text(t(str), x, y, {
+      width: opts.width,
+      align: opts.align || 'left',
+      lineGap: opts.lineGap ?? 1.5,
+      ellipsis: opts.ellipsis,
+      height: opts.height,
+    });
+  doc.x = ML;
+}
+
+function textH(doc, str, width, size, bold = false) {
+  return doc
+    .font(bold ? 'Helvetica-Bold' : 'Helvetica')
+    .fontSize(size)
+    .heightOfString(t(str), { width, lineGap: 1.5 });
+}
+
+let decorating = false;
 
 function decorate(doc, meta) {
-  const { width, height, margins } = doc.page;
-  const saved = { top: margins.top, bottom: margins.bottom, left: margins.left, right: margins.right };
+  if (decorating) return;
+  decorating = true;
+  const { width, height } = doc.page;
+  const saved = { ...doc.page.margins };
   doc.page.margins = { top: 0, bottom: 0, left: 0, right: 0 };
   doc.save();
-  doc.rect(0, 0, width, 46).fill(INK);
-  doc.rect(0, 46, width, 3).fill(CYAN);
-  doc.fillColor(WHITE).font('Helvetica-Bold').fontSize(10).text('MAKEFLOW', 42, 18, { lineBreak: false });
-  doc.fillColor('#67E8F9').font('Helvetica').fontSize(9).text('AI Visibility Report', 112, 18, { lineBreak: false });
-  doc.fillColor('#ffffffcc').fontSize(8).text(t(meta.business), 42, 18, {
-    align: 'right',
-    width: width - 84,
-    lineBreak: false,
-  });
-  doc.rect(0, height - 40, width, 40).fill(INK);
-  doc.fillColor('#ffffff99').fontSize(7).font('Helvetica').text(
-    `Tested against ChatGPT (browsing + knowledge)  ·  ${meta.date}  ·  Scores vary over time`,
-    42,
-    height - 24,
-    { width: width - 120, lineBreak: false }
+  doc.rect(0, 0, width, height).fill(PAPER);
+  doc.rect(0, 0, width, 50).fill(INK);
+  doc.rect(0, 50, width, 2.5).fill(CYAN);
+  tx(doc, 'MAKEFLOW', 36, 18, { bold: true, size: 10, color: WHITE, width: 80 });
+  tx(doc, 'AI Visibility Report', 108, 19, { size: 9, color: '#67E8F9', width: 200 });
+  tx(doc, meta.business || 'MakeFlow', 36, 19, { size: 9, color: '#C7D2FE', width: width - 72, align: 'right' });
+  doc.rect(0, height - 42, width, 42).fill(INK);
+  tx(
+    doc,
+    `Confidential  ·  Tested against ChatGPT  ·  ${meta.date || ''}  ·  Snapshot only — re-run to track change`,
+    36,
+    height - 26,
+    { size: 7, color: '#94A3B8', width: width - 90, height: 12 }
   );
-  doc.fillColor(WHITE).text(String(doc.page.number), width - 54, height - 24, { width: 20, align: 'right', lineBreak: false });
+  tx(doc, String(doc.page.number), width - 52, height - 26, { size: 8, color: WHITE, width: 20, align: 'right', height: 12 });
   doc.restore();
   doc.page.margins = saved;
-  doc.y = saved.top;
+  doc.x = ML;
+  doc.y = MT;
+  decorating = false;
 }
 
-function sectionTitle(doc, title) {
-  need(doc, 40);
-  doc.moveDown(0.35);
+function heading(doc, title) {
+  need(doc, 26);
   const y = doc.y;
-  doc.rect(left(doc), y + 2, 3, 12).fill(INDIGO);
-  doc.fillColor(INK).font('Helvetica-Bold').fontSize(13).text(t(title), left(doc) + 12, y);
-  doc.moveDown(0.35);
+  doc.rect(ML, y + 1, 3, 11).fill(INDIGO);
+  tx(doc, title, ML + 10, y, { bold: true, size: 11, color: INK, width: cw(doc) - 10 });
+  doc.y = y + 16;
 }
 
-function body(doc, text, opts = {}) {
-  doc.font('Helvetica').fontSize(opts.size || 9.5).fillColor(opts.color || MUTED).text(t(text), {
-    width: opts.width || innerWidth(doc),
-    align: opts.align || 'left',
-    lineGap: 2,
-  });
+function chip(doc, label, x, y, color = MUTED) {
+  const pad = 7;
+  const w = doc.font('Helvetica').fontSize(7).widthOfString(t(label)) + pad * 2;
+  doc.roundedRect(x, y, w, 12, 6).fill('#EEF1F7');
+  tx(doc, label, x + pad, y + 2, { size: 7, color });
+  return w + 5;
 }
 
-function barRow(doc, label, value, color) {
-  need(doc, 22);
-  const x = left(doc);
-  const w = innerWidth(doc);
-  const y = doc.y;
-  const pct = Math.max(0, Math.min(100, Number(value) || 0));
-  doc.font('Helvetica').fontSize(8.5).fillColor(TEXT).text(t(label), x, y, { width: 170 });
-  doc.roundedRect(x + 178, y + 2, w - 220, 8, 4).fill(PAPER);
-  doc.roundedRect(x + 178, y + 2, Math.max(4, ((w - 220) * pct) / 100), 8, 4).fill(color || INDIGO);
-  doc.font('Helvetica-Bold').fontSize(8.5).fillColor(INK).text(String(Math.round(pct)), x + w - 28, y, {
-    width: 28,
-    align: 'right',
-  });
-  doc.y = y + 18;
+function bar(doc, x, y, w, pct, color) {
+  doc.roundedRect(x, y, w, 6, 3).fill('#E6E9F2');
+  doc.roundedRect(x, y, Math.max(3, (w * Math.max(0, Math.min(100, pct))) / 100), 6, 3).fill(color);
 }
 
-function kpiCards(doc, items) {
-  need(doc, 78);
-  const gap = 10;
-  const n = items.length;
-  const w = (innerWidth(doc) - gap * (n - 1)) / n;
-  const y = doc.y;
-  const x0 = left(doc);
+function ring(doc, cx, cy, r, pct, color) {
+  doc.save();
+  doc.circle(cx, cy, r).lineWidth(8).strokeColor('#1E2745').stroke();
+  const p = Math.max(0.01, Math.min(0.999, (Number(pct) || 0) / 100));
+  const start = -Math.PI / 2;
+  const end = start + Math.PI * 2 * p;
+  const large = p > 0.5 ? 1 : 0;
+  const x1 = cx + r * Math.cos(start);
+  const y1 = cy + r * Math.sin(start);
+  const x2 = cx + r * Math.cos(end);
+  const y2 = cy + r * Math.sin(end);
+  doc
+    .path(`M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2}`)
+    .lineWidth(8)
+    .lineCap('round')
+    .strokeColor(color)
+    .stroke();
+  doc.restore();
+}
+
+function kpiStrip(doc, items, y) {
+  const gap = 8;
+  const w = (cw(doc) - gap * 3) / 4;
   items.forEach((item, i) => {
-    const x = x0 + i * (w + gap);
-    doc.roundedRect(x, y, w, 70, 10).fill(WHITE);
-    doc.roundedRect(x, y, w, 70, 10).lineWidth(1).strokeColor(LINE).stroke();
-    doc.font('Helvetica').fontSize(7.5).fillColor(MUTED).text(t(item.label).toUpperCase(), x + 10, y + 12, {
-      width: w - 20,
-    });
-    doc.font('Helvetica-Bold').fontSize(16).fillColor(INK).text(t(item.value), x + 10, y + 28, { width: w - 20 });
-    if (item.hint) {
-      doc.font('Helvetica').fontSize(7).fillColor(MUTED).text(t(item.hint), x + 10, y + 50, { width: w - 20 });
-    }
+    const x = ML + i * (w + gap);
+    doc.roundedRect(x, y, w, 54, 8).fill(WHITE);
+    doc.roundedRect(x, y, w, 54, 8).lineWidth(0.6).strokeColor(LINE).stroke();
+    doc.rect(x, y, 3, 54).fill(item.color || INDIGO);
+    tx(doc, item.label, x + 10, y + 8, { size: 6.5, color: MUTED, width: w - 16 });
+    tx(doc, item.value, x + 10, y + 20, { bold: true, size: 15, color: INK, width: w - 16 });
+    tx(doc, item.hint || '', x + 10, y + 38, { size: 6.5, color: MUTED, width: w - 16, height: 10, ellipsis: true });
   });
-  doc.y = y + 82;
+  return y + 62;
 }
 
-function checkRows(doc, checks) {
-  checks.forEach((raw) => {
-    const c = Array.isArray(raw)
-      ? { status: raw[0], label: raw[1], evidence: raw[2], points: raw[3] }
-      : {
-          status: raw.status,
-          label: raw.label,
-          evidence: raw.evidence,
-          points: `${raw.points_awarded ?? 0}/${raw.points_max ?? 0}`,
-        };
-    need(doc, 28);
-    const y = doc.y;
-    const x = left(doc);
-    const color = c.status === 'pass' ? MINT : c.status === 'fail' ? CORAL : AMBER;
-    doc.roundedRect(x, y, innerWidth(doc), 24, 6).fill(PAPER);
-    doc.roundedRect(x + 8, y + 6, 12, 12, 3).fill(color);
-    doc.font('Helvetica').fontSize(9).fillColor(TEXT).text(t(c.label), x + 28, y + 7, { width: innerWidth(doc) - 90 });
-    doc.font('Helvetica').fontSize(8).fillColor(MUTED).text(t(c.points || ''), x + innerWidth(doc) - 58, y + 8, {
-      width: 50,
-      align: 'right',
+function drawTable(doc, cols, rows) {
+  const total = cw(doc);
+  const sum = cols.reduce((s, c) => s + c.w, 0);
+  const scaled = cols.map((c) => ({ ...c, w: (c.w / sum) * total }));
+  need(doc, 22 + rows.length * 18);
+  let y = doc.y;
+  doc.rect(ML, y, total, 17).fill(INK);
+  let x = ML;
+  scaled.forEach((c) => {
+    tx(doc, c.l, x + 8, y + 4, { size: 6.5, color: '#94A3B8', width: c.w - 12 });
+    x += c.w;
+  });
+  y += 17;
+  rows.forEach((row) => {
+    const bg = row._you ? '#E0E7FF' : row._alt ? WHITE : '#F7F8FC';
+    doc.rect(ML, y, total, 18).fill(bg);
+    x = ML;
+    row.cells.forEach((v, ci) => {
+      tx(doc, v, x + 8, y + 4, { size: 8, color: TEXT, width: scaled[ci].w - 12, bold: ci === 0 || row._you });
+      x += scaled[ci].w;
     });
-    doc.y = y + 28;
+    y += 18;
   });
-}
-
-function table(doc, columns, rows) {
-  const total = columns.reduce((s, c) => s + c.width, 0);
-  const x0 = left(doc);
-  need(doc, 28);
-  let x = x0;
-  const hy = doc.y;
-  doc.rect(x0, hy, total, 20).fill(PAPER);
-  columns.forEach((col) => {
-    doc.font('Helvetica-Bold').fontSize(7.5).fillColor(MUTED).text(t(col.label).toUpperCase(), x + 6, hy + 6, {
-      width: col.width - 12,
-    });
-    x += col.width;
-  });
-  doc.y = hy + 20;
-  rows.forEach((row, i) => {
-    need(doc, 22);
-    const y = doc.y;
-    if (row.highlight) doc.rect(x0, y, total, 22).fill('#EEF2FF');
-    else if (i % 2 === 0) doc.rect(x0, y, total, 22).fill('#FAFBFF');
-    let cx = x0;
-    columns.forEach((col) => {
-      doc.font(row.highlight || col.bold ? 'Helvetica-Bold' : 'Helvetica')
-        .fontSize(8.5)
-        .fillColor(TEXT)
-        .text(t(row[col.key] ?? '—'), cx + 6, y + 6, { width: col.width - 12, align: col.align || 'left' });
-      cx += col.width;
-    });
-    doc.y = y + 22;
-  });
-}
-
-function recCard(doc, rec, index) {
-  const title = rec.title || 'Recommendation';
-  const why = rec.why || rec.why_it_matters || '';
-  const how = rec.how || rec.what_to_do || '';
-  const impact = rec.impact || rec.expected_impact || '';
-  const effort = rec.effort || '';
-  const service = rec.service || rec.service_key || '';
-  const block = 18 + Math.ceil(t(why).length / 90) * 12 + (how ? Math.ceil(t(how).length / 90) * 12 : 0) + 28;
-  need(doc, Math.min(block, 90));
-  const y = doc.y;
-  const w = innerWidth(doc);
-  const x = left(doc);
-  doc.font('Helvetica-Bold').fontSize(10).fillColor(INK).text(`${index}. ${t(title)}`, x, y, { width: w });
-  if (why) {
-    doc.moveDown(0.15);
-    body(doc, why, { size: 8.5 });
-  }
-  if (how) {
-    doc.moveDown(0.08);
-    body(doc, `Do this: ${how}`, { size: 8.5, color: TEXT });
-  }
-  doc.moveDown(0.15);
-  const chips = [impact && `${impact} impact`, effort && `${effort} effort`, service].filter(Boolean);
-  let cx = x;
-  const cy = doc.y;
-  chips.forEach((chip) => {
-    const tw = doc.font('Helvetica').fontSize(7).widthOfString(t(chip)) + 14;
-    doc.roundedRect(cx, cy, tw, 14, 7).lineWidth(0.8).strokeColor(LINE).stroke();
-    doc.fillColor(service && chip === service ? INDIGO : MUTED).text(t(chip), cx + 7, cy + 3);
-    cx += tw + 6;
-  });
-  doc.y = cy + 22;
+  doc.y = y + 10;
 }
 
 function drawReport(doc, report) {
-  const score = report.overall_score ?? 0;
+  const score = Number(report.overall_score) || 0;
   const band = report.score_band || '—';
   const metrics = report.metrics || {};
   const website = String(report.website || '').replace(/^https?:\/\//, '');
+  const accent = scoreColor(score);
   const date = report.created_at
-    ? new Date(report.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })
-    : new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+    ? new Date(report.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
+    : '';
 
-  doc.y = 64;
-  doc.font('Helvetica').fontSize(8).fillColor(CYAN).text('AI VISIBILITY REPORT  ·  TESTED AGAINST CHATGPT');
-  doc.moveDown(0.25);
-  doc.font('Helvetica-Bold').fontSize(22).fillColor(INK).text(t(report.business_name || 'Business'), {
-    width: innerWidth(doc),
-  });
-  doc.moveDown(0.15);
-  body(doc, [website, report.industry, report.city_region, date].filter(Boolean).join('  ·  '), { size: 9 });
-  doc.moveDown(0.6);
-
-  need(doc, 120);
   const heroY = doc.y;
-  const heroW = innerWidth(doc);
-  const heroX = left(doc);
-  doc.roundedRect(heroX, heroY, heroW, 108, 14).fill(INK);
-  doc.roundedRect(heroX, heroY, 6, 108, 3).fill(scoreColor(score));
-  doc.fillColor(WHITE).font('Helvetica-Bold').fontSize(46).text(String(score), heroX + 24, heroY + 22);
-  doc.font('Helvetica').fontSize(10).fillColor('#ffffff88').text('/ 100', heroX + 24, heroY + 72);
-  doc.font('Helvetica-Bold').fontSize(16).fillColor(WHITE).text(t(band), heroX + 150, heroY + 28, { width: heroW - 180 });
-  doc.font('Helvetica').fontSize(9).fillColor('#ffffffaa').text(
-    'Overall visibility in ChatGPT answers for discovery, comparison, local and brand questions.',
-    heroX + 150,
-    heroY + 52,
-    { width: heroW - 180 }
-  );
-  doc.y = heroY + 122;
+  const heroH = 148;
+  doc.roundedRect(ML, heroY, cw(doc), heroH, 12).fill(INK);
+  ring(doc, ML + 70, heroY + 74, 42, score, accent);
+  tx(doc, String(score), ML + 42, heroY + 54, { bold: true, size: 26, color: WHITE, width: 56, align: 'center' });
+  tx(doc, '/100', ML + 42, heroY + 84, { size: 8, color: '#94A3B8', width: 56, align: 'center' });
 
-  kpiCards(doc, [
-    { label: 'Mention rate', value: metrics.mention_rate != null ? `${metrics.mention_rate}%` : '—', hint: metrics.mention_label },
-    { label: 'Avg position', value: metrics.avg_position ?? '—', hint: 'when mentioned' },
-    { label: 'Citations', value: metrics.citations ?? '—', hint: 'browsing answers' },
-    { label: 'AI-readiness', value: report.readability_score != null ? `${report.readability_score}/100` : '—', hint: 'website audit' },
-  ]);
+  const rx = ML + 132;
+  const ry = heroY + 16;
+  tx(doc, 'OVERALL AI VISIBILITY', rx, ry, { size: 7, color: CYAN, width: 360 });
+  tx(doc, t(report.business_name || 'Business'), rx, ry + 12, { bold: true, size: 17, color: WHITE, width: 360 });
+  tx(doc, [website, report.industry, report.city_region, date].filter(Boolean).join('  ·  '), rx, ry + 34, {
+    size: 8,
+    color: '#94A3B8',
+    width: 360,
+  });
+  const bandW = Math.min(160, doc.font('Helvetica-Bold').fontSize(9).widthOfString(t(band)) + 22);
+  doc.roundedRect(rx, ry + 50, bandW, 16, 8).fill(accent);
+  tx(doc, band, rx, ry + 53, { bold: true, size: 8.5, color: INK, width: bandW, align: 'center' });
+  tx(
+    doc,
+    'How often ChatGPT names this business when Australians ask for recommendations in browsing and knowledge modes.',
+    rx,
+    ry + 76,
+    { size: 8, color: '#CBD5E1', width: 360 }
+  );
+  doc.y = heroY + heroH + 10;
+
+  doc.y = kpiStrip(doc, [
+    { label: 'MENTION RATE', value: metrics.mention_rate != null ? `${metrics.mention_rate}%` : '—', hint: metrics.mention_label || 'of opportunity queries', color: INDIGO },
+    { label: 'AVG POSITION', value: metrics.avg_position ?? '—', hint: 'when you are named', color: CYAN },
+    { label: 'CITATIONS', value: metrics.citations ?? '—', hint: 'browsing answers with a link', color: MINT },
+    { label: 'AI-READINESS', value: report.readability_score != null ? `${report.readability_score}/100` : '—', hint: 'website technical audit', color: AMBER },
+  ], doc.y);
 
   if (report.executive_summary) {
-    sectionTitle(doc, 'Executive summary');
-    body(doc, report.executive_summary, { size: 10, color: TEXT });
+    heading(doc, 'Executive summary');
+    const textW = cw(doc) - 28;
+    const h = Math.max(42, Math.min(textH(doc, report.executive_summary, textW, 9) + 20, 110));
+    need(doc, h + 8);
+    const boxY = doc.y;
+    doc.roundedRect(ML, boxY, cw(doc), h, 8).fill(WHITE);
+    doc.roundedRect(ML, boxY, cw(doc), h, 8).lineWidth(0.6).strokeColor(LINE).stroke();
+    doc.rect(ML, boxY, 3.5, h).fill(INDIGO);
+    tx(doc, report.executive_summary, ML + 14, boxY + 10, { size: 9, color: TEXT, width: textW, height: h - 16 });
+    doc.y = boxY + h + 10;
   }
 
   const modes = report.score_by_mode || [];
   const cats = report.score_by_category || [];
   if (modes.length || cats.length) {
-    sectionTitle(doc, 'Where the score comes from');
+    heading(doc, 'Score breakdown');
+    const colW = (cw(doc) - 12) / 2;
+    const rows = Math.max(modes.length, cats.length);
+    need(doc, 18 + rows * 22);
+    const startY = doc.y;
+    let leftY = startY;
+    let rightY = startY;
     if (modes.length) {
-      body(doc, 'Score by mode', { size: 8, color: MUTED });
-      doc.moveDown(0.2);
-      modes.forEach((m) => barRow(doc, m.name, m.value, INDIGO));
-      doc.moveDown(0.3);
+      tx(doc, 'BY MODE', ML, leftY, { size: 6.5, color: MUTED, width: colW });
+      leftY += 12;
+      modes.forEach((m) => {
+        tx(doc, m.name, ML, leftY, { size: 8, color: TEXT, width: colW - 32 });
+        tx(doc, String(m.value ?? 0), ML + colW - 26, leftY, { bold: true, size: 8, color: INK, width: 26, align: 'right' });
+        bar(doc, ML, leftY + 11, colW, m.value, INDIGO);
+        leftY += 22;
+      });
     }
     if (cats.length) {
-      body(doc, 'Score by question category', { size: 8, color: MUTED });
-      doc.moveDown(0.2);
-      cats.forEach((m, i) => barRow(doc, m.name, m.value, [CORAL, AMBER, CYAN, MINT, INDIGO][i % 5]));
+      const x = ML + colW + 12;
+      tx(doc, 'BY QUESTION CATEGORY', x, rightY, { size: 6.5, color: MUTED, width: colW });
+      rightY += 12;
+      cats.forEach((m, i) => {
+        const color = [CORAL, AMBER, CYAN, MINT, INDIGO][i % 5];
+        tx(doc, m.name, x, rightY, { size: 8, color: TEXT, width: colW - 32 });
+        tx(doc, String(m.value ?? 0), x + colW - 26, rightY, { bold: true, size: 8, color: INK, width: 26, align: 'right' });
+        bar(doc, x, rightY + 11, colW, m.value, color);
+        rightY += 22;
+      });
     }
+    doc.y = Math.max(leftY, rightY) + 4;
   }
 
   const weights = report.weights || metrics.weights || [];
   if (weights.length) {
-    sectionTitle(doc, 'How the score is built');
-    table(
+    heading(doc, 'How the score is built');
+    drawTable(
       doc,
       [
-        { label: 'Component', key: 'name', width: 220 },
-        { label: 'Weight', key: 'weight', width: 90 },
-        { label: 'Score', key: 'score', width: 90 },
+        { l: 'COMPONENT', w: 260 },
+        { l: 'WEIGHT', w: 90 },
+        { l: 'SCORE', w: 90 },
       ],
-      weights.map((w) => ({ name: w.name, weight: w.weight, score: w.score }))
+      weights.map((row, i) => ({
+        _alt: i % 2 === 1,
+        cells: [row.name, row.weight, row.score == null ? '—' : `${row.score}`],
+      }))
     );
   }
 
   const checks = report.ai_readiness?.checks || [];
   if (checks.length) {
-    sectionTitle(doc, `Website AI-readiness${report.readability_score != null ? `  ${report.readability_score}/100` : ''}`);
-    body(doc, 'Technical signals that help ChatGPT find, trust and cite this website.');
-    doc.moveDown(0.25);
-    checkRows(doc, checks);
+    heading(doc, `Website AI-readiness${report.readability_score != null ? `  ·  ${report.readability_score}/100` : ''}`);
+    const colW = (cw(doc) - 8) / 2;
+    const rowH = 20;
+    checks.forEach((raw, i) => {
+      const c = Array.isArray(raw)
+        ? { status: raw[0], label: raw[1], points: raw[3] || raw[2] }
+        : { status: raw.status, label: raw.label, points: `${raw.points_awarded ?? 0}/${raw.points_max ?? 0}` };
+      const col = i % 2;
+      if (col === 0) need(doc, rowH);
+      const y = doc.y;
+      const x = ML + col * (colW + 8);
+      const color = c.status === 'pass' ? MINT : c.status === 'fail' ? CORAL : AMBER;
+      doc.roundedRect(x, y, colW, 18, 5).fill(WHITE);
+      doc.roundedRect(x + 6, y + 4, 9, 9, 2).fill(color);
+      tx(doc, c.label, x + 20, y + 4, { size: 7.5, color: TEXT, width: colW - 64, height: 11, ellipsis: true });
+      tx(doc, c.points || '', x + colW - 40, y + 4, { size: 7, color: MUTED, width: 34, align: 'right' });
+      if (col === 1 || i === checks.length - 1) doc.y = y + rowH;
+      else doc.y = y;
+    });
+    doc.y += 6;
   }
 
   const comps = report.competitors || report.result_competitors || report.competitors_result || [];
   if (comps.length) {
-    sectionTitle(doc, 'Competitors ChatGPT recommends');
-    table(
+    heading(doc, 'Competitors ChatGPT recommends');
+    drawTable(
       doc,
       [
-        { label: 'Business', key: 'name', width: 200 },
-        { label: 'Mention rate', key: 'mention', width: 100 },
-        { label: 'Avg pos', key: 'pos', width: 80 },
-        { label: 'Share of voice', key: 'sov', width: 110 },
+        { l: 'BUSINESS', w: 210 },
+        { l: 'MENTION', w: 80 },
+        { l: 'AVG POS', w: 70 },
+        { l: 'SHARE OF VOICE', w: 110 },
       ],
-      comps.map((c) => ({
-        name: c.you ? `${c.name} (you)` : c.name,
-        mention: c.mention_rate != null ? `${c.mention_rate}%` : '—',
-        pos: c.avg_position ?? '—',
-        sov: c.share_of_voice != null ? `${c.share_of_voice}%` : '—',
-        highlight: !!c.you,
+      comps.map((c, i) => ({
+        _you: !!c.you,
+        _alt: i % 2 === 1,
+        cells: [
+          c.you ? `${c.name}  (you)` : c.name,
+          c.mention_rate != null ? `${c.mention_rate}%` : '—',
+          c.avg_position != null && c.avg_position !== '' ? c.avg_position : '—',
+          c.share_of_voice != null ? `${c.share_of_voice}%` : '—',
+        ],
       }))
     );
   }
 
-  const gaps = (report.gaps || []).slice(0, 8);
+  const gaps = (report.gaps || []).slice(0, 12);
   if (gaps.length) {
-    sectionTitle(doc, 'Highest-value gaps');
-    body(doc, 'Questions where ChatGPT named someone else instead of you.');
-    doc.moveDown(0.25);
+    heading(doc, 'Highest-value gaps');
+    tx(doc, 'Questions where ChatGPT named someone else — or named nobody — instead of you.', ML, doc.y, {
+      size: 7.5,
+      color: MUTED,
+      width: cw(doc),
+    });
+    const colW = (cw(doc) - 8) / 2;
+    const rowH = 36;
     gaps.forEach((g, i) => {
-      need(doc, 42);
-      const named = (g.named_instead || g.competitors_named || []).slice(0, 3).join(', ');
-      doc.font('Helvetica-Bold').fontSize(9).fillColor(INK).text(`${i + 1}. ${t(g.question || g.query || '')}`, {
-        width: innerWidth(doc),
+      const named = (g.named_instead || g.competitors_named || []).filter(Boolean).slice(0, 3);
+      const col = i % 2;
+      if (col === 0) need(doc, rowH);
+      const y = doc.y;
+      const x = ML + col * (colW + 8);
+      doc.roundedRect(x, y, colW, 32, 6).fill(WHITE);
+      doc.roundedRect(x, y, colW, 32, 6).lineWidth(0.5).strokeColor(LINE).stroke();
+      tx(doc, `${i + 1}.  ${g.question || g.query || ''}`, x + 8, y + 5, {
+        size: 7.5,
+        color: TEXT,
+        width: colW - 16,
+        height: 11,
+        ellipsis: true,
+        bold: true,
       });
-      body(doc, [g.category, g.mode, named && `Named instead: ${named}`].filter(Boolean).join('  ·  '), { size: 8 });
-      doc.moveDown(0.2);
+      const metaLine = [g.category, g.mode].filter(Boolean).join(' · ');
+      const namedLine = named.length ? named.join(', ') : 'No one named';
+      tx(doc, `${metaLine}${metaLine ? '  ·  ' : ''}${namedLine}`, x + 8, y + 18, {
+        size: 6.5,
+        color: named.length ? CORAL : MUTED,
+        width: colW - 16,
+        height: 10,
+        ellipsis: true,
+      });
+      if (col === 1 || i === gaps.length - 1) doc.y = y + rowH;
+      else doc.y = y;
     });
   }
 
   const recs = report.recommendations || [];
   if (recs.length) {
-    sectionTitle(doc, 'Prioritised recommendations');
-    recs.slice(0, 10).forEach((r, i) => recCard(doc, r, i + 1));
-  }
-
-  const help = report.how_makeflow_helps?.length
-    ? report.how_makeflow_helps
-    : Object.keys(SERVICES).map((key) => ({
-        service_key: key,
-        name: SERVICES[key].name,
-        description: SERVICES[key].description,
-        items: recs.filter((r) => (r.service || r.service_key) === key).map((r) => r.title),
-      })).filter((g) => g.items?.length);
-
-  if (help.length) {
-    sectionTitle(doc, 'How MakeFlow can fix this');
-    help.forEach((g) => {
-      need(doc, 40);
-      doc.font('Helvetica-Bold').fontSize(10).fillColor(INDIGO).text(t(g.name || g.title || g.service_key));
-      if (g.description || g.body) body(doc, g.description || g.body, { size: 8 });
-      (g.items || []).forEach((item) => {
-        doc.font('Helvetica').fontSize(8.5).fillColor(TEXT).text(`  •  ${t(item)}`, { width: innerWidth(doc) });
+    heading(doc, 'Prioritised recommendations');
+    recs.slice(0, 8).forEach((r, i) => {
+      const why = r.why || r.why_it_matters || '';
+      const how = r.how || r.what_to_do || '';
+      const w = cw(doc);
+      const inner = w - 44;
+      const whyH = why ? textH(doc, why, inner, 8) : 0;
+      const howH = how ? textH(doc, `Do this: ${how}`, inner, 8) : 0;
+      const boxH = 16 + 14 + whyH + (whyH ? 4 : 0) + howH + (howH ? 4 : 0) + 18;
+      need(doc, boxH + 6);
+      const y = doc.y;
+      doc.roundedRect(ML, y, w, boxH, 8).fill(WHITE);
+      doc.roundedRect(ML, y, w, boxH, 8).lineWidth(0.6).strokeColor(LINE).stroke();
+      doc.rect(ML, y, 3.5, boxH).fill(INDIGO);
+      doc.circle(ML + 18, y + 14, 8).fill(INK);
+      tx(doc, String(i + 1), ML + 10, y + 9, { bold: true, size: 8, color: WHITE, width: 16, align: 'center' });
+      tx(doc, r.title || 'Recommendation', ML + 32, y + 8, { bold: true, size: 9.5, color: INK, width: inner });
+      let yy = y + 26;
+      if (why) {
+        tx(doc, why, ML + 32, yy, { size: 8, color: MUTED, width: inner });
+        yy += whyH + 3;
+      }
+      if (how) {
+        tx(doc, `Do this: ${how}`, ML + 32, yy, { size: 8, color: TEXT, width: inner });
+        yy += howH + 4;
+      }
+      let cx = ML + 32;
+      const chips = [
+        r.impact && `${r.impact} impact`,
+        r.effort && `${r.effort} effort`,
+        r.service || r.service_key,
+      ].filter(Boolean);
+      chips.forEach((c) => {
+        cx += chip(doc, c, cx, yy, c === (r.service || r.service_key) ? INDIGO : MUTED);
       });
-      doc.moveDown(0.25);
+      doc.y = y + boxH + 6;
     });
   }
 
-  need(doc, 50);
-  doc.moveDown(0.6);
-  doc.roundedRect(left(doc), doc.y, innerWidth(doc), 48, 10).fill(PAPER);
-  const fy = doc.y + 12;
-  doc.font('Helvetica').fontSize(8).fillColor(MUTED).text(
-    t(
-      `Methodology: ${metrics.opportunity_count || 0} opportunity questions tested against ChatGPT in browsing and knowledge modes. AI answers are non-deterministic; re-run later to track change. This report is for the business owner and is not a guarantee of ranking.`
-    ),
-    left(doc) + 12,
-    fy,
-    { width: innerWidth(doc) - 24 }
+  const help = report.how_makeflow_helps?.length
+    ? report.how_makeflow_helps.filter((g) => (g.items || []).length || g.description)
+    : Object.keys(SERVICES)
+        .map((key) => ({
+          service_key: key,
+          name: SERVICES[key].name,
+          description: SERVICES[key].description,
+          items: recs.filter((r) => (r.service || r.service_key) === key).map((r) => r.title),
+        }))
+        .filter((g) => g.items?.length);
+
+  if (help.length) {
+    heading(doc, 'How MakeFlow can fix this');
+    const n = Math.min(help.length, 3);
+    const colW = (cw(doc) - 8 * (n - 1)) / n;
+    need(doc, 86);
+    const y = doc.y;
+    help.slice(0, 3).forEach((g, i) => {
+      const x = ML + i * (colW + 8);
+      doc.roundedRect(x, y, colW, 82, 8).fill(INK);
+      tx(doc, g.name || g.title || g.service_key, x + 10, y + 10, { bold: true, size: 8.5, color: WHITE, width: colW - 20 });
+      tx(doc, g.description || g.body || '', x + 10, y + 26, { size: 7, color: '#94A3B8', width: colW - 20, height: 22 });
+      (g.items || []).slice(0, 2).forEach((item, ii) => {
+        tx(doc, `• ${item}`, x + 10, y + 52 + ii * 12, { size: 7, color: '#C7D2FE', width: colW - 20, height: 11, ellipsis: true });
+      });
+    });
+    doc.y = y + 90;
+  }
+
+  need(doc, 36);
+  doc.roundedRect(ML, doc.y, cw(doc), 32, 7).fill(WHITE);
+  tx(
+    doc,
+    `Methodology: ${metrics.opportunity_count || 0} opportunity questions tested against ChatGPT (browsing + knowledge). AI answers are non-deterministic. Re-run to track change. Not a ranking guarantee.`,
+    ML + 12,
+    doc.y + 9,
+    { size: 7, color: MUTED, width: cw(doc) - 24 }
   );
 }
 
@@ -399,12 +474,12 @@ export function buildPdfBuffer(report) {
   const date = report.created_at
     ? new Date(report.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
     : new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
-  const meta = { business: report.business_name || 'MakeFlow', date };
+  const meta = { business: t(report.business_name) || 'MakeFlow', date: date || '' };
 
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({
       size: 'A4',
-      margins: { top: 64, bottom: 56, left: 42, right: 42 },
+      margins: { top: MT, bottom: MB, left: ML, right: MR },
       info: {
         Title: `${report.business_name || 'Business'} — AI Visibility Report`,
         Author: 'MakeFlow',

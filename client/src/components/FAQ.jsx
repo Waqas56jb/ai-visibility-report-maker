@@ -9,11 +9,11 @@ const ITEMS = [
   },
   {
     q: 'How long does it take?',
-    a: "Usually 2–3 minutes. We crawl your site, generate 30–50 questions, run each twice and score the results. You'll see live progress and we'll email you the link.",
+    a: "Usually 2–3 minutes. We crawl your site, generate 30–50 questions, run each twice and score the results. You'll see live progress and we'll email you the link if you ask us to.",
   },
   {
     q: 'Will my score change if I run it again?',
-    a: 'Yes, slightly. AI answers are non-deterministic. Treat the score as a snapshot and compare trends over time rather than single points.',
+    a: 'Yes, slightly. AI answers are non-deterministic. Treat the score as a snapshot and compare trends over time rather than single points. That is why re-run exists.',
   },
   {
     q: 'What if my site blocks crawlers?',
@@ -21,7 +21,19 @@ const ITEMS = [
   },
   {
     q: 'Is it really free?',
-    a: "Yes. The report is free. If you want us to fix what it finds, that's where MakeFlow's services come in.",
+    a: "Yes. The report is a free lead magnet. If you want us to fix what it finds — schema, pages, listings, a chatbot — that's MakeFlow's paid work.",
+  },
+  {
+    q: 'What does the PDF include?',
+    a: 'Overall score, mention rate, position, citations, readiness, score by mode and category, competitor share of voice, highest-value gaps, sequenced recommendations, and how MakeFlow can deliver the work. Formatted for A4.',
+  },
+  {
+    q: 'Do you test Google, Perplexity or Gemini?',
+    a: 'Not in this product. One engine, done properly, beats a thin score across five. ChatGPT is the assistant most Australian SMEs hear about from customers today.',
+  },
+  {
+    q: 'Will you spam my email?',
+    a: 'We send the report link when you ask. No drip sequences from this form. You can create an account to keep history and re-run later.',
   },
 ];
 

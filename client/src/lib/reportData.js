@@ -73,6 +73,54 @@ export const reportData = {
   },
 };
 
+export const sampleReport = {
+  business_name: 'Harbourview Accountants',
+  website: 'https://harbourviewaccountants.com.au',
+  industry: 'Accounting',
+  city_region: 'Brisbane',
+  created_at: '2026-08-26T00:00:00.000Z',
+  overall_score: reportData.score,
+  score_band: 'Barely visible',
+  readability_score: reportData.readability,
+  executive_summary:
+    'ChatGPT almost never recommends Harbourview for discovery or comparison questions. You appear on brand searches, but competitors with clearer service pages and schema take the shortlist when a customer has not heard of you yet.',
+  metrics: {
+    mention_rate: 26,
+    mention_label: '11 of 42 queries',
+    avg_position: 2.7,
+    citations: 3,
+    sentiment: 'Positive',
+    opportunity_count: 42,
+    weights: reportData.weights.map((w) => ({ name: w[0], weight: w[1], score: w[2] })),
+  },
+  score_by_mode: reportData.mode.map((m) => ({ name: m[0], value: m[1] })),
+  score_by_category: reportData.cats.map((m) => ({ name: m[0], value: m[1] })),
+  weights: reportData.weights.map((w) => ({ name: w[0], weight: w[1], score: w[2] })),
+  ai_readiness: { checks: reportData.checks },
+  competitors: reportData.comps.map((c) => ({
+    name: c[0],
+    mention_rate: c[1],
+    avg_position: c[2],
+    share_of_voice: c[3],
+    est_score: c[4],
+    you: c[5],
+  })),
+  gaps: reportData.gaps.map((g) => ({
+    category: g[0],
+    question: g[1],
+    named_instead: g[2],
+    mode: 'browsing',
+  })),
+  recommendations: reportData.recs.map((r) => ({
+    title: r[0],
+    why: r[1],
+    how: r[2],
+    impact: r[3],
+    effort: r[4],
+    service: r[5],
+  })),
+};
+
 export function bandOf(s) {
   if (s <= 20) {
     return ['Invisible', 'b1', 'ChatGPT almost never names you. Customers asking for recommendations are being sent elsewhere.'];

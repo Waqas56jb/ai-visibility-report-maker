@@ -13,9 +13,30 @@ import profileRoutes from './routes/profile.js';
 import adminRoutes from './routes/admin.js';
 
 const app = express();
-const origins = [process.env.CLIENT_ORIGIN, process.env.ADMIN_ORIGIN].filter(Boolean);
+const DEFAULT_ORIGINS = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://ai-visibility-report-maker-client.vercel.app',
+  'https://ai-visibility-report-maker-admin.vercel.app',
+];
+const origins = [
+  ...DEFAULT_ORIGINS,
+  ...(process.env.CLIENT_ORIGIN || '').split(','),
+  ...(process.env.ADMIN_ORIGIN || '').split(','),
+]
+  .map((s) => s.trim())
+  .filter(Boolean);
 
-app.use(cors({ origin: origins.length ? origins : true, credentials: true }));
+app.use(
+  cors({
+    origin(origin, cb) {
+      if (!origin) return cb(null, true);
+      if (origins.includes(origin) || /\.vercel\.app$/.test(origin)) return cb(null, true);
+      return cb(null, false);
+    },
+    credentials: true,
+  })
+);
 app.use(express.json({ limit: '2mb' }));
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));

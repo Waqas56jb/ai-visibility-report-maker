@@ -6,6 +6,7 @@ import Signup from './pages/Signup.jsx';
 import ForgotPassword from './pages/ForgotPassword.jsx';
 import ResetPasswordConfirm from './pages/ResetPasswordConfirm.jsx';
 import PublicReport from './pages/PublicReport.jsx';
+import SampleReport from './pages/Report.jsx';
 import AppLayout from './layouts/AppLayout.jsx';
 import Dashboard from './pages/app/Dashboard.jsx';
 import NewReport from './pages/app/NewReport.jsx';
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="/reset-password" element={<ForgotPassword />} />
           <Route path="/forgot-password" element={<Navigate to="/reset-password" replace />} />
           <Route path="/reset-password/confirm" element={<ResetPasswordConfirm />} />
+          <Route path="/report" element={<SampleReport />} />
           <Route path="/report/:id" element={<PublicReport />} />
           <Route path="/app" element={<AppLayout />}>
             <Route index element={<Navigate to="dashboard" replace />} />

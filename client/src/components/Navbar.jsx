@@ -10,6 +10,7 @@ import {
   Route as RouteIcon,
   ScanSearch,
   UserPlus,
+  X,
 } from 'lucide-react';
 import Logo from './Logo.jsx';
 import { useAuth } from '../store/auth.js';
@@ -46,6 +47,11 @@ export default function Navbar({ variant = 'landing' }) {
     setOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    document.body.classList.toggle('nav-open', open);
+    return () => document.body.classList.remove('nav-open');
+  }, [open]);
+
   function onSection(e, id) {
     e.preventDefault();
     setOpen(false);
@@ -63,14 +69,14 @@ export default function Navbar({ variant = 'landing' }) {
         <div className="wrap">
           <Logo />
           <nav className="nav-links">
+            <a href="#why" onClick={(e) => onSection(e, 'why')}>
+              Why AI
+            </a>
             <a href="#how" onClick={(e) => onSection(e, 'how')}>
               How it works
             </a>
-            <a href="#measure" onClick={(e) => onSection(e, 'measure')}>
-              What we measure
-            </a>
-            <a href="#services" onClick={(e) => onSection(e, 'services')}>
-              Services
+            <a href="#inside" onClick={(e) => onSection(e, 'inside')}>
+              The report
             </a>
             <a href="#faq" onClick={(e) => onSection(e, 'faq')}>
               FAQ
@@ -78,42 +84,60 @@ export default function Navbar({ variant = 'landing' }) {
           </nav>
           <div className="nav-actions">
             {user ? (
-              <Link to="/app/dashboard" className="btn btn-ghost btn-sm">
+              <Link to="/app/dashboard" className="btn btn-ghost btn-sm nav-hide-sm">
                 Dashboard
               </Link>
             ) : (
-              <Link to="/login" className="btn btn-ghost btn-sm">
+              <Link to="/login" className="btn btn-ghost btn-sm nav-hide-sm">
                 Log in
               </Link>
             )}
             {user ? (
-              <Link to="/app/new" className="btn btn-primary btn-sm">
+              <Link to="/app/new" className="btn btn-primary btn-sm nav-hide-md">
                 New report
               </Link>
             ) : (
               <button
                 type="button"
-                className="btn btn-primary btn-sm"
+                className="btn btn-primary btn-sm nav-hide-md"
                 onClick={() => goToCheck(navigate, pathname)}
               >
                 Check my visibility
               </button>
             )}
-            <button className="burger" aria-label="Menu" onClick={() => setOpen((v) => !v)}>
-              <Menu className="lucide svg" />
+            <button
+              className="burger"
+              type="button"
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-expanded={open}
+              onClick={() => setOpen((v) => !v)}
+            >
+              {open ? <X className="lucide svg" /> : <Menu className="lucide svg" />}
             </button>
           </div>
         </div>
       </header>
       <div className={`mobile-menu${open ? ' open' : ''}`}>
+        {!user && (
+          <button
+            type="button"
+            className="btn btn-grad"
+            onClick={() => {
+              setOpen(false);
+              goToCheck(navigate, pathname);
+            }}
+          >
+            <ScanSearch className="lucide svg" /> Check my visibility
+          </button>
+        )}
+        <a href="#why" onClick={(e) => onSection(e, 'why')}>
+          <ScanSearch className="lucide svg" /> Why AI
+        </a>
         <a href="#how" onClick={(e) => onSection(e, 'how')}>
           <RouteIcon className="lucide svg" /> How it works
         </a>
-        <a href="#measure" onClick={(e) => onSection(e, 'measure')}>
-          <ScanSearch className="lucide svg" /> What we measure
-        </a>
-        <a href="#services" onClick={(e) => onSection(e, 'services')}>
-          <Layers className="lucide svg" /> Services
+        <a href="#inside" onClick={(e) => onSection(e, 'inside')}>
+          <Layers className="lucide svg" /> The report
         </a>
         <a href="#faq" onClick={(e) => onSection(e, 'faq')}>
           <CircleHelp className="lucide svg" /> FAQ

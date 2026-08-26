@@ -187,7 +187,7 @@ export default function Hero() {
             Google. We run real customer questions through ChatGPT and show you exactly where your
             business appears — and where your competitors do instead.
           </p>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <div className="hero-ctas">
             <button type="button" className="btn btn-grad" onClick={() => goToCheck(navigate, '/')}>
               <ScanSearch className="lucide svg" /> Run my free report
             </button>

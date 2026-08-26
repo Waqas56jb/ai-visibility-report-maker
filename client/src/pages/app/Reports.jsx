@@ -79,7 +79,7 @@ export default function Reports() {
                       <strong>{r.business_name}</strong>
                       <div className="muted">{r.website}</div>
                     </td>
-                    <td>{r.status}</td>
+                    <td><span className={`dash-status ${r.status === 'completed' ? 'completed' : r.status === 'failed' ? 'failed' : 'queued'}`}>{r.status}</span></td>
                     <td>{r.score_band || '—'}</td>
                     <td>{r.overall_score ?? '—'}</td>
                     <td>{new Date(r.created_at).toLocaleString()}</td>

@@ -1,6 +1,9 @@
+import { useId } from 'react';
 import { bandOf } from '../../api/generate.js';
 
 export default function ScoreGauge({ score, band }) {
+  const rawId = useId().replace(/:/g, '');
+  const gid = `gauge-${rawId}`;
   const n = score == null || score === '' ? null : Number(score);
   const label = band || (n == null ? '—' : bandOf(n));
   const offset = 628 - (628 * (n || 0)) / 100;
@@ -10,13 +13,13 @@ export default function ScoreGauge({ score, band }) {
       <div className="gauge">
         <svg viewBox="0 0 230 230">
           <defs>
-            <linearGradient id="g" x1="0" x2="1">
+            <linearGradient id={gid} x1="0" x2="1">
               <stop offset="0" stopColor="#4F46E5" />
               <stop offset="1" stopColor="#06B6D4" />
             </linearGradient>
           </defs>
           <circle className="track" cx="115" cy="115" r="100" />
-          <circle className="val" cx="115" cy="115" r="100" style={{ strokeDashoffset: offset }} />
+          <circle className="val" cx="115" cy="115" r="100" style={{ stroke: `url(#${gid})`, strokeDashoffset: offset }} />
         </svg>
         <div className="num">
           <div>

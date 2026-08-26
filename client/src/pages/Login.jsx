@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import AuthShell, { BackLink, Field, OAuthRow } from '../components/auth/AuthShell.jsx';
+import AuthShell, { BackLink, Field } from '../components/auth/AuthShell.jsx';
 import { loginSchema } from '../schemas/auth.js';
 import { useAuth } from '../store/auth.js';
 import { useToast } from '../lib/toast.jsx';
@@ -69,8 +69,6 @@ export default function Login() {
       <BackLink />
       <h1>Welcome back</h1>
       <p>Log in to see your saved reports.</p>
-      <OAuthRow onClick={(name) => toast(`${name} sign-in is coming soon`)} />
-      <div className="divider">or with email</div>
       <form onSubmit={handleSubmit} noValidate>
         <Field label="Email" type="email" value={values.email} onChange={set('email')} error={errors.email} disabled={loading} placeholder="you@company.com.au" />
         <Field

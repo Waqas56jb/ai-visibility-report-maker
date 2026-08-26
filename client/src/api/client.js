@@ -1,4 +1,4 @@
-const BASE = import.meta.env.VITE_API_URL || '';
+const BASE = String(import.meta.env.VITE_API_URL || 'https://ai-visibility-report-maker-server.vercel.app').replace(/\/$/, '');
 
 function token() {
   try {

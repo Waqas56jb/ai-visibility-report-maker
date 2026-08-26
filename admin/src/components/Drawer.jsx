@@ -110,7 +110,7 @@ export default function Drawer({ id, onClose, onChanged }) {
   }
 
   async function copyLink() {
-    const url = report?.public_url || `${import.meta.env.VITE_CLIENT_URL || 'http://localhost:5173'}/report/${report?.id}`;
+    const url = report?.public_url || `${import.meta.env.VITE_CLIENT_URL || 'https://ai-visibility-report-maker-client.vercel.app'}/report/${report?.id}`;
     try {
       await navigator.clipboard.writeText(url);
       toast('Report link copied');

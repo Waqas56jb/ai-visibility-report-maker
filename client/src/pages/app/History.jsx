@@ -78,7 +78,14 @@ export default function History() {
       </div>
       <div className="chart">
         <svg viewBox="0 0 100 100" preserveAspectRatio="none" width="100%" height="180">
-          <polyline fill="none" stroke="#4F46E5" strokeWidth="1.5" points={pts} />
+          <defs>
+            <linearGradient id="histFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#4F46E5" stopOpacity="0.35" />
+              <stop offset="1" stopColor="#06B6D4" stopOpacity="0.02" />
+            </linearGradient>
+          </defs>
+          <polygon fill="url(#histFill)" points={`0,100 ${pts} 100,100`} />
+          <polyline fill="none" stroke="#4F46E5" strokeWidth="1.8" points={pts} />
         </svg>
       </div>
       <div className="card panel" style={{ marginTop: 16 }}>

@@ -8,31 +8,37 @@ const GROUPS = {
 };
 
 export default function HowMakeFlowHelps({ recommendations = [] }) {
+  const groups = Object.entries(GROUPS)
+    .map(([key, g]) => ({ key, ...g, recs: recommendations.filter((r) => (r.service || r.service_key) === key) }))
+    .filter((g) => g.recs.length);
+  const shown = groups.length ? groups : Object.entries(GROUPS).slice(0, 3).map(([key, g]) => ({ key, ...g, recs: [] }));
+
   return (
     <div className="help">
       <span className="eyebrow" style={{ color: '#67E8F9' }}>
         How MakeFlow fixes this
       </span>
       <h2>A plan, grouped by the service that delivers it</h2>
-      <div className="help-grid">
-        {Object.entries(GROUPS).map(([key, g]) => {
+      <div className={`help-grid help-n${Math.min(shown.length, 3)}`}>
+        {shown.map((g) => {
           const Icon = g.icon;
-          const recs = recommendations.filter((r) => r.service === key);
           return (
-            <div className="help-item" key={key}>
+            <div className="help-item" key={g.key}>
               <div className="ic">
                 <Icon className="lucide svg" />
               </div>
               <h4>{g.title}</h4>
               <p>{g.body}</p>
-              <ul>
-                {recs.map((r) => (
-                  <li key={r.title}>
-                    <Check className="lucide svg" />
-                    {r.title}
-                  </li>
-                ))}
-              </ul>
+              {g.recs.length > 0 && (
+                <ul>
+                  {g.recs.map((r) => (
+                    <li key={r.title}>
+                      <Check className="lucide svg" />
+                      {r.title}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           );
         })}
