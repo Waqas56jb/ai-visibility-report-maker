@@ -84,37 +84,37 @@ export default function Navbar({ variant = 'landing' }) {
           </nav>
           <div className="nav-actions">
             {user ? (
-              <Link to="/app/dashboard" className="btn btn-ghost btn-sm nav-hide-sm">
+              <Link to="/app/dashboard" className="btn btn-ghost btn-sm">
                 Dashboard
               </Link>
             ) : (
-              <Link to="/login" className="btn btn-ghost btn-sm nav-hide-sm">
+              <Link to="/login" className="btn btn-ghost btn-sm">
                 Log in
               </Link>
             )}
             {user ? (
-              <Link to="/app/new" className="btn btn-primary btn-sm nav-hide-md">
+              <Link to="/app/new" className="btn btn-primary btn-sm">
                 New report
               </Link>
             ) : (
               <button
                 type="button"
-                className="btn btn-primary btn-sm nav-hide-md"
+                className="btn btn-primary btn-sm"
                 onClick={() => goToCheck(navigate, pathname)}
               >
                 Check my visibility
               </button>
             )}
-            <button
-              className="burger"
-              type="button"
-              aria-label={open ? 'Close menu' : 'Open menu'}
-              aria-expanded={open}
-              onClick={() => setOpen((v) => !v)}
-            >
-              {open ? <X className="lucide svg" /> : <Menu className="lucide svg" />}
-            </button>
           </div>
+          <button
+            className="burger"
+            type="button"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="lucide svg" /> : <Menu className="lucide svg" />}
+          </button>
         </div>
       </header>
       <div className={`mobile-menu${open ? ' open' : ''}`}>
