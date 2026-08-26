@@ -10,6 +10,8 @@ import { analyseCompetitors, scoreReport } from './score.js';
 import { buildGapList } from './buildGapList.js';
 import { writeRecommendations, mapToServices } from './writeRecommendations.js';
 import { renderPdf } from './renderPdf.js';
+import { sendCompletedReportEmail } from './mailer.js';
+import { settings } from '../config/env.js';
 
 const queue = new PQueue({ concurrency: 2 });
 const running = new Set();
@@ -169,6 +171,18 @@ async function run(reportId) {
       truncated,
       error: crawl.audit_incomplete ? 'Site could not be fully crawled; readiness audit is incomplete.' : null,
     });
+
+    try {
+      const { data: done } = await supabase.from('reports').select('*').eq('id', reportId).maybeSingle();
+      if (done && done.notify_email !== false && settings().emailOnComplete !== false) {
+        const mailed = await sendCompletedReportEmail(done);
+        if (mailed?.sent) {
+          await patch(reportId, { email_sent_at: new Date().toISOString() });
+        }
+      }
+    } catch (err) {
+      console.warn('report email failed', reportId, err.message);
+    }
   } catch (err) {
     console.error('pipeline failed', reportId, err);
     await patch(reportId, {

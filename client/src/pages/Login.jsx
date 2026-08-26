@@ -18,7 +18,15 @@ export default function Login() {
 
   useEffect(() => {
     document.title = 'Log in — MakeFlow';
-    if (user) navigate('/app/dashboard', { replace: true });
+    if (user && !sessionStorage.getItem('mf_report')) navigate('/app/dashboard', { replace: true });
+    try {
+      const pending = JSON.parse(sessionStorage.getItem('mf_report') || 'null');
+      if (pending?.email) {
+        setValues((v) => (v.email ? v : { ...v, email: pending.email }));
+      }
+    } catch {
+      /* ignore */
+    }
   }, [user, navigate]);
 
   const set = (key) => (e) => {
@@ -48,7 +56,7 @@ export default function Login() {
       if (pending) {
         sessionStorage.removeItem('mf_report');
         const p = JSON.parse(pending);
-        navigate('/app/new', { state: { prefill: { name: p.business, website: p.website } } });
+        navigate('/app/new', { state: { prefill: { name: p.business, website: p.website, email: p.email } } });
       } else {
         navigate('/app/dashboard');
       }

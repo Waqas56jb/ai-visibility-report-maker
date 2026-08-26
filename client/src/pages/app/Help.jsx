@@ -1,6 +1,7 @@
 const FAQ = [
   ['Which AI is this tested against?', 'ChatGPT only, in browsing and knowledge modes.'],
-  ['How long does a report take?', 'Usually about 3 minutes. You can leave this page — we will email you when it is ready if that toggle is on.'],
+  ['How long does a report take?', 'Usually about 3 minutes. You can leave this page — we email the PDF when it is ready if that toggle is on.'],
+  ['How many free reports do I get?', 'One report per email every 30 days. Re-runs in that window count toward the same limit.'],
   ['Will my score change if I re-run?', 'Yes, slightly. Treat it as a snapshot and compare trends.'],
 ];
 

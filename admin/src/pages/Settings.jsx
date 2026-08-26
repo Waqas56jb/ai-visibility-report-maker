@@ -495,7 +495,7 @@ export default function Settings() {
           </div>
           <div className="opt">
             <div>
-              Email report link on completion<span>Transactional email provider, pluggable</span>
+              Email report PDF on completion<span>Sends via SMTP when generation finishes</span>
             </div>
             <Switch on={data.engine.emailOnComplete !== false} onToggle={() => setEngine({ emailOnComplete: data.engine.emailOnComplete === false })} />
           </div>
@@ -514,16 +514,24 @@ export default function Settings() {
               <h3>
                 <Shield className="lucide svg" /> Limits & access
               </h3>
-              <p>Rate limiting and CORS.</p>
+              <p>Free-report quota is enforced in the database. IP burst limits stop API abuse.</p>
             </div>
           </div>
           <div className="field">
-            <label>Reports per IP per day</label>
-            <input type="number" value={data.limits.reportsPerIp} onChange={(e) => setLimits({ reportsPerIp: Number(e.target.value) })} />
+            <label>Reports per email (free window)</label>
+            <input type="number" min="1" value={data.limits.reportsPerEmail} onChange={(e) => setLimits({ reportsPerEmail: Number(e.target.value) })} />
           </div>
           <div className="field">
-            <label>Reports per email per day</label>
-            <input type="number" value={data.limits.reportsPerEmail} onChange={(e) => setLimits({ reportsPerEmail: Number(e.target.value) })} />
+            <label>Email window (days)</label>
+            <input type="number" min="1" value={data.limits.emailWindowDays ?? 30} onChange={(e) => setLimits({ emailWindowDays: Number(e.target.value) })} />
+          </div>
+          <div className="field">
+            <label>Reports per IP (same window)</label>
+            <input type="number" min="1" value={data.limits.reportsPerIp} onChange={(e) => setLimits({ reportsPerIp: Number(e.target.value) })} />
+          </div>
+          <div className="field">
+            <label>IP window (days)</label>
+            <input type="number" min="1" value={data.limits.ipWindowDays ?? 30} onChange={(e) => setLimits({ ipWindowDays: Number(e.target.value) })} />
           </div>
           <div className="field">
             <label>Allowed origins</label>

@@ -74,6 +74,7 @@ export default function Checker() {
         city_region: payload.location,
         competitors: payload.competitors ? payload.competitors.split(',').map((s) => s.trim()).filter(Boolean) : [],
         notify_email: true,
+        email: payload.email,
         save_business: true,
         modes: { browsing: true, knowledge: true },
       });
@@ -114,7 +115,7 @@ export default function Checker() {
         </Reveal>
         <Reveal delay="d1" className="form-card">
           <h3>{checker.formTitle || 'Check your AI visibility'}</h3>
-          <p className="sub">{checker.formSub || 'Takes about 3 minutes. No credit card, no spam.'}</p>
+          <p className="sub">{checker.formSub || 'Takes about 3 minutes. One free report per email every 30 days.'}</p>
           <form onSubmit={onSubmit} noValidate>
             <div className="field">
               <label>Business name</label>
@@ -190,8 +191,8 @@ export default function Checker() {
               <Zap className="lucide svg" /> Generate my report
             </button>
             <p className="fine">
-              <Lock className="lucide svg" style={{ verticalAlign: '-2px' }} /> We'll email you a
-              link to your report. Results are tested against ChatGPT and vary over time.
+              <Lock className="lucide svg" style={{ verticalAlign: '-2px' }} /> We'll email the PDF to this address.
+              One free report per email every 30 days.
             </p>
           </form>
         </Reveal>

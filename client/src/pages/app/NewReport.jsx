@@ -23,6 +23,7 @@ export default function NewReport() {
   const navigate = useNavigate();
   const location = useLocation();
   const settings = useAuth((s) => s.user?.settings) || {};
+  const userEmail = useAuth((s) => s.user?.email) || '';
   const [step, setStep] = useState(1);
   const [businesses, setBusinesses] = useState([]);
   const [pending, setPending] = useState(false);
@@ -108,6 +109,7 @@ export default function NewReport() {
       const payload = {
         ...parsed.data,
         competitors: (parsed.data.competitors || []).map((c) => c.trim()).filter(Boolean).slice(0, 3),
+        email: String(location.state?.prefill?.email || userEmail || '').trim(),
       };
       const { reportId } = await api.createReport(payload);
       navigate(`/app/reports/${reportId}`);
@@ -206,6 +208,11 @@ export default function NewReport() {
             onChange={(v) => setValue('modes.knowledge', v)}
           />
           <Toggle label="Email me when ready" checked={watch('notify_email')} onChange={(v) => setValue('notify_email', v)} />
+          {watch('notify_email') && (
+            <p className="desc" style={{ marginTop: 8 }}>
+              We'll send the PDF to {location.state?.prefill?.email || userEmail || 'your account email'}. One free report per email every 30 days.
+            </p>
+          )}
           <Toggle label="Save this business for next time" checked={watch('save_business')} onChange={(v) => setValue('save_business', v)} />
         </div>
       )}

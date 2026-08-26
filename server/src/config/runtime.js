@@ -18,6 +18,34 @@ function originsList() {
   return [process.env.CLIENT_ORIGIN, process.env.ADMIN_ORIGIN].filter(Boolean).join(', ');
 }
 
+function defaultExclusions() {
+  return EXCLUDED_NAMES.map((n) => n.replace(/\b\w/g, (c) => c.toUpperCase())).join(', ');
+}
+
+let limitsOverlay = {};
+
+export function normalizeLimits(raw = {}) {
+  const legacy = raw.emailWindowDays == null;
+  const reportsPerEmail = Number(raw.reportsPerEmail);
+  const reportsPerIp = Number(raw.reportsPerIp);
+  return {
+    reportsPerEmail: legacy ? 1 : Number.isFinite(reportsPerEmail) && reportsPerEmail > 0 ? reportsPerEmail : 1,
+    emailWindowDays: Number(raw.emailWindowDays) > 0 ? Number(raw.emailWindowDays) : 30,
+    reportsPerIp: Number.isFinite(reportsPerIp) && reportsPerIp > 0 ? reportsPerIp : 5,
+    ipWindowDays: Number(raw.ipWindowDays) > 0 ? Number(raw.ipWindowDays) : 30,
+    allowedOrigins: raw.allowedOrigins || originsList(),
+    exclusions: raw.exclusions || defaultExclusions(),
+  };
+}
+
+export function applyLimitsOverlay(partial = {}) {
+  limitsOverlay = normalizeLimits(partial);
+}
+
+export function getLimits() {
+  return normalizeLimits(limitsOverlay);
+}
+
 export function defaultSettingsPayload() {
   const s = settings();
   return {
@@ -41,12 +69,14 @@ export function defaultSettingsPayload() {
       knowledge: s.knowledge !== false,
       emailOnComplete: s.emailOnComplete !== false,
     },
-    limits: {
-      reportsPerIp: 3,
-      reportsPerEmail: 2,
+    limits: normalizeLimits({
+      reportsPerIp: 5,
+      reportsPerEmail: 1,
+      emailWindowDays: 30,
+      ipWindowDays: 30,
       allowedOrigins: originsList(),
-      exclusions: EXCLUDED_NAMES.map((n) => n.replace(/\b\w/g, (c) => c.toUpperCase())).join(', '),
-    },
+      exclusions: defaultExclusions(),
+    }),
     site: defaultSite(),
   };
 }
@@ -61,6 +91,7 @@ export function applySaved(row = {}) {
     }
   }
   if (row.engine) applyEngineOverlay(row.engine);
+  if (row.limits) applyLimitsOverlay(row.limits);
   if (row.limits?.exclusions) {
     const names = String(row.limits.exclusions)
       .split(',')
@@ -106,7 +137,7 @@ export async function saveAdminSettings(patch = {}) {
     weights: patch.weights || existing.weights || defaults.weights,
     services: patch.services || existing.services || defaults.services,
     engine: { ...defaults.engine, ...(existing.engine || {}), ...(patch.engine || {}) },
-    limits: { ...defaults.limits, ...(existing.limits || {}), ...(patch.limits || {}) },
+    limits: normalizeLimits({ ...(existing.limits || {}), ...(patch.limits || {}) }),
     site: mergeSite(defaults.site, existing.site, patch.site),
     updated_at: new Date().toISOString(),
   };

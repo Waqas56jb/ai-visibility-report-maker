@@ -7,6 +7,7 @@ import { resumeInFlight } from './lib/pipeline.js';
 import { loadAdminSettings, publicSitePayload } from './config/runtime.js';
 import { ensureAdminColumns } from './db/ensure.js';
 import { buildPdfBuffer, pdfFilename, sendPdf } from './lib/renderPdf.js';
+import { apiRateLimit } from './middleware/rateLimit.js';
 import authRoutes from './routes/auth.js';
 import reportRoutes from './routes/reports.js';
 import businessRoutes from './routes/businesses.js';
@@ -14,6 +15,7 @@ import profileRoutes from './routes/profile.js';
 import adminRoutes from './routes/admin.js';
 
 const app = express();
+app.set('trust proxy', 1);
 const DEFAULT_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:5174',
@@ -39,6 +41,7 @@ app.use(
   })
 );
 app.use(express.json({ limit: '2mb' }));
+app.use('/api', apiRateLimit);
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
@@ -95,7 +98,9 @@ app.get('/api/public/reports/:id', async (req, res, next) => {
 
 app.use((err, _req, res, _next) => {
   console.error(err);
-  res.status(500).json({ error: err.message || 'Server error' });
+  const status = Number(err.status) >= 400 && Number(err.status) < 600 ? Number(err.status) : 500;
+  if (err.retryAfterSec) res.set('Retry-After', String(err.retryAfterSec));
+  res.status(status).json({ error: err.message || 'Server error' });
 });
 
 const port = Number(process.env.PORT) || 4000;

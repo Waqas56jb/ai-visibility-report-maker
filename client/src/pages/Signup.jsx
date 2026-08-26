@@ -26,7 +26,15 @@ export default function Signup() {
 
   useEffect(() => {
     document.title = 'Create account — MakeFlow';
-    if (user) navigate('/app/dashboard', { replace: true });
+    if (user && !sessionStorage.getItem('mf_report')) navigate('/app/dashboard', { replace: true });
+    try {
+      const pending = JSON.parse(sessionStorage.getItem('mf_report') || 'null');
+      if (pending?.email) {
+        setValues((v) => (v.email ? v : { ...v, email: pending.email }));
+      }
+    } catch {
+      /* ignore */
+    }
   }, [user, navigate]);
 
   const set = (key) => (e) => {
@@ -52,7 +60,14 @@ export default function Signup() {
     try {
       await signup(parsed.data);
       toast('Account created');
-      navigate('/app/dashboard');
+      const pending = sessionStorage.getItem('mf_report');
+      if (pending) {
+        sessionStorage.removeItem('mf_report');
+        const p = JSON.parse(pending);
+        navigate('/app/new', { state: { prefill: { name: p.business, website: p.website, email: p.email } } });
+      } else {
+        navigate('/app/dashboard');
+      }
     } catch (err) {
       toast(err.message);
     } finally {

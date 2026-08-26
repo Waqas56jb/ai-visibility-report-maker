@@ -5,10 +5,20 @@ import { startPipeline } from '../lib/pipeline.js';
 import { mapReport, normalizeUrl, domainOf } from '../lib/map.js';
 import { settings } from '../config/env.js';
 import { buildPdfBuffer, pdfFilename, sendPdf } from '../lib/renderPdf.js';
+import {
+  QuotaError,
+  attachUsageReport,
+  clientIp,
+  consumeReportQuota,
+  normalizeEmail,
+  releaseReportQuota,
+  sendQuotaError,
+} from '../lib/quota.js';
 
 const router = Router();
 
 router.post('/', requireUser, async (req, res, next) => {
+  let usageId = null;
   try {
     const b = req.body || {};
     const business_name = String(b.business_name || '').trim();
@@ -27,6 +37,17 @@ router.post('/', requireUser, async (req, res, next) => {
     if ((active || []).some((r) => domainOf(r.website) === domain)) {
       return res.status(409).json({ error: 'A report for this website is already running.' });
     }
+
+    const notify_to = normalizeEmail(b.email) || normalizeEmail(req.user.email);
+    if (!notify_to) return res.status(400).json({ error: 'A valid email is required to generate a report.' });
+
+    const isAdmin = req.profile?.role === 'admin';
+    const reservation = await consumeReportQuota({
+      email: notify_to,
+      ip: clientIp(req),
+      isAdmin,
+    });
+    usageId = reservation.usageId || null;
 
     let business_id = b.business_id || null;
     if (business_id) {
@@ -64,7 +85,11 @@ router.post('/', requireUser, async (req, res, next) => {
         })
         .select('id')
         .single();
-      if (error) return res.status(400).json({ error: error.message });
+      if (error) {
+        await releaseReportQuota(usageId);
+        usageId = null;
+        return res.status(400).json({ error: error.message });
+      }
       business_id = biz.id;
       const comps = (b.competitors || []).filter(Boolean);
       if (comps.length) {
@@ -94,17 +119,24 @@ router.post('/', requireUser, async (req, res, next) => {
         key_services: b.key_services || [],
         modes: b.modes || { browsing: engine.browsing !== false, knowledge: engine.knowledge !== false },
         notify_email: typeof b.notify_email === 'boolean' ? b.notify_email : engine.emailOnComplete !== false,
+        notify_to,
         status: 'queued',
         progress_step: 'queued',
       })
       .select('*')
       .single();
-    if (error) return res.status(400).json({ error: error.message });
+    if (error) {
+      await releaseReportQuota(usageId);
+      usageId = null;
+      return res.status(400).json({ error: error.message });
+    }
+    await attachUsageReport(usageId, data.id);
+    usageId = null;
 
     try {
       await supabase.from('leads').insert({
         user_id: req.user.id,
-        email: req.user.email,
+        email: notify_to,
         name: [req.profile?.first_name, req.profile?.last_name].filter(Boolean).join(' ').trim(),
         business_name,
         website,
@@ -119,6 +151,8 @@ router.post('/', requireUser, async (req, res, next) => {
     startPipeline(data.id);
     res.status(201).json({ reportId: data.id, report: mapReport(data) });
   } catch (err) {
+    await releaseReportQuota(usageId);
+    if (err instanceof QuotaError) return sendQuotaError(res, err);
     next(err);
   }
 });
@@ -229,6 +263,7 @@ router.delete('/:id', requireUser, async (req, res, next) => {
 });
 
 router.post('/:id/rerun', requireUser, async (req, res, next) => {
+  let usageId = null;
   try {
     const { data: prev, error } = await supabase
       .from('reports')
@@ -238,6 +273,17 @@ router.post('/:id/rerun', requireUser, async (req, res, next) => {
       .maybeSingle();
     if (error) return res.status(400).json({ error: error.message });
     if (!prev) return res.status(404).json({ error: 'Report not found.' });
+
+    const notify_to = normalizeEmail(prev.notify_to) || normalizeEmail(req.user.email);
+    if (!notify_to) return res.status(400).json({ error: 'A valid email is required to generate a report.' });
+
+    const isAdmin = req.profile?.role === 'admin';
+    const reservation = await consumeReportQuota({
+      email: notify_to,
+      ip: clientIp(req),
+      isAdmin,
+    });
+    usageId = reservation.usageId || null;
 
     const { data, error: insErr } = await supabase
       .from('reports')
@@ -253,15 +299,24 @@ router.post('/:id/rerun', requireUser, async (req, res, next) => {
         key_services: prev.key_services,
         modes: prev.modes,
         notify_email: prev.notify_email,
+        notify_to,
         status: 'queued',
         progress_step: 'queued',
       })
       .select('*')
       .single();
-    if (insErr) return res.status(400).json({ error: insErr.message });
+    if (insErr) {
+      await releaseReportQuota(usageId);
+      usageId = null;
+      return res.status(400).json({ error: insErr.message });
+    }
+    await attachUsageReport(usageId, data.id);
+    usageId = null;
     startPipeline(data.id);
     res.status(201).json({ reportId: data.id, report: mapReport(data) });
   } catch (err) {
+    await releaseReportQuota(usageId);
+    if (err instanceof QuotaError) return sendQuotaError(res, err);
     next(err);
   }
 });

@@ -52,6 +52,7 @@ create table if not exists public.reports (
   key_services jsonb default '[]'::jsonb,
   modes jsonb default '{"browsing":true,"knowledge":true}'::jsonb,
   notify_email boolean default true,
+  notify_to text,
   status text default 'queued' check (status in ('queued','processing','completed','failed')),
   progress_step text default 'queued',
   error text,
@@ -79,6 +80,20 @@ alter table public.reports add column if not exists prompt_versions jsonb defaul
 alter table public.reports add column if not exists truncated boolean default false;
 alter table public.reports add column if not exists how_makeflow_helps jsonb;
 alter table public.reports add column if not exists executive_summary text;
+alter table public.reports add column if not exists notify_to text;
+alter table public.reports add column if not exists email_sent_at timestamptz;
+
+create table if not exists public.report_usage (
+  id uuid primary key default gen_random_uuid(),
+  email text not null,
+  ip text default '',
+  report_id uuid unique,
+  created_at timestamptz default now()
+);
+create index if not exists report_usage_email_created_idx on public.report_usage (email, created_at desc);
+create index if not exists report_usage_ip_created_idx on public.report_usage (ip, created_at desc);
+create index if not exists reports_notify_to_idx on public.reports (notify_to);
+alter table public.report_usage enable row level security;
 
 create table if not exists public.leads (
   id uuid primary key default gen_random_uuid(),

@@ -3,7 +3,7 @@ import { supabase } from '../supabase.js';
 import { requireUser, requireAdmin } from '../middleware/auth.js';
 import { startPipeline } from '../lib/pipeline.js';
 import { mapAdminReport, mapQueryRow, mapReport, domainOf, usageCost } from '../lib/map.js';
-import { defaultSettingsPayload, saveAdminSettings } from '../config/runtime.js';
+import { defaultSettingsPayload, saveAdminSettings, normalizeLimits } from '../config/runtime.js';
 import { mergeSite, defaultSite } from '../config/site.js';
 import { buildPdfBuffer, pdfFilename, sendPdf } from '../lib/renderPdf.js';
 
@@ -398,6 +398,7 @@ router.post('/reports/:id/rerun', async (req, res, next) => {
         key_services: prev.key_services,
         modes: prev.modes,
         notify_email: prev.notify_email,
+        notify_to: prev.notify_to || null,
         status: 'queued',
         progress_step: 'queued',
       })
@@ -501,7 +502,7 @@ router.get('/settings', async (_req, res, next) => {
       weights: data?.weights || defaults.weights,
       services: data?.services || defaults.services,
       engine: { ...defaults.engine, ...(data?.engine || {}) },
-      limits: { ...defaults.limits, ...(data?.limits || {}) },
+      limits: normalizeLimits(data?.limits || defaults.limits),
       site: mergeSite(defaultSite(), data?.site),
     });
   } catch (err) {

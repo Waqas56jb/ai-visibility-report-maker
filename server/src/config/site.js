@@ -38,7 +38,7 @@ export const DEFAULT_CONTENT = {
     lead:
       'Tell us who you are and where your website lives. We crawl it, generate the questions your customers really ask, test them against ChatGPT and hand you a full report — for free.',
     formTitle: 'Check your AI visibility',
-    formSub: 'Takes about 3 minutes. No credit card, no spam.',
+    formSub: 'Takes about 3 minutes. One free report per email every 30 days.',
     submit: 'Run my free report',
   },
   servicesEyebrow: 'How MakeFlow helps',
@@ -82,7 +82,7 @@ export const DEFAULT_CONTENT = {
     },
     {
       q: 'Is it really free?',
-      a: "Yes. The report is a free lead magnet. If you want us to fix what it finds — schema, pages, listings, a chatbot — that's MakeFlow's paid work.",
+      a: "Yes — one free report per email every 30 days. If you want us to fix what it finds — schema, pages, listings, a chatbot — that's MakeFlow's paid work.",
     },
     {
       q: 'What does the PDF include?',
