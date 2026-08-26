@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+.env.*
+!.env.example
+*.local
+.DS_Store
+server/node_modules
+admin/node_modules
+admin/dist
+client/dist
