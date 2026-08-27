@@ -45,7 +45,7 @@ export default function Measure() {
             {METRICS.map((m) => {
               const Icon = m.icon;
               return (
-                <div className="metric" key={m.title}>
+                <div className="metric" key={m.title} style={{ '--w': m.w }}>
                   <div className="ic">
                     <Icon className="lucide svg" />
                   </div>

@@ -16,6 +16,7 @@ export default function Services() {
         <div className="services">
           {items.map((item, i) => (
             <Reveal key={item.title || i} delay={i === 0 ? '' : `d${i}`} className="card service">
+              <span className="num">{String(i + 1).padStart(2, '0')}</span>
               {item.img ? <img src={item.img} alt="" /> : null}
               <h3>{item.title}</h3>
               <p>{item.body}</p>
