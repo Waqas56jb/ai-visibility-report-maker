@@ -1,5 +1,6 @@
 import { ArrowRight, Bot, CalendarCheck, Check, MessagesSquare, SearchCheck, Workflow } from 'lucide-react';
 import { useSite } from '../../store/site.jsx';
+import { withReportContext } from '../../lib/serviceLinks.js';
 
 const GROUPS = {
   aiso: {
@@ -28,19 +29,6 @@ const GROUPS = {
   },
 };
 
-/** Adds report context to a MakeFlow contact link so an enquiry arrives with its report attached. */
-function withContext(url, report) {
-  if (!url) return url;
-  try {
-    const u = new URL(url);
-    u.searchParams.set('utm_source', 'ai-visibility-report');
-    if (report?.id) u.searchParams.set('ref', report.id);
-    if (report?.overall_score != null) u.searchParams.set('score', report.overall_score);
-    return u.toString();
-  } catch {
-    return url;
-  }
-}
 
 export default function HowMakeFlowHelps({ recommendations = [], report = null }) {
   const { content } = useSite();
@@ -107,7 +95,7 @@ export default function HowMakeFlowHelps({ recommendations = [], report = null }
               {g.cta && (
                 <a
                   className="help-link"
-                  href={withContext(g.cta, report)}
+                  href={withReportContext(g.cta, report)}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -130,7 +118,7 @@ export default function HowMakeFlowHelps({ recommendations = [], report = null }
         <div className="help-act-btns">
           <a
             className="btn btn-light"
-            href={withContext(bookUrl || lead?.cta, report)}
+            href={withReportContext(bookUrl || lead?.cta, report)}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -138,7 +126,7 @@ export default function HowMakeFlowHelps({ recommendations = [], report = null }
           </a>
           <a
             className="btn btn-ghost-light"
-            href={withContext('https://makeflow.com.au/contact?s=other', report)}
+            href={withReportContext('https://makeflow.com.au/contact?s=other', report)}
             target="_blank"
             rel="noopener noreferrer"
           >

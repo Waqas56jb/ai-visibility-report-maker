@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Play, ScanSearch } from 'lucide-react';
+import { ArrowRight, MessagesSquare, Play, ScanSearch } from 'lucide-react';
 import Navbar, { goToCheck } from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import Reveal from '../components/Reveal.jsx';
@@ -12,6 +12,10 @@ export default function ServicesPage() {
   const page = content.servicesPage || {};
   const items = page.items || [];
   const brand = content.brandName || 'MakeFlow';
+  const contactUrl = (content.bookCall?.url || 'https://makeflow.com.au/contact').trim();
+  const contactExternal = /^https?:\/\//i.test(contactUrl);
+  const contactProps = contactExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+  const otherServicesHref = `${contactUrl}${contactUrl.includes('?') ? '&' : '?'}s=other`;
 
   useEffect(() => {
     document.title = `${page.title || 'Services'} | ${brand}`;
@@ -40,6 +44,12 @@ export default function ServicesPage() {
                   <Play className="lucide svg" /> {content.hero?.ctaSecondary}
                 </Link>
               </div>
+              <p className="hero-alt">
+                Already know which service you need?{' '}
+                <a href={contactUrl} {...contactProps}>
+                  Talk to us directly <ArrowRight className="lucide svg" />
+                </a>
+              </p>
             </Reveal>
           </div>
         </section>
@@ -68,13 +78,18 @@ export default function ServicesPage() {
               <span className="eyebrow">{page.ctaEyebrow}</span>
               <h2>{page.ctaTitle}</h2>
               <p>{page.ctaBody}</p>
-              <button
-                type="button"
-                className="btn btn-light"
-                onClick={() => goToCheck(navigate, '/services')}
-              >
-                <ArrowRight className="lucide svg" /> {page.ctaButton}
-              </button>
+              <div className="cta-btns">
+                <button
+                  type="button"
+                  className="btn btn-light"
+                  onClick={() => goToCheck(navigate, '/services')}
+                >
+                  <ScanSearch className="lucide svg" /> {page.ctaButton}
+                </button>
+                <a className="btn btn-ghost-light" href={otherServicesHref} {...contactProps}>
+                  <MessagesSquare className="lucide svg" /> Ask about something else
+                </a>
+              </div>
             </Reveal>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import Navbar from '../components/Navbar.jsx';
 import Hero from '../components/Hero.jsx';
+import Journey from '../components/Journey.jsx';
 import Checker from '../components/Checker.jsx';
 import HowItWorks from '../components/HowItWorks.jsx';
 import Measure from '../components/Measure.jsx';
@@ -39,6 +40,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
+        <Journey />
         <Checker />
         <LandingStory />
         <HowItWorks />

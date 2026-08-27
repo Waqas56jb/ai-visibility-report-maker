@@ -83,7 +83,7 @@ export default function ReportView({ report }) {
       <div className="card panel" style={{ marginBottom: 20 }}>
         <h3>Prioritised recommendations</h3>
         <p className="desc">Do these first. Each maps to a MakeFlow service.</p>
-        <RecommendationList items={report.recommendations || []} />
+        <RecommendationList items={report.recommendations || []} report={report} />
       </div>
 
       <div className="card panel" style={{ marginBottom: 20 }}>
