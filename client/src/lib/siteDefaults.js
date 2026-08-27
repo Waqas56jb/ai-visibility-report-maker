@@ -1,14 +1,14 @@
 export const DEFAULT_THEME = {
-  ink: '#16181D',
-  ink2: '#242830',
-  paper: '#FAFAF9',
-  text: '#1F2328',
-  cyan: '#37B4D8',
-  indigo: '#4A6CF7',
-  violet: '#8B7BE8',
-  coral: '#E8735F',
-  amber: '#E0A44A',
-  mint: '#3FA96B',
+  ink: '#160C51',
+  ink2: '#3A3374',
+  paper: '#F5F6FF',
+  text: '#160C51',
+  cyan: '#5B6EF0',
+  indigo: '#7287FA',
+  violet: '#7C3AED',
+  coral: '#E0544A',
+  amber: '#D08A1F',
+  mint: '#16A34A',
 };
 
 export const DEFAULT_CONTENT = {

@@ -36,11 +36,7 @@ export default function ServicesPage() {
                 >
                   <ScanSearch className="lucide svg" /> {page.ctaButton}
                 </button>
-                <Link
-                  to="/report"
-                  className="btn btn-ghost"
-                  style={{ borderColor: 'rgba(255,255,255,.25)', color: '#fff' }}
-                >
+                <Link to="/report" className="btn btn-ghost">
                   <Play className="lucide svg" /> {content.hero?.ctaSecondary}
                 </Link>
               </div>
@@ -69,9 +65,7 @@ export default function ServicesPage() {
         <section className="section" style={{ paddingTop: 0 }}>
           <div className="wrap">
             <Reveal className="cta">
-              <span className="eyebrow" style={{ color: '#8B9BFB' }}>
-                {page.ctaEyebrow}
-              </span>
+              <span className="eyebrow">{page.ctaEyebrow}</span>
               <h2>{page.ctaTitle}</h2>
               <p>{page.ctaBody}</p>
               <button

@@ -157,8 +157,8 @@ function Simulator() {
         })}
       </div>
       <div className="sim-foot">
-        <span style={{ color: 'rgba(255,255,255,.6)' }}>
-          Mentioned in <b style={{ color: '#fff' }}>{hits}</b> answers
+        <span>
+          Mentioned in <b>{hits}</b> answers
         </span>
         <span className="sim-score">
           {score == null ? '—' : score}
@@ -190,11 +190,7 @@ export default function Hero() {
             <button type="button" className="btn btn-grad" onClick={() => goToCheck(navigate, '/')}>
               <ScanSearch className="lucide svg" /> {hero.ctaPrimary}
             </button>
-            <Link
-              to="/report"
-              className="btn btn-ghost"
-              style={{ borderColor: 'rgba(255,255,255,.25)', color: '#fff' }}
-            >
+            <Link to="/report" className="btn btn-ghost">
               <Play className="lucide svg" /> {hero.ctaSecondary}
             </Link>
           </div>
