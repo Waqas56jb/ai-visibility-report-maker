@@ -9,7 +9,7 @@ export default function Report() {
   const toast = useToast();
 
   useEffect(() => {
-    document.title = `${sampleReport.business_name} — AI Visibility Report`;
+    document.title = `${sampleReport.business_name} | AI Visibility Report`;
   }, []);
 
   return (
@@ -18,10 +18,10 @@ export default function Report() {
       <div className="report">
         <div className="wrap">
           <div className="table-actions" style={{ marginBottom: 16 }}>
-            <button type="button" className="btn btn-ghost btn-sm" onClick={() => toast('Sample report — sign in to copy a live public link')}>
+            <button type="button" className="btn btn-ghost btn-sm" onClick={() => toast('This is the sample report. Sign in to copy a live public link.')}>
               <LinkIcon className="lucide svg" /> Copy link
             </button>
-            <button type="button" className="btn btn-primary btn-sm" onClick={() => toast('Sample report — run a live report to download the branded PDF')}>
+            <button type="button" className="btn btn-primary btn-sm" onClick={() => toast('This is the sample report. Run a live one to download the branded PDF.')}>
               <FileDown className="lucide svg" /> Download PDF
             </button>
           </div>

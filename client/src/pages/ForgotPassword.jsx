@@ -14,7 +14,7 @@ export default function ForgotPassword() {
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
-    document.title = 'Reset password — MakeFlow';
+    document.title = 'Reset password | MakeFlow';
   }, []);
 
   async function send(e) {

@@ -17,7 +17,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    document.title = 'Log in — MakeFlow';
+    document.title = 'Log in | MakeFlow';
     if (user && !sessionStorage.getItem('mf_report')) navigate('/app/dashboard', { replace: true });
     try {
       const pending = JSON.parse(sessionStorage.getItem('mf_report') || 'null');

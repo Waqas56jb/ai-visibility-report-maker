@@ -14,7 +14,7 @@ export default function VerifyEmail() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    document.title = 'Confirm your email — MakeFlow';
+    document.title = 'Confirm your email | MakeFlow';
   }, []);
 
   useEffect(() => {

@@ -25,7 +25,7 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    document.title = 'Create account — MakeFlow';
+    document.title = 'Create account | MakeFlow';
     if (user && !sessionStorage.getItem('mf_report')) navigate('/app/dashboard', { replace: true });
     try {
       const pending = JSON.parse(sessionStorage.getItem('mf_report') || 'null');

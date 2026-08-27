@@ -58,7 +58,7 @@ export const reportData = {
   ],
   recs: [
     ['Add LocalBusiness & Service schema', 'You were absent from 8 of 10 discovery queries. No structured data tells AI systems what you do or where.', 'Add JSON-LD for Organization/AccountingService with services, areas served and reviews on every service page.', 'high', 'low', 'aiso'],
-    ['Publish FAQ pages per service', 'Informational queries scored 9/100. Competitors cited had FAQ content matching the question wording.', 'Write 6–10 Q&As per service using the exact phrasing from the gap list; mark up with FAQPage schema.', 'high', 'medium', 'aiso'],
+    ['Publish FAQ pages per service', 'Informational queries scored 9/100. Competitors cited had FAQ content matching the question wording.', 'Write 6 to 10 Q&As per service using the exact phrasing from the gap list; mark up with FAQPage schema.', 'high', 'medium', 'aiso'],
     ['Expand thin service pages', "Service pages average 90 words. ChatGPT described competitors' services in detail and yours vaguely.", 'Rewrite each service page to 400+ words in plain language: who it\'s for, what\'s included, outcomes.', 'high', 'medium', 'aiso'],
     ['Get listed where ChatGPT looks', "Browsing answers cited 3 directories for competitors that don't list you.", 'Claim profiles on the sources cited in competitor answers and keep NAP identical to the site.', 'medium', 'low', 'automation'],
     ['Add llms.txt and sitemap', 'Both missing; readiness score capped at 44.', 'Publish llms.txt summarising services and locations; fix the 404 sitemap and submit it.', 'medium', 'low', 'aiso'],

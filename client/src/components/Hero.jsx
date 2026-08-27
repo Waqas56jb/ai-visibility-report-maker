@@ -16,7 +16,7 @@ const SIM_QS = [
     hit: true,
   },
   {
-    q: 'Harbourview Accountants vs Bright Ledger — which is better?',
+    q: 'Harbourview Accountants vs Bright Ledger: which is better?',
     a: '<b class="b rival">Bright Ledger Advisory</b> is often cited for cloud accounting; <b class="b you">Harbourview Accountants</b> tends to be recommended for hands-on support…',
     hit: true,
   },

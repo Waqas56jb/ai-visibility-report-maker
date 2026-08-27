@@ -89,10 +89,10 @@ export default function Checker() {
       <div className="wrap">
         <Reveal>
           <span className="eyebrow">{checker.eyebrow || 'Run the check'}</span>
-          <h2>{checker.title || 'Three details. One honest score.'}</h2>
+          <h2>{checker.title || 'Three details and you have your score'}</h2>
           <p>
             {checker.lead ||
-              'Tell us who you are and where your website lives. We crawl it, generate the questions your customers really ask, test them against ChatGPT and hand you a full report — for free.'}
+              'Tell us who you are and where your website lives. We crawl it, work out the questions your customers really ask, test them against ChatGPT and send you the full report. Free.'}
           </p>
           <ul>
             <li>
@@ -104,8 +104,8 @@ export default function Checker() {
               and who it named instead
             </li>
             <li>
-              <CheckCircle2 className="lucide svg" /> A website AI-readiness audit — schema, FAQ,
-              llms.txt, crawler access
+              <CheckCircle2 className="lucide svg" /> A website AI-readiness audit covering schema,
+              FAQ, llms.txt and crawler access
             </li>
             <li>
               <CheckCircle2 className="lucide svg" /> A prioritised fix list and a branded PDF you

@@ -56,7 +56,7 @@ export default function ReportView({ report }) {
         </div>
         <div className="card panel">
           <h3>Score by question category</h3>
-          <p className="desc">Where you show up — and where you disappear.</p>
+          <p className="desc">Where you show up, and where you disappear.</p>
           <BarList items={report.score_by_category || []} colored />
         </div>
       </div>
@@ -88,7 +88,7 @@ export default function ReportView({ report }) {
 
       <div className="card panel" style={{ marginBottom: 20 }}>
         <h3>Highest-value gaps</h3>
-        <p className="desc">Live questions where ChatGPT named someone else — or named nobody.</p>
+        <p className="desc">Live questions where ChatGPT named someone else, or nobody at all.</p>
         <GapList gaps={report.gaps || []} />
       </div>
 

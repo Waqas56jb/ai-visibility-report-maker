@@ -548,9 +548,13 @@ td .sov i b{display:block;height:100%;background:var(--grad)}
 .field select{padding:13px 14px;border:1px solid var(--line-2);border-radius:12px;background:#fff;width:100%}
 .comp-row{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:8px}
 
-/* RESPONSIVE — phones, tablets, small laptops */
+/* RESPONSIVE: phones, tablets, small laptops */
 @media(max-width:1100px){
   .wrap{padding:0 20px}
+}
+/* Tablet-only column counts. Scoped with min-width so they cannot override
+   the phone rules defined earlier at max-width:900px / 560px. */
+@media(max-width:1100px) and (min-width:901px){
   .pipe-grid{grid-template-columns:repeat(3,1fr)}
   .who-grid{grid-template-columns:repeat(2,1fr)}
 }
@@ -614,3 +618,17 @@ td .sov i b{display:block;height:100%;background:var(--grad)}
 }
 
 
+
+/* Mobile readability pass. Placed last so these win over the blocks above. */
+@media(max-width:900px){
+  /* Google vs ChatGPT: box the two sides so the contrast still reads once the
+     "vs" divider is hidden and the columns stack. */
+  .compare-band{padding:64px 0}
+  .compare-table{gap:16px}
+  .compare-table>div:not(.vs){border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:22px}
+  .compare-table>div:not(.vs):last-child{background:rgba(103,232,249,.07);border-color:rgba(103,232,249,.3)}
+  /* Hero stats: even thirds instead of a 2 + 1 orphan row. */
+  .hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .hero-stats div strong{font-size:20px}
+  .hero-stats div span{font-size:12px;line-height:1.35}
+}

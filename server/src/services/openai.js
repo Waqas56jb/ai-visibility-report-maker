@@ -169,7 +169,7 @@ function extractResponseText(data) {
 
 export async function answerAsChatGPT({ query, mode, city, country = 'AU', stage, usage, model }) {
   const system =
-    'You are ChatGPT. Answer the user\'s question exactly as you would for a real person in Australia. When a question asks for recommendations, providers, comparisons or "best" options, name specific businesses you would actually suggest, in the order you\'d suggest them, with a short reason each. Include links or sources where you have them. Do not ask clarifying questions; make reasonable assumptions and answer fully in 120–250 words.';
+    'You are ChatGPT. Answer the user\'s question exactly as you would for a real person in Australia. When a question asks for recommendations, providers, comparisons or "best" options, name specific businesses you would actually suggest, in the order you\'d suggest them, with a short reason each. Include links or sources where you have them. Do not ask clarifying questions; make reasonable assumptions and answer fully in 120 to 250 words.';
 
   const browsing = mode === 'browsing';
   const body = {

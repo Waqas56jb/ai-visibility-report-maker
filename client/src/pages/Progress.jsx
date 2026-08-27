@@ -19,7 +19,7 @@ export default function Progress() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    document.title = 'Generating report — MakeFlow';
+    document.title = 'Generating report | MakeFlow';
   }, []);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function Progress() {
   const title = ready ? 'Report ready' : `${STAGES[Math.min(index, STAGES.length - 1)][0]}…`;
   const sub = ready
     ? 'Opening your report…'
-    : `Hang tight — this takes about 3 minutes. We'll also email you the link.`;
+    : `This takes about 3 minutes. We'll email you the link as well.`;
   const pctLabel = ready
     ? '100%'
     : `${pct}% · ${STAGES[Math.min(index, STAGES.length - 1)][1]}`;

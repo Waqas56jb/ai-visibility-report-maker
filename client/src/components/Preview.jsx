@@ -16,10 +16,10 @@ export default function Preview() {
       <div className="wrap">
         <Reveal className="section-head center">
           <span className="eyebrow">The report</span>
-          <h2>Proof, not opinions</h2>
+          <h2>See where every number came from</h2>
           <p>
-            Every finding links back to a real question and a real answer. You'll see the exact
-            wording ChatGPT used — and who it recommended instead of you.
+            Every finding links back to a real question and a real answer. You see the exact wording
+            ChatGPT used, and who it recommended instead of you.
           </p>
         </Reveal>
         <Reveal delay="d1" className="preview-shot">

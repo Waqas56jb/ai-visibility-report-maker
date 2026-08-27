@@ -1,5 +1,5 @@
 /**
- * Auth API layer — the ONLY place auth pages talk to the "backend".
+ * Auth API layer: the ONLY place auth pages talk to the "backend".
  *
  * Replace with real API calls later.
  *

@@ -87,7 +87,7 @@ function decorate(doc, meta) {
   doc.rect(0, height - 42, width, 42).fill(INK);
   tx(
     doc,
-    `Confidential  ·  Tested against ChatGPT  ·  ${meta.date || ''}  ·  Snapshot only — re-run to track change`,
+    `Confidential  ·  Tested against ChatGPT  ·  ${meta.date || ''}  ·  Snapshot only, re-run to track change`,
     36,
     height - 26,
     { size: 7, color: '#94A3B8', width: width - 90, height: 12 }
@@ -343,7 +343,7 @@ function drawReport(doc, report) {
   const gaps = (report.gaps || []).slice(0, 12);
   if (gaps.length) {
     heading(doc, 'Highest-value gaps');
-    tx(doc, 'Questions where ChatGPT named someone else — or named nobody — instead of you.', ML, doc.y, {
+    tx(doc, 'Questions where ChatGPT named someone else, or nobody at all, instead of you.', ML, doc.y, {
       size: 7.5,
       color: MUTED,
       width: cw(doc),
@@ -481,7 +481,7 @@ export function buildPdfBuffer(report) {
       size: 'A4',
       margins: { top: MT, bottom: MB, left: ML, right: MR },
       info: {
-        Title: `${report.business_name || 'Business'} — AI Visibility Report`,
+        Title: `${report.business_name || 'Business'} | AI Visibility Report`,
         Author: 'MakeFlow',
         Subject: 'ChatGPT AI visibility report',
       },

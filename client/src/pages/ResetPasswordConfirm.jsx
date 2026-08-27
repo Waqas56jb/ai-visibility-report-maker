@@ -22,7 +22,7 @@ export default function ResetPasswordConfirm() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    document.title = 'Set a new password — MakeFlow';
+    document.title = 'Set a new password | MakeFlow';
   }, []);
 
   async function handleSubmit(e) {

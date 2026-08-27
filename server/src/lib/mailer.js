@@ -128,7 +128,7 @@ export async function sendCompletedReportEmail(row) {
   await tx.sendMail({
     from: fromAddress(),
     to,
-    subject: `${business} — AI visibility score ${scoreLabel(row.overall_score)}/100`,
+    subject: `${business}: AI visibility score ${scoreLabel(row.overall_score)}/100`,
     text: [
       `Your MakeFlow AI visibility report for ${business} is ready.`,
       '',

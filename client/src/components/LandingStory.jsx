@@ -3,12 +3,12 @@ import { Building2, CheckCircle2, Eye, FileSearch, Globe2, MessageSquare, Scale,
 import Reveal from './Reveal.jsx';
 
 const INSIDE = [
-  { icon: Eye, title: 'Overall score /100', body: 'One number for how often ChatGPT names you — with a plain-English band from Invisible to Leading.' },
-  { icon: MessageSquare, title: '40+ live questions', body: 'Discovery, comparison, local, brand and long-tail, written for your niche and city — not generic keywords.' },
+  { icon: Eye, title: 'Overall score /100', body: 'One number for how often ChatGPT names you, plus a plain-English band from Invisible to Leading.' },
+  { icon: MessageSquare, title: '40+ live questions', body: 'Discovery, comparison, local, brand and long-tail questions, written for your niche and your city.' },
   { icon: Globe2, title: 'Browsing vs knowledge', body: 'See whether the live web or ChatGPT’s training data is doing the work, so you know what to fix first.' },
-  { icon: Scale, title: 'Share of voice', body: 'Who it recommends instead, how often, and in what position. Your competitors, named in black and white.' },
-  { icon: FileSearch, title: 'AI-readiness audit', body: 'Schema, FAQ, llms.txt, crawlers, sitemaps and service-page depth — scored with evidence, not vibes.' },
-  { icon: Shield, title: 'Prioritised plan', body: 'What to fix first, mapped to AI Search Optimisation, chatbots or automation. A sequence, not a dump.' },
+  { icon: Scale, title: 'Share of voice', body: 'Who it recommends instead of you, how often, and where they sit in the answer.' },
+  { icon: FileSearch, title: 'AI-readiness audit', body: 'Schema, FAQ, llms.txt, crawlers, sitemaps and how deep your service pages go. Each one scored, with the evidence shown.' },
+  { icon: Shield, title: 'Prioritised plan', body: 'What to fix first, mapped to AI Search Optimisation, chatbots or automation, in the order we would do it.' },
 ];
 
 const WHO = [
@@ -31,10 +31,10 @@ const PROOF = [
 
 const PIPE = [
   ['Crawl', 'Homepage, services, schema, robots, FAQ and whether GPTBot is even allowed in.'],
-  ['Questions', '30–50 prompts a real customer in your city would type — not a keyword list.'],
+  ['Questions', '30 to 50 prompts a real customer in your city would type. Not a keyword list.'],
   ['Ask twice', 'Each question runs with browsing and from knowledge. We store who was named.'],
   ['Score', 'Mentions, position, citations, sentiment, competitors and site readiness.'],
-  ['Plan', 'Gaps ranked by value. Recommendations sequenced. Branded A4 PDF ready to send.'],
+  ['Plan', 'Gaps ranked by what they are worth to you, then a branded A4 PDF you can send straight on.'],
 ];
 
 function CountStat({ n, suffix, label }) {
@@ -93,9 +93,9 @@ export default function LandingStory() {
             <span className="eyebrow">Why this exists</span>
             <h2>Google is no longer the only front door</h2>
             <p>
-              People now ask ChatGPT who to hire, who to trust, and who is nearby. If the model does
-              not know you, you are invisible in a conversation you never see. This report makes that
-              conversation visible — with evidence, not guesses.
+              People ask ChatGPT who to hire, who to trust, and who is nearby. If the model does not
+              know you, you are invisible in a conversation you never get to see. This report shows
+              you what it actually says.
             </p>
           </Reveal>
           <div className="why-grid">
@@ -112,16 +112,16 @@ export default function LandingStory() {
               <span className="why-n">02</span>
               <h3>The model has favourites</h3>
               <p>
-                It cites directories, competitors with clearer service pages, and brands that look
-                easy to trust. We show exactly who is taking your place — question by question.
+                It leans on directories, competitors with clearer service pages, and brands that
+                look easy to trust. We show you who it names instead of you, question by question.
               </p>
             </Reveal>
             <Reveal delay="d2" className="card why-card">
               <span className="why-n">03</span>
               <h3>You can change the answer</h3>
               <p>
-                Schema, FAQs, llms.txt, listings and on-site assistants are not vanity. They are how
-                AI systems decide you are real. The report turns that into a sequenced plan.
+                Schema, FAQs, llms.txt and listings are how AI systems decide you are a real
+                business. The report turns that into a plan with an order to it.
               </p>
             </Reveal>
           </div>
@@ -132,10 +132,10 @@ export default function LandingStory() {
         <div className="wrap">
           <Reveal className="section-head center">
             <span className="eyebrow">The engine</span>
-            <h2>Five steps. Nothing hand-wavy.</h2>
+            <h2>Five steps, run the same way every time</h2>
             <p>
-              Every report is generated the same way, so you can re-run next month and actually
-              compare. No black-box “AI score” without a denominator.
+              Because nothing changes between runs, the report you get next month lines up against
+              this one. You can see how every part of the score was built.
             </p>
           </Reveal>
           <div className="pipe-grid">
@@ -154,8 +154,8 @@ export default function LandingStory() {
         <div className="wrap">
           <Reveal className="section-head center">
             <span className="eyebrow">What’s in the PDF</span>
-            <h2>A client-ready A4 pack, not a screenshot</h2>
-            <p>Every free run produces an on-screen analysis and a branded A4 report you can send or keep.</p>
+            <h2>A proper A4 report, not a screenshot</h2>
+            <p>Every free run gives you the analysis on screen and a branded A4 report to keep or send on.</p>
           </Reveal>
           <div className="inside-grid">
             {INSIDE.map((item, i) => {
@@ -223,8 +223,8 @@ export default function LandingStory() {
           </div>
           <Reveal className="who-note">
             <CheckCircle2 className="lucide svg" />
-            National brands and directories still win many answers. The report shows whether that is
-            happening in <em>your</em> category and city — so you stop guessing.
+            National brands and directories still win a lot of answers. The report shows you
+            whether that is happening in <em>your</em> category and your city.
           </Reveal>
         </div>
       </section>

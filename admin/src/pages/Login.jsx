@@ -49,7 +49,7 @@ export default function Login() {
         <Brand onDark showAdmin />
         <div>
           <h2>Every report is a lead. Every lead is here.</h2>
-          <p>Watch reports come in, open any result, and export your leads — all behind one secure login.</p>
+          <p>Watch reports come in, open any result and export your leads, all behind one secure login.</p>
           <div className="live">
             <div>
               <span>Harbourview Accountants</span>

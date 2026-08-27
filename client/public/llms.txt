@@ -1,0 +1,37 @@
+# MakeFlow AI Visibility Report
+
+> A free report that shows Australian business owners how often ChatGPT
+> recommends them, who it recommends instead, and what to fix.
+
+MakeFlow is an Australian AI studio. We make businesses visible in AI search,
+then build the chatbots and automations that turn it into customers.
+
+## What the report does
+
+- Crawls your website: homepage, service pages, schema, robots.txt, FAQ content
+  and whether AI crawlers such as GPTBot are allowed in.
+- Writes 30 to 50 questions a real customer in your niche and city would type.
+- Runs every question through ChatGPT twice: once with web browsing on, once
+  from its own knowledge. Both are scored separately.
+- Scores six signals: mention rate (35%), prominence (20%), website
+  AI-readiness (15%), citation rate (10%), sentiment (10%) and competitive
+  position (10%).
+- Returns an on-screen analysis and a branded A4 PDF with a prioritised fix list.
+
+## Pages
+
+- [Home](/): run a free report.
+- [Sample report](/report): a full worked example.
+
+## Terms
+
+- AI visibility: how often an AI assistant names your business when someone asks
+  it for a recommendation.
+- Generative engine optimisation (GEO): the work of getting named in AI answers,
+  as distinct from ranking in a list of blue links.
+- Browsing mode vs knowledge mode: whether ChatGPT looked at the live web to
+  answer, or answered from its training data.
+
+## Contact
+
+MakeFlow, Australia. One free report per email every 30 days.

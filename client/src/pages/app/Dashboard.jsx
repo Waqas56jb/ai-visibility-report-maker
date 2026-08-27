@@ -60,7 +60,7 @@ export default function Dashboard() {
         <div>
           <span className="eyebrow">Overview</span>
           <h2>Your AI visibility at a glance</h2>
-          <p className="muted">Scores, businesses and the latest ChatGPT tests — all in one place.</p>
+          <p className="muted">Your scores, businesses and latest ChatGPT tests, all in one place.</p>
         </div>
         <Link to="/app/new" className="btn btn-grad">
           <Sparkles className="lucide svg" /> Run new report

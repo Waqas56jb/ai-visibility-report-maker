@@ -18,7 +18,7 @@ export default function Landing() {
   const cities = content.cities?.length ? content.cities : ['Brisbane', 'Sydney', 'Melbourne'];
 
   useEffect(() => {
-    document.title = content.documentTitle || 'MakeFlow — AI Visibility Report';
+    document.title = content.documentTitle || 'AI Visibility Report for Australian Businesses | MakeFlow';
   }, [content.documentTitle]);
 
   return (

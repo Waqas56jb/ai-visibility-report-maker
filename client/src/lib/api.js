@@ -1,5 +1,5 @@
 /**
- * API layer — the ONLY place the UI talks to the backend.
+ * API layer: the ONLY place the UI talks to the backend.
  *
  * submitReport(data) is called by the hero form with:
  *   { businessName: string, websiteUrl: string, email: string }

@@ -15,7 +15,7 @@ export default function ResetPassword() {
   const [done, setDone] = useState(false);
 
   useEffect(() => {
-    document.title = 'Reset password — MakeFlow';
+    document.title = 'Reset password | MakeFlow';
   }, []);
 
   const set = (key) => (e) => {

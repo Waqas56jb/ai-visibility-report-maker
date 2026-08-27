@@ -91,7 +91,7 @@ export function generateReportResult({ business_name, website, city_region, comp
     ],
     recommendations: [
       { title: 'Add LocalBusiness & Service schema', why: `No structured data tells AI systems what ${business_name} does.`, how: 'Add JSON-LD for Organization/LocalBusiness.', impact: 'high', effort: 'low', service: 'aiso' },
-      { title: 'Publish FAQ pages per service', why: 'Informational queries scored poorly.', how: 'Write 6–10 Q&As per service with FAQPage schema.', impact: 'high', effort: 'medium', service: 'aiso' },
+      { title: 'Publish FAQ pages per service', why: 'Informational queries scored poorly.', how: 'Write 6 to 10 Q&As per service with FAQPage schema.', impact: 'high', effort: 'medium', service: 'aiso' },
       { title: 'Get listed where ChatGPT looks', why: 'Browsing answers cited directories you are missing from.', how: 'Claim profiles and keep NAP identical.', impact: 'medium', effort: 'low', service: 'automation' },
       { title: 'Answer instantly with a site assistant', why: 'AI-driven visitors have no way to convert.', how: 'Deploy a chatbot trained on your FAQ.', impact: 'low', effort: 'low', service: 'chatbot' },
     ],

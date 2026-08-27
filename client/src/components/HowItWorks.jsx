@@ -12,7 +12,7 @@ const STEPS = [
     n: 'Step 2',
     icon: MessageSquareText,
     title: 'We write real questions',
-    body: '30–50 questions a customer in your niche and city would actually ask — discovery, comparison, brand, local and long-tail.',
+    body: '30 to 50 questions a customer in your niche and city would actually ask: discovery, comparison, brand, local and long-tail.',
   },
   {
     n: 'Step 3',
@@ -24,7 +24,7 @@ const STEPS = [
     n: 'Step 4',
     icon: FileBarChart,
     title: 'You get the report',
-    body: 'Score, breakdown, competitor share of voice, gap list and a prioritised fix plan — on screen and as a branded PDF.',
+    body: 'Score, breakdown, competitor share of voice, gap list and a prioritised fix plan, on screen and as a branded PDF.',
   },
 ];
 

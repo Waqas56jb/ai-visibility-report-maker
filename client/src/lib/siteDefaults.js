@@ -1,28 +1,28 @@
 export const DEFAULT_THEME = {
-  ink: '#0B1020',
-  ink2: '#141B33',
-  paper: '#F7F8FC',
-  text: '#0F172A',
-  cyan: '#06B6D4',
-  indigo: '#4F46E5',
-  violet: '#7C3AED',
-  coral: '#F0625A',
-  amber: '#F5B84B',
-  mint: '#22C55E',
+  ink: '#16181D',
+  ink2: '#242830',
+  paper: '#FAFAF9',
+  text: '#1F2328',
+  cyan: '#37B4D8',
+  indigo: '#4A6CF7',
+  violet: '#8B7BE8',
+  coral: '#E8735F',
+  amber: '#E0A44A',
+  mint: '#3FA96B',
 };
 
 export const DEFAULT_CONTENT = {
   brandName: 'MakeFlow',
-  documentTitle: 'MakeFlow — AI Visibility Report',
+  documentTitle: 'AI Visibility Report | Free ChatGPT and AI Search Check | MakeFlow',
   navCta: 'Check my visibility',
-  strip: 'Built on the same methodology used by AI search agencies',
+  strip: 'Tested against ChatGPT, the assistant your customers actually use',
   cities: ['Brisbane', 'Sydney', 'Melbourne', 'Perth', 'Adelaide', 'Gold Coast', 'Newcastle', 'Canberra'],
   hero: {
     eyebrow: 'Free AI Visibility Report · Tested against ChatGPT',
     headline: 'When customers ask ChatGPT, does it',
     highlight: 'say your name?',
     lead:
-      'Thousands of Australians now ask AI assistants for recommendations before they search Google. We run real customer questions through ChatGPT and show you exactly where your business appears — and where your competitors do instead.',
+      "More Australians ask an AI assistant before they ever open Google. We run your customers' real questions through ChatGPT and show you exactly who it names.",
     ctaPrimary: 'Run my free report',
     ctaSecondary: 'See a sample report',
     stat1n: '40+',
@@ -34,9 +34,9 @@ export const DEFAULT_CONTENT = {
   },
   checker: {
     eyebrow: 'Run the check',
-    title: 'Three details. One honest score.',
+    title: 'Three details and you have your score',
     lead:
-      'Tell us who you are and where your website lives. We crawl it, generate the questions your customers really ask, test them against ChatGPT and hand you a full report — for free.',
+      'Tell us who you are and where your site lives. We crawl it, test real customer questions against ChatGPT, then send your AI visibility report. Free.',
     formTitle: 'Check your AI visibility',
     formSub: 'Takes about 3 minutes. One free report per email every 30 days.',
     submit: 'Run my free report',
@@ -52,7 +52,7 @@ export const DEFAULT_CONTENT = {
     },
     {
       title: 'AI Chatbots',
-      body: 'Custom assistants on your site and WhatsApp that answer, qualify and book — trained on your real content.',
+      body: 'Custom assistants on your site and WhatsApp that answer questions, qualify leads and take bookings, trained on your own content.',
       img: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=800&q=80',
     },
     {
@@ -66,45 +66,45 @@ export const DEFAULT_CONTENT = {
   faqs: [
     {
       q: 'Which AI is this tested against?',
-      a: 'ChatGPT only, in two modes: with web browsing enabled and from its own knowledge. Both are reported separately so you can see whether your website or your reputation is doing the work.',
+      a: 'ChatGPT only, in two modes: with web browsing on, and from its own knowledge. We report both separately, so you can see which one carries you.',
     },
     {
       q: 'How long does it take?',
-      a: "Usually 2–3 minutes. We crawl your site, generate 30–50 questions, run each twice and score the results. You'll see live progress and we'll email you the link if you ask us to.",
+      a: 'Usually 2 to 3 minutes. We crawl your site, write 30 to 50 questions, run each one twice and score the answers. You watch it happen live, and we email you the link if you want it.',
     },
     {
       q: 'Will my score change if I run it again?',
-      a: 'Yes, slightly. AI answers are non-deterministic. Treat the score as a snapshot and compare trends over time rather than single points. That is why re-run exists.',
+      a: 'Yes, a little. AI answers are never identical twice. Treat each score as a snapshot and watch the trend across runs rather than reading too much into one number.',
     },
     {
       q: 'What if my site blocks crawlers?',
-      a: 'We still run the visibility test. The readiness score reflects what we could observe and the report tells you exactly which crawler rules are blocking AI systems.',
+      a: 'We still run the visibility test. The readiness score reflects what we could actually see, and the report names the crawler rules that are shutting AI systems out.',
     },
     {
       q: 'Is it really free?',
-      a: "Yes — one free report per email every 30 days. If you want us to fix what it finds — schema, pages, listings, a chatbot — that's MakeFlow's paid work.",
+      a: "Yes. One free report per email every 30 days. Fixing what it finds, whether that is schema, pages, listings or a chatbot, is MakeFlow's paid work.",
     },
     {
       q: 'What does the PDF include?',
-      a: 'Overall score, mention rate, position, citations, readiness, score by mode and category, competitor share of voice, highest-value gaps, sequenced recommendations, and how MakeFlow can deliver the work. Formatted for A4.',
+      a: 'Overall score, mention rate, position, citations, readiness, score by mode and category, competitor share of voice, your biggest gaps, what to do about them in order, and how MakeFlow can do that work. Set up for A4.',
     },
     {
       q: 'Do you test Google, Perplexity or Gemini?',
-      a: 'Not in this product. One engine, done properly, beats a thin score across five. ChatGPT is the assistant most Australian SMEs hear about from customers today.',
+      a: 'Not in this product. We would rather do one engine properly than spread a thin score across five. ChatGPT is the one most Australian businesses hear about from their customers.',
     },
     {
       q: 'Will you spam my email?',
-      a: 'We send the report link when you ask. No drip sequences from this form. You can create an account to keep history and re-run later.',
+      a: 'We send the report link when you ask for it. Nothing else comes out of this form. Make an account if you want to keep your history and re-run later.',
     },
   ],
   cta: {
     eyebrow: 'Ready?',
     title: 'Find out what ChatGPT says about you',
-    body: 'Two minutes to fill in. Three minutes to wait. One honest score.',
+    body: 'About two minutes to fill in the form and three to get your score back.',
     button: 'Run my free report',
   },
   footerBlurb:
-    'Australian AI studio. We make businesses visible to AI assistants and build the chatbots and automations that turn that visibility into customers.',
+    'Australian AI studio. We make businesses visible in AI search, then build the chatbots and automations that turn it into customers.',
   footerCopy: '© 2026 MakeFlow Pty Ltd · makeflow.com.au',
   footerNote: 'Results tested against ChatGPT · Scores vary over time',
 };

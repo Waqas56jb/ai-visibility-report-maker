@@ -38,8 +38,8 @@ export default function Measure() {
             Six signals, weighted into one score
           </h2>
           <p className="muted">
-            Each weight is transparent. If ChatGPT never mentions you, no amount of pretty website
-            fixes it — so mentions carry the most weight.
+            Every weight is shown up front. If ChatGPT never mentions you at all, a tidy website
+            will not save you, so mentions carry the most.
           </p>
           <div className="metrics">
             {METRICS.map((m) => {
