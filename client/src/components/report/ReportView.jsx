@@ -92,7 +92,7 @@ export default function ReportView({ report }) {
         <GapList gaps={report.gaps || []} />
       </div>
 
-      <HowMakeFlowHelps recommendations={report.recommendations || []} />
+      <HowMakeFlowHelps recommendations={report.recommendations || []} report={report} />
       <div className="method">
         Methodology: tested against ChatGPT in browsing and knowledge modes. AI answers are non-deterministic; scores
         vary over time. Re-run later to track change.
