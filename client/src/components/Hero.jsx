@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Play, ScanSearch, User } from 'lucide-react';
+import { Play, ScanSearch, Sparkles, Timer, User } from 'lucide-react';
 import { goToCheck } from './Navbar.jsx';
 import { useSite } from '../store/site.jsx';
 
@@ -180,7 +180,16 @@ export default function Hero() {
       <div className="hero-glow" />
       <div className="hero-grid" />
       <div className="wrap">
-        <div className="hero-anim">
+        <div className="hero-mock">
+          <Simulator />
+          <span className="hero-badge hero-badge-1">
+            <Sparkles className="lucide svg" /> {hero.stat1n} {hero.stat1l}
+          </span>
+          <span className="hero-badge hero-badge-2">
+            <Timer className="lucide svg" /> {hero.stat3n} {hero.stat3l}
+          </span>
+        </div>
+        <div className="hero-copy">
           <span className="eyebrow">{hero.eyebrow}</span>
           <h1>
             {hero.headline} <span className="hl">{hero.highlight}</span>
@@ -209,7 +218,6 @@ export default function Hero() {
             </div>
           </div>
         </div>
-        <Simulator />
       </div>
     </section>
   );

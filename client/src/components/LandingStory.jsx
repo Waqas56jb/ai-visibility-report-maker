@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { Building2, Eye, FileSearch, Globe2, MessageSquare, Scale, Shield } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Building2, Eye, FileSearch, Globe2, MessageSquare, ScanSearch, Scale, Shield } from 'lucide-react';
 import Reveal from './Reveal.jsx';
+import { goToCheck } from './Navbar.jsx';
+import { useSite } from '../store/site.jsx';
 
 const INSIDE = [
   { icon: Eye, title: 'Overall score /100', body: 'One number for how often ChatGPT names you, plus a plain-English band from Invisible to Leading.' },
@@ -77,6 +80,9 @@ function CountStat({ n, suffix, label }) {
 }
 
 export default function LandingStory() {
+  const navigate = useNavigate();
+  const { content } = useSite();
+
   return (
     <>
       <section className="proof-band">
@@ -88,15 +94,24 @@ export default function LandingStory() {
       </section>
 
       <section className="section why-ai" id="why">
+        <div className="hero-glow" />
         <div className="wrap">
-          <Reveal className="section-head">
+          <Reveal className="section-head center">
             <span className="eyebrow">Why this exists</span>
-            <h2>Google is no longer the only front door</h2>
+            <h2>
+              Google is no longer the only <span className="hl">front door</span>
+            </h2>
             <p>
               People ask ChatGPT who to hire, who to trust, and who is nearby. If the model does not
               know you, you are invisible in a conversation you never get to see. This report shows
               you what it actually says.
             </p>
+            <div className="why-cta">
+              <button type="button" className="btn btn-grad" onClick={() => goToCheck(navigate, '/')}>
+                <ScanSearch className="lucide svg" /> {content.hero?.ctaPrimary || 'Run my free report'}
+              </button>
+              <span className="why-cta-note">{content.checker?.formSub || 'Takes about 3 minutes. One free report per email every 30 days.'}</span>
+            </div>
           </Reveal>
           <div className="why-grid">
             <Reveal className="card why-card">
