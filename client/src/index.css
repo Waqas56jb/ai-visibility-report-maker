@@ -93,14 +93,18 @@ body.nav-open{overflow:hidden}
 .sim{background:rgba(20,27,51,.75);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-lg);backdrop-filter:blur(16px);box-shadow:0 40px 100px -30px rgba(0,0,0,.7);overflow:hidden;animation:up 1s .5s cubic-bezier(.2,.7,.2,1) both}
 .sim-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.08);font-family:var(--font-m);font-size:12px;color:rgba(255,255,255,.6)}
 .sim-head .dots span{display:inline-block;width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.2);margin-right:6px}
-.sim-body{padding:18px;min-height:320px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
-.sim-q{font-family:var(--font-m);font-size:12.5px;color:#C5CBFF;display:flex;gap:8px;align-items:flex-start}
-.sim-q .svg{flex:none;margin-top:2px}
-.sim-a{font-size:13.5px;line-height:1.6;color:rgba(255,255,255,.85);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:12px 14px}
-.sim-a .b{padding:1px 6px;border-radius:5px;background:rgba(255,255,255,.1)}
+.sim-body{padding:18px;min-height:320px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+/* user turn — bubble on the right with its own avatar, the way a real chat reads */
+.sim-q{align-self:flex-end;max-width:86%;margin-top:8px;display:flex;flex-direction:row-reverse;align-items:flex-end;gap:8px;font-size:13px;line-height:1.5}
+.sim-q .svg{flex:none;width:26px;height:26px;padding:6px;border-radius:50%;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);stroke-width:1.8}
+.sim-q span{background:rgba(114,135,250,.22);border:1px solid rgba(197,203,255,.22);color:#E7E9FF;border-radius:16px 16px 4px 16px;padding:9px 13px;min-width:0}
+/* assistant turn — bubble on the left, avatar floated outside it */
+.sim-a{position:relative;align-self:flex-start;margin-left:34px;max-width:calc(86% - 34px);font-size:13.5px;line-height:1.6;color:rgba(255,255,255,.85);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px 16px 16px 4px;padding:11px 14px}
+.sim-a::before{content:"";position:absolute;left:-34px;bottom:0;width:26px;height:26px;border-radius:50%;background:var(--grad);box-shadow:0 0 0 1px rgba(255,255,255,.15),0 4px 12px -4px rgba(0,0,0,.55)}
+.sim-a .b{padding:1px 6px;border-radius:6px;background:rgba(255,255,255,.12)}
 .sim-a .b.you{background:rgba(34,197,94,.25);color:#86EFAC}
 .sim-a .b.rival{background:rgba(240,98,90,.2);color:#FCA5A5}
-.sim-tag{align-self:flex-start;font-family:var(--font-m);font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid}
+.sim-tag{align-self:flex-start;margin-left:34px;font-family:var(--font-m);font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid}
 .sim-tag.yes{color:#86EFAC;border-color:rgba(134,239,172,.4)}
 .sim-tag.no{color:#FCA5A5;border-color:rgba(252,165,165,.4)}
 .sim-foot{padding:14px 18px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;font-size:13px}
@@ -116,6 +120,11 @@ body.nav-open{overflow:hidden}
   .hero-ctas .btn{width:100%;justify-content:center}
   .hero-stats{gap:16px;margin-top:24px}
   .sim-body{min-height:220px;padding:14px}
+  .sim-q,.sim-a{max-width:100%}
+  .sim-q .svg{width:22px;height:22px;padding:5px}
+  .sim-a{margin-left:28px;max-width:calc(100% - 28px)}
+  .sim-a::before{left:-28px;width:22px;height:22px}
+  .sim-tag{margin-left:28px}
 }
 
 /* logos strip — a dark band that runs continuous with the hero above and checker below */
