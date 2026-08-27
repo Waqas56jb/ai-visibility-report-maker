@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Building2, CheckCircle2, Eye, FileSearch, Globe2, MessageSquare, Scale, Shield } from 'lucide-react';
+import { Building2, Eye, FileSearch, Globe2, MessageSquare, Scale, Shield } from 'lucide-react';
 import Reveal from './Reveal.jsx';
 
 const INSIDE = [
@@ -221,11 +221,6 @@ export default function LandingStory() {
               </div>
             ))}
           </div>
-          <Reveal className="who-note">
-            <CheckCircle2 className="lucide svg" />
-            National brands and directories still win a lot of answers. The report shows you
-            whether that is happening in <em>your</em> category and your city.
-          </Reveal>
         </div>
       </section>
     </>
