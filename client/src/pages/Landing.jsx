@@ -5,8 +5,6 @@ import Checker from '../components/Checker.jsx';
 import HowItWorks from '../components/HowItWorks.jsx';
 import Measure from '../components/Measure.jsx';
 import Preview from '../components/Preview.jsx';
-import Services from '../components/Services.jsx';
-import Testimonials from '../components/Testimonials.jsx';
 import FAQ from '../components/FAQ.jsx';
 import FinalCta from '../components/FinalCta.jsx';
 import Footer from '../components/Footer.jsx';
@@ -46,8 +44,6 @@ export default function Landing() {
         <HowItWorks />
         <Measure />
         <Preview />
-        <Services />
-        <Testimonials />
         <FAQ />
         <FinalCta />
       </main>
