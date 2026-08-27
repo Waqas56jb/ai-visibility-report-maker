@@ -21,6 +21,8 @@ const DEFAULT_ORIGINS = [
   'http://localhost:5174',
   'https://ai-visibility-report-maker-client.vercel.app',
   'https://ai-visibility-report-maker-admin.vercel.app',
+  'https://www.makeflow.com.au',
+  'https://makeflow.com.au',
 ];
 const origins = [
   ...DEFAULT_ORIGINS,

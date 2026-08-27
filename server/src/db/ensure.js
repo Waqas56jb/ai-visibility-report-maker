@@ -14,6 +14,7 @@ export async function ensureAdminColumns() {
     await client.query(`alter table public.admin_settings add column if not exists site jsonb`);
     await client.query(`alter table public.reports add column if not exists notify_to text`);
     await client.query(`alter table public.reports add column if not exists email_sent_at timestamptz`);
+    await client.query(`alter table public.reports add column if not exists pipeline_lock_at timestamptz`);
     await client.query(`
       create table if not exists public.report_usage (
         id uuid primary key default gen_random_uuid(),

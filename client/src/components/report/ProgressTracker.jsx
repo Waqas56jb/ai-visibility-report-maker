@@ -13,11 +13,15 @@ const LABELS = {
   failed: 'Failed',
 };
 
-export default function ProgressTracker({ step, status, error, onRetry }) {
+export default function ProgressTracker({ step, status, error, onRetry, metrics }) {
   const idx = STAGES.indexOf(step);
+  const testingLabel =
+    step === 'testing' && metrics?.tests_total
+      ? `Asking ChatGPT (${metrics.tests_done || 0}/${metrics.tests_total})`
+      : null;
   return (
     <div className="progress-box" style={{ margin: '40px auto' }}>
-      <h2>{status === 'failed' ? 'Report failed' : LABELS[step] || 'Working…'}</h2>
+      <h2>{status === 'failed' ? 'Report failed' : testingLabel || LABELS[step] || 'Working…'}</h2>
       {error && <p>{error}</p>}
       <div className="plist">
         {STAGES.map((s, i) => {

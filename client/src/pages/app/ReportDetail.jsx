@@ -38,7 +38,7 @@ export default function ReportDetail() {
           await load();
         } else {
           setReport((prev) => ({ ...(prev || { id }), ...status }));
-          timer = window.setTimeout(tick, 3000);
+          timer = window.setTimeout(tick, 2000);
         }
       } catch (err) {
         if (live) toast(err.message);
@@ -98,6 +98,7 @@ export default function ReportDetail() {
           step={report.progress_step}
           status={report.status}
           error={report.error}
+          metrics={report.metrics}
           onRetry={async () => {
             const { reportId } = await api.rerunReport(id);
             navigate(`/app/reports/${reportId}`);

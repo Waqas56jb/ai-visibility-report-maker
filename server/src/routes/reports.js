@@ -185,12 +185,15 @@ router.get('/:id/status', requireUser, async (req, res, next) => {
   try {
     const { data, error } = await supabase
       .from('reports')
-      .select('id,status,progress_step,error,overall_score')
+      .select('id,status,progress_step,error,overall_score,metrics')
       .eq('id', req.params.id)
       .eq('user_id', req.user.id)
       .maybeSingle();
     if (error) return res.status(400).json({ error: error.message });
     if (!data) return res.status(404).json({ error: 'Report not found.' });
+    if (data.status === 'queued' || data.status === 'processing') {
+      startPipeline(data.id);
+    }
     res.json(data);
   } catch (err) {
     next(err);
@@ -227,6 +230,7 @@ router.get('/:id', requireUser, async (req, res, next) => {
       .maybeSingle();
     if (error) return res.status(400).json({ error: error.message });
     if (!data) return res.status(404).json({ error: 'Report not found.' });
+    if (data.status === 'queued' || data.status === 'processing') startPipeline(data.id);
     res.json(mapReport(data));
   } catch (err) {
     next(err);

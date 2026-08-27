@@ -1,3 +1,9 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/src/index.js" }]
+  "rewrites": [{ "source": "/(.*)", "destination": "/src/index.js" }],
+  "functions": {
+    "src/index.js": {
+      "maxDuration": 60,
+      "includeFiles": "prompts/**"
+    }
+  }
 }

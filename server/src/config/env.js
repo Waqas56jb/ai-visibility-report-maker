@@ -20,7 +20,7 @@ export function settings() {
     maxQueries: overlay.maxQueries ?? num('MAX_QUERIES', 42),
     maxPages: overlay.maxPages ?? num('MAX_PAGES', 12),
     maxCostUsd: overlay.maxCostUsd ?? (Number(process.env.MAX_COST_USD) || 0.6),
-    maxOpenAiCalls: overlay.maxOpenAiCalls ?? num('MAX_OPENAI_CALLS', 100),
+    maxOpenAiCalls: overlay.maxOpenAiCalls ?? num('MAX_OPENAI_CALLS', 160),
     bucket: process.env.SUPABASE_BUCKET || 'reports',
     browsing: overlay.browsing !== false,
     knowledge: overlay.knowledge !== false,

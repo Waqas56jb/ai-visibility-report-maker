@@ -82,6 +82,7 @@ alter table public.reports add column if not exists how_makeflow_helps jsonb;
 alter table public.reports add column if not exists executive_summary text;
 alter table public.reports add column if not exists notify_to text;
 alter table public.reports add column if not exists email_sent_at timestamptz;
+alter table public.reports add column if not exists pipeline_lock_at timestamptz;
 
 create table if not exists public.report_usage (
   id uuid primary key default gen_random_uuid(),

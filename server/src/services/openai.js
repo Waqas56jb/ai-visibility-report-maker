@@ -56,13 +56,20 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-function retryable(status, err) {
-  if (status === 429 || (status >= 500 && status < 600)) return true;
+function isTimeout(err) {
+  const name = err?.name || '';
   const msg = String(err?.message || '');
-  return /timeout|ETIMEDOUT|fetch failed|invalid JSON|schema/i.test(msg);
+  return name === 'TimeoutError' || name === 'AbortError' || /timeout|aborted|AbortError/i.test(msg);
 }
 
-async function openaiFetch(url, body) {
+function retryable(status, err) {
+  if (isTimeout(err)) return false;
+  if (status === 429 || (status >= 500 && status < 600)) return true;
+  const msg = String(err?.message || '');
+  return /ETIMEDOUT|fetch failed|invalid JSON|schema/i.test(msg);
+}
+
+async function openaiFetch(url, body, { timeoutMs = 20000 } = {}) {
   const key = process.env.OPENAI_API_KEY;
   if (!key) throw new Error('OPENAI_API_KEY is missing');
   const res = await fetch(url, {
@@ -72,7 +79,7 @@ async function openaiFetch(url, body) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
-    signal: AbortSignal.timeout(90000),
+    signal: AbortSignal.timeout(timeoutMs),
   });
   const text = await res.text();
   let data = {};
@@ -119,7 +126,7 @@ export async function completeJson({
   let lastErr;
   for (let i = 0; i <= BACKOFF.length; i++) {
     try {
-      const data = await openaiFetch('https://api.openai.com/v1/chat/completions', payload);
+      const data = await openaiFetch('https://api.openai.com/v1/chat/completions', payload, { timeoutMs: 25000 });
       const content = data.choices?.[0]?.message?.content || '{}';
       let parsed;
       try {
@@ -181,19 +188,20 @@ export async function answerAsChatGPT({ query, mode, city, country = 'AU', stage
     }
   }
 
+  const timeoutMs = browsing ? 22000 : 18000;
   let lastErr;
-  for (let i = 0; i <= BACKOFF.length; i++) {
+  for (let i = 0; i <= 1; i++) {
     try {
       const started = Date.now();
       let data;
       try {
-        data = await openaiFetch('https://api.openai.com/v1/responses', body);
+        data = await openaiFetch('https://api.openai.com/v1/responses', body, { timeoutMs });
       } catch (err) {
         if (browsing && (err.status === 400 || err.status === 404)) {
           const fallback = { ...body };
           delete fallback.tools;
           delete fallback.tool_choice;
-          data = await openaiFetch('https://api.openai.com/v1/responses', fallback);
+          data = await openaiFetch('https://api.openai.com/v1/responses', fallback, { timeoutMs: 18000 });
         } else {
           throw err;
         }
@@ -205,7 +213,7 @@ export async function answerAsChatGPT({ query, mode, city, country = 'AU', stage
       return { raw_answer: text, citations, latency_ms: Date.now() - started, model };
     } catch (err) {
       lastErr = err;
-      if (i === BACKOFF.length || !retryable(err.status, err)) {
+      if (i >= 1 || !retryable(err.status, err)) {
         if (err.status === 400 || err.status === 404) {
           return chatCompletionAnswer({ query, system, model, stage, usage });
         }
@@ -219,7 +227,9 @@ export async function answerAsChatGPT({ query, mode, city, country = 'AU', stage
 
 async function chatCompletionAnswer({ query, system, model, stage, usage }) {
   const started = Date.now();
-  const data = await openaiFetch('https://api.openai.com/v1/chat/completions', {
+  const data = await openaiFetch(
+    'https://api.openai.com/v1/chat/completions',
+    {
     model,
     temperature: 0.2,
     max_tokens: 700,
@@ -227,7 +237,9 @@ async function chatCompletionAnswer({ query, system, model, stage, usage }) {
       { role: 'system', content: system },
       { role: 'user', content: query },
     ],
-  });
+    },
+    { timeoutMs: 18000 }
+  );
   usage?.record({
     stage,
     model,

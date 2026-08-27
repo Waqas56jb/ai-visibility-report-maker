@@ -4,6 +4,8 @@ import { MentionBatch } from '../services/schemas.js';
 import { settings } from '../config/env.js';
 import { mentionedInText } from './fuzzy.js';
 import { domainOf } from './url.js';
+import { SliceYield } from './keepAlive.js';
+import { saveQueryRows, testsFinished } from './reportQueries.js';
 
 function cantBrowse(text) {
   return /i can'?t browse|i don't have access to the (internet|web)|as an ai/i.test(text || '');
@@ -92,35 +94,81 @@ ${String(row.raw_answer || '').slice(0, 2000)}
   });
 }
 
-export async function runVisibilityTests(report, summary, queries, usage) {
-  const s = settings();
+function buildRows(queries, report, existing = []) {
   const modes = [];
   if (report.modes?.browsing !== false) modes.push('browsing');
   if (report.modes?.knowledge !== false) modes.push('knowledge');
-  const city = summary.service_area?.city || (report.city_region || '').split(',')[0] || null;
-  const country = (summary.service_area?.country || report.country || 'Australia').slice(0, 2).toUpperCase() === 'AU' ? 'AU' : 'AU';
 
-  const rows = [];
-  const answerQ = new PQueue({ concurrency: 4 });
-
-  for (const q of queries) {
-    for (const mode of modes) {
-      rows.push({
-        text: q.text,
-        category: q.category,
-        topic: q.topic,
-        intent: q.intent,
-        mode,
-        raw_answer: '',
-        citations: [],
-        extraction: null,
-        error: null,
-      });
-    }
+  const prev = new Map();
+  for (const row of existing) {
+    if (!row?.text || !row?.mode) continue;
+    prev.set(`${row.mode}::${row.text}`, row);
   }
 
+  const rows = [];
+  for (const q of queries) {
+    for (const mode of modes) {
+      const key = `${mode}::${q.text}`;
+      const found = prev.get(key);
+      rows.push(
+        found
+          ? {
+              ...found,
+              category: found.category || q.category,
+              topic: found.topic || q.topic,
+              intent: found.intent || q.intent,
+            }
+          : {
+              text: q.text,
+              category: q.category,
+              topic: q.topic,
+              intent: q.intent,
+              mode,
+              raw_answer: '',
+              citations: [],
+              extraction: null,
+              error: null,
+            }
+      );
+    }
+  }
+  return rows;
+}
+
+function queriesFromRows(rows) {
+  const seen = new Set();
+  const out = [];
+  for (const row of rows) {
+    if (!row.text || seen.has(row.text)) continue;
+    seen.add(row.text);
+    out.push({
+      text: row.text,
+      category: row.category,
+      topic: row.topic,
+      intent: row.intent,
+    });
+  }
+  return out;
+}
+
+export async function runVisibilityTests(report, summary, queries, usage, { deadline, onProgress } = {}) {
+  const s = settings();
+  const city = summary.service_area?.city || (report.city_region || '').split(',')[0] || null;
+  const country = 'AU';
+  const existing = Array.isArray(report._existingRows) ? report._existingRows : [];
+  const seed = queries?.length ? queries : queriesFromRows(existing);
+  const rows = buildRows(seed, report, existing);
+
+  const pending = rows.filter((row) => !row.raw_answer && !row.error);
+  const concurrency = process.env.VERCEL ? 2 : 3;
+  const answerQ = new PQueue({ concurrency });
+
   await answerQ.addAll(
-    rows.map((row, idx) => async () => {
+    pending.map((row) => async () => {
+      if (deadline?.hit(8000)) {
+        answerQ.clear();
+        return;
+      }
       if (usage.wouldExceed() || usage.truncated) {
         row.error = 'truncated_cost';
         return;
@@ -142,14 +190,15 @@ export async function runVisibilityTests(report, summary, queries, usage) {
       } catch (err) {
         row.error = err.message || 'answer_failed';
       }
-      void idx;
+      row.attempted = true;
+      if (onProgress) await onProgress(rows);
     })
   );
 
-  const succeeded = rows.filter((r) => r.raw_answer && !r.error);
-  for (let i = 0; i < succeeded.length; i += 5) {
-    if (usage.wouldExceed()) break;
-    const batch = succeeded.slice(i, i + 5);
+  const needExtract = rows.filter((r) => r.raw_answer && !r.error && !r.extraction);
+  for (let i = 0; i < needExtract.length; i += 5) {
+    if (deadline?.hit(6000) || usage.wouldExceed()) break;
+    const batch = needExtract.slice(i, i + 5);
     try {
       await extractBatch(batch, summary, report.website, usage);
     } catch (err) {
@@ -168,7 +217,16 @@ export async function runVisibilityTests(report, summary, queries, usage) {
         applyFuzzy(r, summary, report.website);
       });
     }
+    if (onProgress) await onProgress(rows);
+  }
+
+  if (onProgress) await onProgress(rows);
+
+  if (!testsFinished(rows)) {
+    throw new SliceYield(rows);
   }
 
   return rows;
 }
+
+export { saveQueryRows };
