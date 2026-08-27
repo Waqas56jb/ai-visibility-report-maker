@@ -61,6 +61,49 @@ export const DEFAULT_CONTENT = {
       img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
     },
   ],
+  servicesPage: {
+    eyebrow: 'What we do',
+    title: 'Six ways we put AI to work for you',
+    lead:
+      'The visibility report tells you where you stand. These are the services behind the fix, and the work we take on once the gaps are clear.',
+    ctaEyebrow: 'Not sure where to start?',
+    ctaTitle: 'Start with the free report',
+    ctaBody:
+      'It takes about three minutes and tells you which of these actually matters for your business right now.',
+    ctaButton: 'Run my free report',
+    items: [
+      {
+        title: 'AI Visibility',
+        body:
+          'Get recommended by ChatGPT, Gemini and AI Overviews \u2014 not just ranked on Google. We check where you stand today, then fix it.',
+      },
+      {
+        title: 'AI Workflow Automation',
+        body:
+          'The repetitive work your team does by hand every week, running itself \u2014 connected end to end with AI-powered no-code tooling.',
+      },
+      {
+        title: 'AI Voice Agents',
+        body:
+          'A phone agent that picks up every call, answers the usual questions and books the appointment \u2014 day, night and weekends.',
+      },
+      {
+        title: 'AI Chatbots',
+        body:
+          'Chat on your website and social channels that answers questions instantly and captures the lead before they click away.',
+      },
+      {
+        title: 'Lead & CRM Automation',
+        body:
+          'No enquiry slips through. Every lead is captured, followed up on a schedule, and logged in your CRM without anyone remembering to do it.',
+      },
+      {
+        title: 'AI Integration & Custom Development',
+        body:
+          'AI built directly into the product you already have \u2014 or a new one built from scratch around it. Our deepest, most tailored engagement.',
+      },
+    ],
+  },
   faqEyebrow: 'FAQ',
   faqTitle: 'Questions before you run it',
   faqs: [
@@ -120,6 +163,10 @@ export function defaultSite() {
       hero: { ...DEFAULT_CONTENT.hero },
       checker: { ...DEFAULT_CONTENT.checker },
       cta: { ...DEFAULT_CONTENT.cta },
+      servicesPage: {
+        ...DEFAULT_CONTENT.servicesPage,
+        items: DEFAULT_CONTENT.servicesPage.items.map((s) => ({ ...s })),
+      },
     },
   };
 }
@@ -130,11 +177,18 @@ export function mergeSite(...layers) {
     if (!layer || typeof layer !== 'object') continue;
     if (layer.theme && typeof layer.theme === 'object') Object.assign(out.theme, layer.theme);
     if (layer.content && typeof layer.content === 'object') {
-      const { faqs, services, cities, hero, checker, cta, ...rest } = layer.content;
+      const { faqs, services, cities, hero, checker, cta, servicesPage, ...rest } = layer.content;
       Object.assign(out.content, rest);
       if (hero && typeof hero === 'object') out.content.hero = { ...out.content.hero, ...hero };
       if (checker && typeof checker === 'object') out.content.checker = { ...out.content.checker, ...checker };
       if (cta && typeof cta === 'object') out.content.cta = { ...out.content.cta, ...cta };
+      if (servicesPage && typeof servicesPage === 'object') {
+        const { items, ...sp } = servicesPage;
+        out.content.servicesPage = { ...out.content.servicesPage, ...sp };
+        if (Array.isArray(items)) {
+          out.content.servicesPage.items = items.filter((s) => s && (s.title || s.body));
+        }
+      }
       if (Array.isArray(faqs)) out.content.faqs = faqs.filter((f) => f && (f.q || f.a));
       if (Array.isArray(services)) out.content.services = services.filter((s) => s && (s.title || s.body));
       if (Array.isArray(cities)) out.content.cities = cities.map(String).filter(Boolean);

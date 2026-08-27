@@ -29,14 +29,13 @@ export default function Footer() {
           <div>
             <h4>Services</h4>
             <ul>
+              {(content.servicesPage?.items || []).slice(0, 3).map((s) => (
+                <li key={s.title}>
+                  <Link to="/services">{s.title}</Link>
+                </li>
+              ))}
               <li>
-                <a href="#services">AI Search Optimisation</a>
-              </li>
-              <li>
-                <a href="#services">AI Chatbots</a>
-              </li>
-              <li>
-                <a href="#services">AI Automation</a>
+                <Link to="/services">All services</Link>
               </li>
             </ul>
           </div>

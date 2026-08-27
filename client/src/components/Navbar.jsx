@@ -9,6 +9,7 @@ import {
   PlusCircle,
   Route as RouteIcon,
   ScanSearch,
+  Sparkles,
   UserPlus,
   X,
 } from 'lucide-react';
@@ -81,6 +82,7 @@ export default function Navbar({ variant = 'landing' }) {
             <a href="#inside" onClick={(e) => onSection(e, 'inside')}>
               The report
             </a>
+            <Link to="/services">Services</Link>
             <a href="#faq" onClick={(e) => onSection(e, 'faq')}>
               FAQ
             </a>
@@ -142,6 +144,9 @@ export default function Navbar({ variant = 'landing' }) {
         <a href="#inside" onClick={(e) => onSection(e, 'inside')}>
           <Layers className="lucide svg" /> The report
         </a>
+        <Link to="/services">
+          <Sparkles className="lucide svg" /> Services
+        </Link>
         <a href="#faq" onClick={(e) => onSection(e, 'faq')}>
           <CircleHelp className="lucide svg" /> FAQ
         </a>
