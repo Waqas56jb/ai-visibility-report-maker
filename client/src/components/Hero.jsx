@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Play, ScanSearch, Sparkles, Timer, User } from 'lucide-react';
+import { CheckCircle2, Play, ScanSearch, Sparkles, Timer, User, XCircle } from 'lucide-react';
 import { goToCheck } from './Navbar.jsx';
 import { useSite } from '../store/site.jsx';
 
@@ -125,8 +125,11 @@ function Simulator() {
           <span />
           <span />
         </span>
-        <span>visibility-test · chatgpt · live</span>
-        <span>
+        <span className="sim-head-label">visibility-test · chatgpt</span>
+        <span className="sim-live">
+          <i /> live
+        </span>
+        <span className="sim-count">
           {count} / {SIM_QS.length}
         </span>
       </div>
@@ -142,16 +145,18 @@ function Simulator() {
           }
           if (line.type === 'a') {
             return (
-              <div
-                key={line.id}
-                className="sim-a fade-in"
-                dangerouslySetInnerHTML={{ __html: line.html }}
-              />
+              <div key={line.id} className="sim-a-row fade-in">
+                <span className="sim-avatar">
+                  <Sparkles className="lucide svg" />
+                </span>
+                <div className="sim-a" dangerouslySetInnerHTML={{ __html: line.html }} />
+              </div>
             );
           }
           return (
             <span key={line.id} className={`sim-tag fade-in ${line.hit ? 'yes' : 'no'}`}>
-              {line.hit ? '✓ mentioned' : '✗ not mentioned'}
+              {line.hit ? <CheckCircle2 className="lucide svg" /> : <XCircle className="lucide svg" />}
+              {line.hit ? 'mentioned' : 'not mentioned'}
             </span>
           );
         })}

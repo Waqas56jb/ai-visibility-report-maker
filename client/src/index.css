@@ -103,28 +103,37 @@ body.nav-open{overflow:hidden}
 .hero-badge-2{bottom:8%;right:-6%;animation-delay:1.4s}
 @keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
 
-/* live test simulator */
+/* live test simulator — modern product-UI chat mock, not a plain bubble list */
 .sim{position:relative;z-index:1;background:#fff;border:1px solid rgba(255,255,255,.14);border-radius:var(--r-lg);box-shadow:0 40px 90px -30px rgba(0,0,0,.55);overflow:hidden;animation:up 1s .5s cubic-bezier(.2,.7,.2,1) both}
-.sim-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--tint);font-family:var(--font-m);font-size:12px;color:var(--text-3)}
-.sim-head .dots span{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--line-2);margin-right:6px}
-.sim-body{padding:18px;min-height:320px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
-/* user turn — bubble on the right with its own avatar, the way a real chat reads */
+.sim-head{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fff,var(--tint));font-family:var(--font-m);font-size:12px;color:var(--text-3)}
+.sim-head .dots{display:flex;gap:6px;flex:none}
+.sim-head .dots span{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--line-2)}
+.sim-head-label{min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sim-live{display:inline-flex;align-items:center;gap:6px;margin-left:auto;font-weight:700;color:#15803D;white-space:nowrap}
+.sim-live i{width:7px;height:7px;border-radius:50%;background:#22C55E;box-shadow:0 0 0 3px rgba(34,197,94,.18);animation:pulse-dot 1.8s ease-in-out infinite}
+.sim-count{font-weight:700;color:var(--text);white-space:nowrap}
+.sim-body{padding:20px 18px;min-height:320px;display:flex;flex-direction:column;gap:10px;overflow:hidden;background:linear-gradient(180deg,#fff 0%,var(--paper) 100%)}
+/* user turn — dark filled bubble on the right with its own avatar, the way a real chat reads */
 .sim-q{align-self:flex-end;max-width:86%;margin-top:8px;display:flex;flex-direction:row-reverse;align-items:flex-end;gap:8px;font-size:13px;line-height:1.5}
-.sim-q .svg{flex:none;width:26px;height:26px;padding:6px;border-radius:50%;background:var(--tint-2);border:1px solid var(--line);color:var(--text-3);stroke-width:1.8}
-.sim-q span{background:var(--tint-2);border:1px solid var(--line);color:var(--text);border-radius:16px 16px 4px 16px;padding:9px 13px;min-width:0}
-/* assistant turn — bubble on the left, avatar floated outside it */
-.sim-a{position:relative;align-self:flex-start;margin-left:34px;max-width:calc(86% - 34px);font-size:13.5px;line-height:1.6;color:var(--text-2);background:var(--tint);border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:11px 14px}
-.sim-a::before{content:"";position:absolute;left:-34px;bottom:0;width:26px;height:26px;border-radius:50%;background:var(--grad);box-shadow:0 0 0 1px #fff,0 4px 12px -4px rgba(22,12,81,.3)}
-.sim-a .b{padding:1px 6px;border-radius:6px;background:var(--tint-2)}
+.sim-q .svg{flex:none;width:28px;height:28px;padding:6px;border-radius:50%;background:var(--ink);color:#fff;stroke-width:2}
+.sim-q span{background:var(--ink);color:#fff;border-radius:18px 18px 4px 18px;padding:10px 14px;min-width:0;box-shadow:0 10px 22px -12px rgba(22,12,81,.4)}
+/* assistant turn — avatar sits inline with the bubble, not floated via a pseudo-element */
+.sim-a-row{display:flex;align-items:flex-end;gap:8px;align-self:flex-start;max-width:86%}
+.sim-avatar{flex:none;width:28px;height:28px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 4px 12px -4px rgba(22,12,81,.35)}
+.sim-avatar .svg{width:14px;height:14px;stroke-width:2.4}
+.sim-a{min-width:0;font-size:13.5px;line-height:1.6;color:var(--text-2);background:#fff;border:1px solid var(--line);border-radius:18px 18px 18px 4px;padding:12px 15px;box-shadow:0 12px 26px -18px rgba(22,12,81,.22)}
+.sim-a .b{padding:2px 8px;border-radius:999px;background:var(--tint-2);font-weight:700}
 .sim-a .b.you{background:rgba(34,197,94,.16);color:#15803D}
 .sim-a .b.rival{background:rgba(240,98,90,.14);color:#B91C1C}
-.sim-tag{align-self:flex-start;margin-left:34px;font-family:var(--font-m);font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid}
-.sim-tag.yes{color:#15803D;border-color:rgba(21,128,61,.28);background:rgba(34,197,94,.08)}
-.sim-tag.no{color:#B91C1C;border-color:rgba(185,28,28,.24);background:rgba(240,98,90,.07)}
+.sim-tag{align-self:flex-start;margin-left:36px;display:inline-flex;align-items:center;gap:5px;font-family:var(--font-m);font-weight:700;font-size:11px;letter-spacing:.01em;padding:5px 11px 5px 9px;border-radius:999px;border:1px solid}
+.sim-tag .svg{width:12px;height:12px;stroke-width:2.4}
+.sim-tag.yes{color:#15803D;border-color:rgba(21,128,61,.22);background:rgba(34,197,94,.1)}
+.sim-tag.no{color:#B91C1C;border-color:rgba(185,28,28,.18);background:rgba(240,98,90,.09)}
 .sim-foot{padding:14px 18px;border-top:1px solid var(--line);background:var(--tint);display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text-3)}
 .sim-foot b{color:var(--text)}
-.sim-score{font-family:var(--font-d);font-weight:800;font-size:28px;letter-spacing:-.02em;color:var(--text)}
-.sim-score small{font-size:13px;font-weight:500;color:var(--text-3);margin-left:4px}
+.sim-score{font-family:var(--font-d);font-weight:800;font-size:28px;letter-spacing:-.02em;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--text)}
+.sim-score small{font-size:13px;font-weight:500;color:var(--text-3);margin-left:4px;-webkit-text-fill-color:var(--text-3)}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 0 3px rgba(34,197,94,.18)}50%{box-shadow:0 0 0 6px rgba(34,197,94,.04)}}
 .fade-in{animation:up .5s cubic-bezier(.2,.7,.2,1) both}
 .hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
 .hero-alt{margin-top:18px;font-size:14px;color:var(--text-3)}
@@ -143,11 +152,11 @@ body.nav-open{overflow:hidden}
   .hero-ctas .btn{width:100%;justify-content:center}
   .hero-stats{gap:16px;margin-top:24px}
   .sim-body{min-height:220px;padding:14px}
-  .sim-q,.sim-a{max-width:100%}
+  .sim-q,.sim-a-row{max-width:100%}
   .sim-q .svg{width:22px;height:22px;padding:5px}
-  .sim-a{margin-left:28px;max-width:calc(100% - 28px)}
-  .sim-a::before{left:-28px;width:22px;height:22px}
-  .sim-tag{margin-left:28px}
+  .sim-avatar{width:22px;height:22px}
+  .sim-avatar .svg{width:11px;height:11px}
+  .sim-tag{margin-left:30px}
   .hero-badge{font-size:10.5px;padding:7px 11px;gap:5px;box-shadow:0 12px 26px -10px rgba(0,0,0,.5)}
   .hero-badge-1{top:-12px;left:12px}
   .hero-badge-2{bottom:-12px;right:12px}
