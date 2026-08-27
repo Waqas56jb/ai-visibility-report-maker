@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CheckCircle2, Play, ScanSearch, Sparkles, Timer, User, XCircle } from 'lucide-react';
+import { CheckCircle2, Play, ScanSearch, Sparkles, User, XCircle } from 'lucide-react';
 import { goToCheck } from './Navbar.jsx';
 import { useSite } from '../store/site.jsx';
 
@@ -185,15 +185,7 @@ export default function Hero() {
       <div className="hero-glow" />
       <div className="hero-grid" />
       <div className="wrap">
-        <div className="hero-mock">
-          <Simulator />
-          <span className="hero-badge hero-badge-1">
-            <Sparkles className="lucide svg" /> {hero.stat1n} {hero.stat1l}
-          </span>
-          <span className="hero-badge hero-badge-2">
-            <Timer className="lucide svg" /> {hero.stat3n} {hero.stat3l}
-          </span>
-        </div>
+        {/* hero-mock (Simulator card + floating badges) removed for now — Simulator kept above, add it back later */}
         <div className="hero-copy">
           <span className="eyebrow">{hero.eyebrow}</span>
           <h1>
