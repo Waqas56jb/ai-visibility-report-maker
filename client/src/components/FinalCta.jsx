@@ -12,7 +12,7 @@ export default function FinalCta() {
     <section className="section" style={{ paddingTop: 0 }}>
       <div className="wrap">
         <Reveal className="cta">
-          <span className="eyebrow" style={{ color: '#67E8F9' }}>
+          <span className="eyebrow" style={{ color: '#8B9BFB' }}>
             {cta.eyebrow || 'Ready?'}
           </span>
           <h2>{cta.title}</h2>

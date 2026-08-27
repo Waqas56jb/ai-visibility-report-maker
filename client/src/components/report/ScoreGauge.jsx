@@ -14,8 +14,8 @@ export default function ScoreGauge({ score, band }) {
         <svg viewBox="0 0 230 230">
           <defs>
             <linearGradient id={gid} x1="0" x2="1">
-              <stop offset="0" stopColor="#4F46E5" />
-              <stop offset="1" stopColor="#06B6D4" />
+              <stop offset="0" stopColor="#7287FA" />
+              <stop offset="1" stopColor="#5B6EF0" />
             </linearGradient>
           </defs>
           <circle className="track" cx="115" cy="115" r="100" />

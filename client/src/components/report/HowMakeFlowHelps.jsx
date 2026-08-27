@@ -15,7 +15,7 @@ export default function HowMakeFlowHelps({ recommendations = [] }) {
 
   return (
     <div className="help">
-      <span className="eyebrow" style={{ color: '#67E8F9' }}>
+      <span className="eyebrow" style={{ color: '#8B9BFB' }}>
         How MakeFlow fixes this
       </span>
       <h2>A plan, grouped by the service that delivers it</h2>
