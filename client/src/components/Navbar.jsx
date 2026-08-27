@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
+  CalendarCheck,
   CircleHelp,
   Layers,
   LayoutDashboard,
@@ -38,6 +39,11 @@ export default function Navbar({ variant = 'landing' }) {
   const user = useAuth((s) => s.user);
   const { content } = useSite();
   const navCta = content.navCta || 'Check my visibility';
+  const bookCall = content.bookCall || {};
+  const bookUrl = (bookCall.url || '').trim();
+  const bookLabel = bookCall.label || 'Book a call';
+  const bookExternal = /^https?:\/\//i.test(bookUrl);
+  const bookProps = bookExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {};
   const dark = variant === 'landing';
 
   useEffect(() => {
@@ -97,6 +103,11 @@ export default function Navbar({ variant = 'landing' }) {
                 Log in
               </Link>
             )}
+            {bookUrl ? (
+              <a href={bookUrl} className="btn btn-ghost btn-sm" {...bookProps}>
+                {bookLabel}
+              </a>
+            ) : null}
             {user ? (
               <Link to="/app/new" className="btn btn-primary btn-sm">
                 New report
@@ -150,6 +161,11 @@ export default function Navbar({ variant = 'landing' }) {
         <a href="#faq" onClick={(e) => onSection(e, 'faq')}>
           <CircleHelp className="lucide svg" /> FAQ
         </a>
+        {bookUrl ? (
+          <a href={bookUrl} {...bookProps}>
+            <CalendarCheck className="lucide svg" /> {bookLabel}
+          </a>
+        ) : null}
         {user ? (
           <>
             <Link to="/app/dashboard">

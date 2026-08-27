@@ -55,6 +55,7 @@ export default function Settings() {
   const hero = content.hero || {};
   const checker = content.checker || {};
   const cta = content.cta || {};
+  const bookCall = content.bookCall || {};
 
   function setWeight(key, pct) {
     setData({ ...data, weights: data.weights.map((w) => (w.key === key ? { ...w, pct } : w)) });
@@ -70,6 +71,9 @@ export default function Settings() {
   }
   function setHero(patch) {
     setContent({ hero: { ...hero, ...patch } });
+  }
+  function setBookCall(patch) {
+    setContent({ bookCall: { ...bookCall, ...patch } });
   }
   function setChecker(patch) {
     setContent({ checker: { ...checker, ...patch } });
@@ -165,6 +169,20 @@ export default function Settings() {
                         .filter(Boolean),
                     })
                   }
+                />
+              </div>
+            </div>
+            <div className="row2">
+              <div className="field">
+                <label>Book a call button</label>
+                <input value={bookCall.label || ''} onChange={(e) => setBookCall({ label: e.target.value })} />
+              </div>
+              <div className="field">
+                <label>Book a call link (clear to hide the button)</label>
+                <input
+                  value={bookCall.url || ''}
+                  placeholder="https://makeflow.com.au/contact"
+                  onChange={(e) => setBookCall({ url: e.target.value })}
                 />
               </div>
             </div>

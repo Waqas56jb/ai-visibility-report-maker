@@ -15,6 +15,10 @@ export const DEFAULT_CONTENT = {
   brandName: 'MakeFlow',
   documentTitle: 'AI Visibility Report | Free ChatGPT and AI Search Check | MakeFlow',
   navCta: 'Check my visibility',
+  bookCall: {
+    label: 'Book a call',
+    url: 'https://makeflow.com.au/contact',
+  },
   strip: 'Tested against ChatGPT, the assistant your customers actually use',
   cities: ['Brisbane', 'Sydney', 'Melbourne', 'Perth', 'Adelaide', 'Gold Coast', 'Newcastle', 'Canberra'],
   hero: {
@@ -177,11 +181,12 @@ export function mergeSite(...layers) {
     if (!layer || typeof layer !== 'object') continue;
     if (layer.theme && typeof layer.theme === 'object') Object.assign(out.theme, layer.theme);
     if (layer.content && typeof layer.content === 'object') {
-      const { faqs, services, cities, hero, checker, cta, servicesPage, ...rest } = layer.content;
+      const { faqs, services, cities, hero, checker, cta, servicesPage, bookCall, ...rest } = layer.content;
       Object.assign(out.content, rest);
       if (hero && typeof hero === 'object') out.content.hero = { ...out.content.hero, ...hero };
       if (checker && typeof checker === 'object') out.content.checker = { ...out.content.checker, ...checker };
       if (cta && typeof cta === 'object') out.content.cta = { ...out.content.cta, ...cta };
+      if (bookCall && typeof bookCall === 'object') out.content.bookCall = { ...out.content.bookCall, ...bookCall };
       if (servicesPage && typeof servicesPage === 'object') {
         const { items, ...sp } = servicesPage;
         out.content.servicesPage = { ...out.content.servicesPage, ...sp };
