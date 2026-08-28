@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle2, Lock, Plus, Zap } from 'lucide-react';
+import { Lock, Plus, Zap } from 'lucide-react';
 import Reveal from './Reveal.jsx';
 import { useToast } from '../lib/toast.jsx';
 import { useAuth } from '../store/auth.js';
@@ -87,33 +87,7 @@ export default function Checker() {
   return (
     <section className="section checker" id="check">
       <div className="wrap">
-        <Reveal>
-          <span className="eyebrow">{checker.eyebrow || 'Run the check'}</span>
-          <h2>{checker.title || 'Three details and you have your score'}</h2>
-          <p>
-            {checker.lead ||
-              'Tell us who you are and where your website lives. We crawl it, work out the questions your customers really ask, test them against ChatGPT and send you the full report. Free.'}
-          </p>
-          <ul>
-            <li>
-              <CheckCircle2 className="lucide svg" /> Score out of 100 with a plain-English band:
-              Invisible → Leading
-            </li>
-            <li>
-              <CheckCircle2 className="lucide svg" /> Every question ChatGPT answered without you,
-              and who it named instead
-            </li>
-            <li>
-              <CheckCircle2 className="lucide svg" /> A website AI-readiness audit covering schema,
-              FAQ, llms.txt and crawler access
-            </li>
-            <li>
-              <CheckCircle2 className="lucide svg" /> A prioritised fix list and a branded PDF you
-              can share with your team
-            </li>
-          </ul>
-        </Reveal>
-        <Reveal delay="d1" className="form-card">
+        <Reveal className="form-card">
           <h3>{checker.formTitle || 'Check your AI visibility'}</h3>
           <p className="sub">{checker.formSub || 'Takes about 3 minutes. One free report per email every 30 days.'}</p>
           <form onSubmit={onSubmit} noValidate>

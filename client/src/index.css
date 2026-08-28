@@ -378,13 +378,13 @@ body.nav-open{overflow:hidden}
 .checker{background:#fff;color:var(--text);position:relative;overflow:hidden}
 .checker::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 100% 0%,rgba(91,110,240,.08),transparent 60%),radial-gradient(50% 60% at 0% 100%,rgba(114,135,250,.1),transparent 60%)}
 .checker::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(22,12,81,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(22,12,81,.045) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(60% 70% at 0% 100%,#000,transparent);-webkit-mask-image:radial-gradient(60% 70% at 0% 100%,#000,transparent)}
-.checker .wrap{position:relative;display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:center}
+.checker .wrap{position:relative;display:flex;justify-content:center}
 .checker h2{font-size:clamp(32px,4vw,48px);margin:16px 0 18px}
 .checker p{color:var(--text-2);font-size:16px}
 .checker ul{list-style:none;margin-top:28px;display:grid;gap:14px}
 .checker li{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--text-2)}
 .checker li .svg{color:var(--indigo);margin-top:3px;flex:none}
-.form-card{background:#fff;color:var(--text);border:1px solid var(--line);border-radius:var(--r-lg);padding:32px;box-shadow:var(--shadow-lg)}
+.form-card{background:#fff;color:var(--text);border:1px solid var(--line);border-radius:var(--r-lg);padding:32px;box-shadow:var(--shadow-lg);width:100%;max-width:520px}
 .form-card h3{font-size:22px;margin-bottom:4px}
 .form-card .sub{font-size:14px;color:var(--text-2);margin-bottom:22px}
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
