@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Bot, CheckCircle2, Play, ScanSearch, Sparkles, User, XCircle } from 'lucide-react';
+import { CheckCircle2, Play, ScanSearch, Sparkles, User, XCircle } from 'lucide-react';
 import { goToCheck } from './Navbar.jsx';
 import { useSite } from '../store/site.jsx';
 
-// Inserts a small neutral AI-icon badge right before the word "ChatGPT" in a
+// Inserts the ChatGPT logo badge right before the word "ChatGPT" in a
 // CMS-editable string, without assuming the word is always present.
 function withChatGptIcon(text) {
   if (!text) return text;
@@ -16,7 +16,7 @@ function withChatGptIcon(text) {
     <>
       {before}
       <span className="chatgpt-inline">
-        <Bot className="lucide svg" />
+        <img src="/chatgpt-logo.png" alt="" aria-hidden="true" />
         ChatGPT
       </span>
       {after}
