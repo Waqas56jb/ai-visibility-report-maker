@@ -207,7 +207,6 @@ export default function Hero() {
       <div className="wrap">
         {/* hero-mock (Simulator card + floating badges) removed for now — Simulator kept above, add it back later */}
         <div className="hero-copy">
-          <span className="eyebrow">{hero.eyebrow}</span>
           <h1>
             {withChatGptIcon(hero.headline)} <span className="hl">{hero.highlight}</span>
           </h1>
