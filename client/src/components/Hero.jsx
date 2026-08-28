@@ -4,8 +4,8 @@ import { CheckCircle2, Play, ScanSearch, Sparkles, User, XCircle } from 'lucide-
 import { goToCheck } from './Navbar.jsx';
 import { useSite } from '../store/site.jsx';
 
-// Inserts the ChatGPT logo badge right before the word "ChatGPT" in a
-// CMS-editable string, without assuming the word is always present.
+// Replaces the word "ChatGPT" in a CMS-editable string with the ChatGPT
+// wordmark logo image, without assuming the word is always present.
 function withChatGptIcon(text) {
   if (!text) return text;
   const idx = text.indexOf('ChatGPT');
@@ -15,10 +15,7 @@ function withChatGptIcon(text) {
   return (
     <>
       {before}
-      <span className="chatgpt-inline">
-        <img src="/chatgpt-logo.png" alt="" aria-hidden="true" />
-        ChatGPT
-      </span>
+      <img className="chatgpt-wordmark" src="/chatgpt-wordmark.png" alt="ChatGPT" />
       {after}
     </>
   );
