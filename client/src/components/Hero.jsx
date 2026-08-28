@@ -203,11 +203,27 @@ function Simulator() {
   );
 }
 
+// Extra endings that rotate alongside the CMS-edited hero.highlight, so the
+// hero keeps making the same point ("does it ___?") from a few angles
+// without needing a new admin field. The CMS value always plays first.
+const EXTRA_HIGHLIGHTS = ['get it right?', 'recommend you first?'];
+
 export default function Hero() {
   const navigate = useNavigate();
   const { content } = useSite();
   const hero = content.hero || {};
   const bookCall = content.bookCall || {};
+  const highlights = [hero.highlight, ...EXTRA_HIGHLIGHTS].filter(Boolean);
+  const [highlightIndex, setHighlightIndex] = useState(0);
+
+  useEffect(() => {
+    if (highlights.length < 2) return undefined;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const id = window.setInterval(() => {
+      setHighlightIndex((i) => (i + 1) % highlights.length);
+    }, 2600);
+    return () => window.clearInterval(id);
+  }, [highlights.length]);
   const bookUrl = (bookCall.url || 'https://makeflow.com.au/contact').trim();
   const bookExternal = /^https?:\/\//i.test(bookUrl);
   const bookProps = bookExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {};
@@ -221,7 +237,10 @@ export default function Hero() {
         {/* hero-mock (Simulator card + floating badges) removed for now — Simulator kept above, add it back later */}
         <div className="hero-copy">
           <h1>
-            {withChatGptIcon(hero.headline)} <span className="hl">{hero.highlight}</span>
+            {withChatGptIcon(hero.headline)}{' '}
+            <span className="hl" key={highlightIndex}>
+              {highlights[highlightIndex]}
+            </span>
           </h1>
           <p className="lead">{hero.lead}</p>
           <div className="hero-ctas">
