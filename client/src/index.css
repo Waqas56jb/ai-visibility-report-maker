@@ -108,7 +108,7 @@ body.nav-open{overflow:hidden}
 .hero h1{font-size:clamp(38px,5.6vw,64px);font-weight:800;line-height:1.04;letter-spacing:-.03em}
 .hero h1 .hl{background:linear-gradient(90deg,#8B9BFB,#67E8F9);-webkit-background-clip:text;background-clip:text;color:transparent}
 .chatgpt-wordmark{height:1.15em;width:auto;display:inline-block;vertical-align:text-top;margin:0 .06em;filter:brightness(0) invert(1);transform:translateY(.05em)}
-.hero p.lead{font-size:18px;color:rgba(255,255,255,.68);max-width:560px;margin:22px 0 32px}
+.hero p.lead{font-size:18px;color:rgba(255,255,255,.68);max-width:560px;margin:22px 0 20px}
 .hero .eyebrow{color:#D6DBFF;margin-bottom:22px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);padding:9px 18px;border-radius:999px}
 .hero .btn-ghost{border-color:rgba(255,255,255,.32);color:#fff}
 .hero .btn-ghost:hover{background:rgba(255,255,255,.12);transform:translateY(-1px)}
@@ -203,7 +203,7 @@ body.nav-open{overflow:hidden}
   .hero .wrap{gap:34px}
   .hero h1{font-size:clamp(30px,10vw,42px)}
   .hero .eyebrow{font-size:11px;padding:8px 14px}
-  .hero p.lead{font-size:15.5px;margin:16px 0 22px}
+  .hero p.lead{font-size:15.5px;margin:16px 0 14px}
   .hero-ctas .btn{width:100%;justify-content:center}
   .hero-agency-ctas .btn{width:100%;justify-content:center}
   .hero-stats{gap:16px;margin-top:24px}
