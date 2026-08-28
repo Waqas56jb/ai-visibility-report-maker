@@ -246,9 +246,6 @@ export default function Hero() {
               <span>{hero.stat3l}</span>
             </div>
           </div>
-          <p className="hero-trademark-note">
-            ChatGPT is a trademark of OpenAI. MakeFlow is not affiliated with or endorsed by OpenAI.
-          </p>
         </div>
 
         <div className="hero-side">
