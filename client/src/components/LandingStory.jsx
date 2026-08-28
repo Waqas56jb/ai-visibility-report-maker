@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Building2, Eye, FileSearch, Globe2, MessageSquare, ScanSearch, Scale, Shield } from 'lucide-react';
+import { Eye, FileSearch, Globe2, MessageSquare, ScanSearch, Scale, Shield } from 'lucide-react';
 import Reveal from './Reveal.jsx';
 import { goToCheck } from './Navbar.jsx';
 import { useSite } from '../store/site.jsx';
@@ -12,17 +12,6 @@ const INSIDE = [
   { icon: Scale, title: 'Share of voice', body: 'Who it recommends instead of you, how often, and where they sit in the answer.' },
   { icon: FileSearch, title: 'AI-readiness audit', body: 'Schema, FAQ, llms.txt, crawlers, sitemaps and how deep your service pages go. Each one scored, with the evidence shown.' },
   { icon: Shield, title: 'Prioritised plan', body: 'What to fix first, mapped to AI Search Optimisation, chatbots or automation, in the order we would do it.' },
-];
-
-const WHO = [
-  ['Professional services', 'Accountants, lawyers, brokers, advisors'],
-  ['Health & wellness', 'Clinics, physio, dental, allied health'],
-  ['Home & trade', 'Builders, plumbers, solar, landscaping'],
-  ['Local retail', 'Showrooms, specialists, destination stores'],
-  ['Hospitality', 'Cafés, venues, boutique stays'],
-  ['Education & coaching', 'Tutoring, RTOs, consultants'],
-  ['Agencies & studios', 'Marketing, design, software houses'],
-  ['Medical specialists', 'Dentists, optometry, allied clinics'],
 ];
 
 const PROOF = [
@@ -225,26 +214,6 @@ export default function LandingStory() {
                 <li>Success is being the name it says out loud</li>
               </ul>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section who">
-        <div className="wrap">
-          <Reveal className="section-head">
-            <span className="eyebrow">Built for Australian SMEs</span>
-            <h2>If locals ask ChatGPT for a recommendation, this is for you</h2>
-          </Reveal>
-          <div className="who-grid who-grid-8">
-            {WHO.map((row, i) => (
-              <Reveal key={row[0]} delay={i % 4 === 0 ? '' : `d${i % 4}`} className="card who-card">
-                <Building2 className="lucide svg" />
-                <div>
-                  <strong>{row[0]}</strong>
-                  <span>{row[1]}</span>
-                </div>
-              </Reveal>
-            ))}
           </div>
         </div>
       </section>
