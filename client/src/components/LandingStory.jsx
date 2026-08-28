@@ -87,8 +87,10 @@ export default function LandingStory() {
     <>
       <section className="proof-band">
         <div className="wrap proof-grid">
-          {PROOF.map((p) => (
-            <CountStat key={p.label} n={p.n} suffix={p.suffix} label={p.label} />
+          {PROOF.map((p, i) => (
+            <Reveal key={p.label} delay={i === 0 ? '' : `d${Math.min(i, 3)}`}>
+              <CountStat n={p.n} suffix={p.suffix} label={p.label} />
+            </Reveal>
           ))}
         </div>
       </section>
@@ -234,14 +236,14 @@ export default function LandingStory() {
             <h2>If locals ask ChatGPT for a recommendation, this is for you</h2>
           </Reveal>
           <div className="who-grid who-grid-8">
-            {WHO.map((row) => (
-              <div className="card who-card" key={row[0]}>
+            {WHO.map((row, i) => (
+              <Reveal key={row[0]} delay={i % 4 === 0 ? '' : `d${i % 4}`} className="card who-card">
                 <Building2 className="lucide svg" />
                 <div>
                   <strong>{row[0]}</strong>
                   <span>{row[1]}</span>
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
