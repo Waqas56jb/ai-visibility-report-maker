@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CheckCircle2, Play, ScanSearch, Sparkles, User, XCircle } from 'lucide-react';
+import { BarChart3, CheckCircle2, FileText, Globe2, Play, ScanSearch, Sparkles, User, XCircle, Zap } from 'lucide-react';
 import { goToCheck } from './Navbar.jsx';
 import { useSite } from '../store/site.jsx';
 
@@ -233,6 +233,97 @@ export default function Hero() {
           <p className="hero-trademark-note">
             ChatGPT is a trademark of OpenAI. MakeFlow is not affiliated with or endorsed by OpenAI.
           </p>
+        </div>
+
+        <div className="hero-mock">
+          <div className="mock-window">
+            <div className="mock-topbar">
+              <span className="mock-dots">
+                <i />
+                <i />
+                <i />
+              </span>
+              <span className="mock-url">app.makeflow.com.au/visibility</span>
+            </div>
+            <div className="mock-body">
+              <div className="mock-sidebar">
+                <span className="mock-side-icon active">
+                  <ScanSearch className="lucide svg" />
+                </span>
+                <span className="mock-side-icon">
+                  <BarChart3 className="lucide svg" />
+                </span>
+                <span className="mock-side-icon">
+                  <Globe2 className="lucide svg" />
+                </span>
+                <span className="mock-side-icon">
+                  <FileText className="lucide svg" />
+                </span>
+              </div>
+              <div className="mock-main">
+                <h4>AI Visibility Overview</h4>
+                <div className="mock-stats">
+                  <div className="mock-stat">
+                    <span>Visibility score</span>
+                    <strong>78%</strong>
+                  </div>
+                  <div className="mock-stat">
+                    <span>Questions tested</span>
+                    <strong>42</strong>
+                  </div>
+                </div>
+                <div className="mock-chart" aria-hidden="true">
+                  <svg viewBox="0 0 240 100" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="mockChartFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#7287fa" stopOpacity="0.55" />
+                        <stop offset="100%" stopColor="#7287fa" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d="M0,80 L30,72 L60,76 L90,54 L120,58 L150,34 L180,38 L210,16 L240,20 L240,100 L0,100 Z"
+                      fill="url(#mockChartFill)"
+                    />
+                    <path
+                      d="M0,80 L30,72 L60,76 L90,54 L120,58 L150,34 L180,38 L210,16 L240,20"
+                      fill="none"
+                      stroke="#7287fa"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="hero-badge hero-badge-1 stat-card">
+            <div className="mock-bar-row">
+              <span>Mentioned</span>
+              <b>32/42</b>
+            </div>
+            <div className="mock-bar-track">
+              <i style={{ width: '76%' }} />
+            </div>
+            <div className="mock-bar-row">
+              <span>Cited</span>
+              <b>18/42</b>
+            </div>
+            <div className="mock-bar-track alt">
+              <i style={{ width: '43%' }} />
+            </div>
+          </div>
+
+          <div className="hero-badge hero-badge-2">
+            <Zap className="lucide svg" />
+            Report ready in ~3 min
+          </div>
+
+          <div className="hero-badge hero-badge-3">
+            <span className="dot" />
+            42 questions tested live
+          </div>
         </div>
       </div>
     </section>
