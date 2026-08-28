@@ -153,12 +153,20 @@ export default function LandingStory() {
               this one. You can see how every part of the score was built.
             </p>
           </Reveal>
-          <div className="pipe-grid">
+          <div className="timeline">
+            <span className="timeline-line" aria-hidden="true" />
             {PIPE.map((row, i) => (
-              <Reveal key={row[0]} delay={i === 0 ? '' : `d${Math.min(i, 3)}`} className="pipe-step">
-                <span>{String(i + 1).padStart(2, '0')}</span>
-                <h3>{row[0]}</h3>
-                <p>{row[1]}</p>
+              <Reveal
+                key={row[0]}
+                delay={i === 0 ? '' : `d${Math.min(i, 3)}`}
+                className={`timeline-item ${i % 2 === 0 ? 'tl-left' : 'tl-right'}`}
+              >
+                <span className="timeline-dot" aria-hidden="true" />
+                <div className="timeline-card">
+                  <span className="timeline-tag">Step {String(i + 1).padStart(2, '0')}</span>
+                  <h3>{row[0]}</h3>
+                  <p>{row[1]}</p>
+                </div>
               </Reveal>
             ))}
           </div>
