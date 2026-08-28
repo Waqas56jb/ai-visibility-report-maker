@@ -204,8 +204,8 @@ body.nav-open{overflow:hidden}
   .hero h1{font-size:clamp(30px,10vw,42px)}
   .hero .eyebrow{font-size:11px;padding:8px 14px}
   .hero p.lead{font-size:15.5px;margin:16px 0 14px}
-  .hero-ctas .btn{width:100%;justify-content:center}
-  .hero-agency-ctas .btn{width:100%;justify-content:center}
+  .hero-ctas .btn{justify-content:center}
+  .hero-agency-ctas .btn{justify-content:center}
   .hero-stats{gap:16px;margin-top:24px}
   .sim-body{min-height:220px;padding:14px}
   .sim-q,.sim-a-row{max-width:100%}
