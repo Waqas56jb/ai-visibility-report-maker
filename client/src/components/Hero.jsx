@@ -1,6 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { BarChart3, CheckCircle2, FileText, Globe2, Play, ScanSearch, Sparkles, User, XCircle, Zap } from 'lucide-react';
+import {
+  BarChart3,
+  CalendarCheck,
+  CheckCircle2,
+  FileText,
+  Globe2,
+  Play,
+  ScanSearch,
+  Sparkles,
+  User,
+  XCircle,
+  Zap,
+} from 'lucide-react';
 import { goToCheck } from './Navbar.jsx';
 import { useSite } from '../store/site.jsx';
 
@@ -195,6 +207,10 @@ export default function Hero() {
   const navigate = useNavigate();
   const { content } = useSite();
   const hero = content.hero || {};
+  const bookCall = content.bookCall || {};
+  const bookUrl = (bookCall.url || 'https://makeflow.com.au/contact').trim();
+  const bookExternal = /^https?:\/\//i.test(bookUrl);
+  const bookProps = bookExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {};
 
   return (
     <section className="hero">
@@ -235,7 +251,21 @@ export default function Hero() {
           </p>
         </div>
 
-        <div className="hero-mock">
+        <div className="hero-side">
+          <div className="hero-agency">
+            <h2>AI, Made Personal.</h2>
+            <p>We build the automation and AI-visibility systems behind this report. Book a call and we&rsquo;ll build yours.</p>
+            <div className="hero-agency-ctas">
+              <a href={bookUrl} className="btn btn-grad" {...bookProps}>
+                <CalendarCheck className="lucide svg" /> Book a free call
+              </a>
+              <Link to="/services" className="btn btn-ghost">
+                <Sparkles className="lucide svg" /> Discover services
+              </Link>
+            </div>
+          </div>
+
+          <div className="hero-mock">
           <div className="mock-window">
             <div className="mock-topbar">
               <span className="mock-dots">
@@ -323,6 +353,7 @@ export default function Hero() {
           <div className="hero-badge hero-badge-3">
             <span className="dot" />
             42 questions tested live
+          </div>
           </div>
         </div>
       </div>
