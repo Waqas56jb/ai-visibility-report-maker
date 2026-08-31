@@ -109,7 +109,7 @@ export default function Reports() {
                     </td>
                     <td>
                       <div className="lead">
-                        <strong>{r.lead_name || '—'}</strong>
+                        <strong>{r.lead_name || '-'}</strong>
                         <span>{r.lead_email}</span>
                       </div>
                     </td>
@@ -119,9 +119,9 @@ export default function Reports() {
                     <td>
                       <ScorePill score={r.overall_score} />
                     </td>
-                    <td>{r.readability_score ?? '—'}</td>
+                    <td>{r.readability_score ?? '-'}</td>
                     <td className="mono" style={{ fontSize: 12 }}>
-                      {r.query_count || '—'}
+                      {r.query_count || '-'}
                     </td>
                     <td className="mono" style={{ fontSize: 12 }}>
                       ${(r.cost || 0).toFixed(2)}

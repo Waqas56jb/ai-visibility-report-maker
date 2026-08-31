@@ -5,7 +5,7 @@ export default function WeightsTable({ items = [] }) {
         <div className="wrow" key={w.name}>
           <span>{w.name}</span>
           <span className="pct">{w.weight}</span>
-          <span className="sc">{w.score == null || w.score === '—' ? '—' : `${w.score}/100`}</span>
+          <span className="sc">{w.score == null || w.score === '-' ? '-' : `${w.score}/100`}</span>
         </div>
       ))}
     </div>

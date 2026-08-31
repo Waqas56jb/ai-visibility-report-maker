@@ -345,6 +345,7 @@ router.get('/reports/:id', async (req, res, next) => {
       .from('report_queries')
       .select('*')
       .eq('report_id', data.id)
+      .neq('mode', '')
       .order('created_at', { ascending: true });
     let queryRows = (queries || []).map(mapQueryRow);
     if (!queryRows.length && Array.isArray(data.gaps)) {

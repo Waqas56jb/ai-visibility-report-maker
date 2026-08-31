@@ -7,6 +7,7 @@ import FAQ from '../components/FAQ.jsx';
 import FinalCta from '../components/FinalCta.jsx';
 import Footer from '../components/Footer.jsx';
 import LandingStory from '../components/LandingStory.jsx';
+import AutomationBand from '../components/AutomationBand.jsx';
 import { useSite } from '../store/site.jsx';
 
 export default function Landing() {
@@ -19,10 +20,11 @@ export default function Landing() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main" tabIndex={-1}>
         <Hero />
-        <Checker />
         <LandingStory />
+        <AutomationBand />
+        <Checker />
         <Measure />
         <FAQ />
         <FinalCta />

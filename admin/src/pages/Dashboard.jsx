@@ -34,7 +34,7 @@ const ICONS = {
   'file-bar-chart': FileBarChart,
 };
 
-const BAND_COLORS = ['#F0625A', '#F5B84B', '#06B6D4', '#22C55E', '#4F46E5'];
+const BAND_COLORS = ['#E0544A', '#D08A1F', '#5B6EF0', '#16A34A', '#7287FA'];
 const TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'reports', label: 'Reports' },

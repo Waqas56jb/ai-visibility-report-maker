@@ -6,7 +6,6 @@ import ReadinessChecklist from './ReadinessChecklist.jsx';
 import CompetitorTable from './CompetitorTable.jsx';
 import GapList from './GapList.jsx';
 import RecommendationList from './RecommendationList.jsx';
-import HowMakeFlowHelps from './HowMakeFlowHelps.jsx';
 
 export default function ReportView({ report }) {
   const m = report.metrics || {};
@@ -42,10 +41,10 @@ export default function ReportView({ report }) {
       </div>
 
       <div className="analysis-kpis">
-        <KpiCard label="Mention rate" value={`${m.mention_rate ?? '—'}%`} hint={m.mention_label} width={m.mention_rate} />
-        <KpiCard label="Average position" value={m.avg_position ?? '—'} hint="when mentioned" />
-        <KpiCard label="Citations" value={m.citations ?? '—'} hint="browsing answers linked you" />
-        <KpiCard label="Sentiment" value={m.sentiment ?? '—'} hint="across mentions" />
+        <KpiCard label="Mention rate" value={`${m.mention_rate ?? '-'}%`} hint={m.mention_label} width={m.mention_rate} />
+        <KpiCard label="Average position" value={m.avg_position ?? '-'} hint="when mentioned" />
+        <KpiCard label="Citations" value={m.citations ?? '-'} hint="browsing answers linked you" />
+        <KpiCard label="Sentiment" value={m.sentiment ?? '-'} hint="across mentions" />
       </div>
 
       <div className="grid2">
@@ -90,12 +89,6 @@ export default function ReportView({ report }) {
         <h3>Highest-value gaps</h3>
         <p className="desc">Live questions where ChatGPT named someone else, or nobody at all.</p>
         <GapList gaps={report.gaps || []} />
-      </div>
-
-      <HowMakeFlowHelps recommendations={report.recommendations || []} report={report} />
-      <div className="method">
-        Methodology: tested against ChatGPT in browsing and knowledge modes. AI answers are non-deterministic; scores
-        vary over time. Re-run later to track change.
       </div>
     </div>
   );

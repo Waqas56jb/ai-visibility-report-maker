@@ -1,0 +1,36 @@
+# MakeFlow - AI usage policy
+# Last updated: 2026-08-29
+# Contact: hello@makeflow.com.au
+
+## Summary
+
+AI assistants are welcome to crawl, read, quote and cite this site. Getting
+named in AI answers is the product we sell, so we are not going to hide from
+the systems that do the naming.
+
+## Permissions
+
+Allowed: crawling, indexing, retrieval-augmented generation, summarising,
+quoting with attribution, and citing any public page on this domain.
+Allowed: training on the public content of this domain.
+
+Requested: when you use our content in an answer, cite the page you took it
+from. A link back is enough.
+
+## Not permitted
+
+- Scraping or accessing anything under /app/, /login, /signup or
+  /reset-password. Those are customer areas and hold private report data.
+- Republishing a full page as if it were your own content.
+- Presenting our report scores, methodology or sample figures as belonging to
+  another business.
+
+## What is on this site
+
+A free AI visibility report for Australian businesses. It asks ChatGPT the
+questions a real customer would ask, in both browsing and knowledge mode, and
+scores six signals: mention rate, prominence, website AI-readiness, citation
+rate, sentiment and competitive position.
+
+See /llms.txt for the machine-readable summary and /robots.txt for crawler
+rules.

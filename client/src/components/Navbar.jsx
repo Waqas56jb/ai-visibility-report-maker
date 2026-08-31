@@ -1,34 +1,28 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
+  Building2,
   CalendarCheck,
-  CircleHelp,
-  Layers,
+  Gem,
   LayoutDashboard,
   LogIn,
   Menu,
   PlusCircle,
-  Route as RouteIcon,
   ScanSearch,
   Sparkles,
   UserPlus,
+  Users,
   X,
 } from 'lucide-react';
 import Logo from './Logo.jsx';
 import { useAuth } from '../store/auth.js';
 import { useSite } from '../store/site.jsx';
+import { useCheckerModal } from '../store/checkerModal.js';
 
-function scrollToId(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-}
-
-export function goToCheck(navigate, pathname) {
-  if (pathname === '/') {
-    scrollToId('check');
-  } else {
-    navigate('/');
-    window.setTimeout(() => scrollToId('check'), 80);
-  }
+// Kept signature-compatible with its old scroll-to-section behaviour so every
+// existing call site works unchanged; the checker now opens as a modal instead.
+export function goToCheck() {
+  useCheckerModal.getState().openChecker();
 }
 
 export default function Navbar({ variant = 'landing' }) {
@@ -62,36 +56,16 @@ export default function Navbar({ variant = 'landing' }) {
     return () => document.body.classList.remove('nav-open');
   }, [open]);
 
-  function onSection(e, id) {
-    e.preventDefault();
-    setOpen(false);
-    if (pathname === '/') {
-      scrollToId(id);
-    } else {
-      navigate('/');
-      window.setTimeout(() => scrollToId(id), 80);
-    }
-  }
-
   return (
     <>
       <header className={`nav${dark ? ' dark' : ''}${scrolled ? ' scrolled' : ''}`}>
         <div className="wrap">
           <Logo />
           <nav className="nav-links">
-            <a href="#why" onClick={(e) => onSection(e, 'why')}>
-              Why AI
-            </a>
-            <a href="#how" onClick={(e) => onSection(e, 'how')}>
-              How it works
-            </a>
-            <a href="#inside" onClick={(e) => onSection(e, 'inside')}>
-              The report
-            </a>
             <Link to="/services">Services</Link>
-            <a href="#faq" onClick={(e) => onSection(e, 'faq')}>
-              FAQ
-            </a>
+            <Link to="/use-cases">Use cases</Link>
+            <Link to="/plans">Plans</Link>
+            <Link to="/about">About</Link>
           </nav>
           <div className="nav-actions">
             {user ? (
@@ -146,21 +120,18 @@ export default function Navbar({ variant = 'landing' }) {
             <ScanSearch className="lucide svg" /> {navCta}
           </button>
         )}
-        <a href="#why" onClick={(e) => onSection(e, 'why')}>
-          <ScanSearch className="lucide svg" /> Why AI
-        </a>
-        <a href="#how" onClick={(e) => onSection(e, 'how')}>
-          <RouteIcon className="lucide svg" /> How it works
-        </a>
-        <a href="#inside" onClick={(e) => onSection(e, 'inside')}>
-          <Layers className="lucide svg" /> The report
-        </a>
         <Link to="/services">
           <Sparkles className="lucide svg" /> Services
         </Link>
-        <a href="#faq" onClick={(e) => onSection(e, 'faq')}>
-          <CircleHelp className="lucide svg" /> FAQ
-        </a>
+        <Link to="/use-cases">
+          <Building2 className="lucide svg" /> Use cases
+        </Link>
+        <Link to="/plans">
+          <Gem className="lucide svg" /> Plans
+        </Link>
+        <Link to="/about">
+          <Users className="lucide svg" /> About
+        </Link>
         {bookUrl ? (
           <a href={bookUrl} {...bookProps}>
             <CalendarCheck className="lucide svg" /> {bookLabel}

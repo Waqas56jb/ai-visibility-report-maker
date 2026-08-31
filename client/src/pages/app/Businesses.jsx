@@ -16,6 +16,7 @@ export default function Businesses() {
   const [items, setItems] = useState(null);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [del, setDel] = useState(null);
   const { register, getValues, reset } = useForm({
     defaultValues: { business_name: '', website_url: '', industry: '', city_region: '', competitors: '' },
   });
@@ -77,9 +78,9 @@ export default function Businesses() {
                 <tr key={b.id}>
                   <td>{b.name}</td>
                   <td>{b.website}</td>
-                  <td>{b.industry || '—'}</td>
-                  <td>{b.city_region || '—'}</td>
-                  <td>{b.latest_score ?? '—'}</td>
+                  <td>{b.industry || '-'}</td>
+                  <td>{b.city_region || '-'}</td>
+                  <td>{b.latest_score ?? '-'}</td>
                   <td>{b.reports_count}</td>
                   <td className="table-actions">
                     <Button variant="ghost" className="btn-sm" onClick={() => navigate('/app/new', { state: { prefill: b } })}>
@@ -96,14 +97,7 @@ export default function Businesses() {
                     >
                       Edit
                     </Button>
-                    <Button
-                      variant="ghost"
-                      className="btn-sm"
-                      onClick={async () => {
-                        await api.deleteBusiness(b.id);
-                        load();
-                      }}
-                    >
+                    <Button variant="ghost" className="btn-sm" onClick={() => setDel(b)}>
                       Delete
                     </Button>
                   </td>
@@ -124,6 +118,30 @@ export default function Businesses() {
             Save
           </Button>
         </form>
+      </Modal>
+      <Modal open={Boolean(del)} title="Delete business?" onClose={() => setDel(null)}>
+        <p className="muted">
+          This removes {del?.name} and its saved details. Past reports are not deleted. This cannot be undone.
+        </p>
+        <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
+          <Button
+            variant="primary"
+            onClick={async () => {
+              try {
+                await api.deleteBusiness(del.id);
+                setDel(null);
+                load();
+              } catch (err) {
+                toast(err.message);
+              }
+            }}
+          >
+            Delete
+          </Button>
+          <Button variant="ghost" onClick={() => setDel(null)}>
+            Cancel
+          </Button>
+        </div>
       </Modal>
     </>
   );

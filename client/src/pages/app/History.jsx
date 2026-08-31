@@ -105,9 +105,9 @@ export default function History() {
               return (
                 <tr key={r.id}>
                   <td>{new Date(r.created_at).toLocaleDateString()}</td>
-                  <td>{r.overall_score ?? '—'}</td>
-                  <td>{r.score_band || '—'}</td>
-                  <td>{delta == null ? '—' : `${delta > 0 ? '+' : ''}${delta}`}</td>
+                  <td>{r.overall_score ?? '-'}</td>
+                  <td>{r.score_band || '-'}</td>
+                  <td>{delta == null ? '-' : `${delta > 0 ? '+' : ''}${delta}`}</td>
                 </tr>
               );
             })}

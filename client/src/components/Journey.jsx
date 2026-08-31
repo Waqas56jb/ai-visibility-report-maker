@@ -18,7 +18,7 @@ const STEPS = [
 
 export default function Journey() {
   const { content } = useSite();
-  const bookUrl = (content.bookCall?.url || 'https://makeflow.com.au/contact').trim();
+  const bookUrl = (content.bookCall?.url || 'https://cal.com/isuruabhishek/30min').trim();
   const bookExternal = /^https?:\/\//i.test(bookUrl);
   const bookProps = bookExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {};
 

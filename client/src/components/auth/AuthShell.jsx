@@ -14,6 +14,7 @@ export default function AuthShell({ image, headline, quote, children }) {
         </div>
       </div>
       <div className="auth-form">
+        <div className="auth-form-bg" aria-hidden="true" />
         <div className="auth-box">
           <div className="auth-logo-mobile">
             <Logo />

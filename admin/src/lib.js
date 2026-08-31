@@ -1,5 +1,5 @@
 export function band(s) {
-  if (s == null || s === '') return '—';
+  if (s == null || s === '') return '-';
   const n = Number(s);
   if (n <= 20) return 'Invisible';
   if (n <= 40) return 'Barely visible';
@@ -17,7 +17,7 @@ export function scoreClass(s) {
 }
 
 export function fmtDate(d) {
-  if (!d) return '—';
+  if (!d) return '-';
   return new Date(d).toLocaleDateString('en-AU', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 

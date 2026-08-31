@@ -97,7 +97,7 @@ export default function Dashboard() {
               <TrendingUp className="lucide svg" /> Score change
             </div>
             <strong>
-              {delta == null ? '—' : `${delta > 0 ? '+' : ''}${delta}`}
+              {delta == null ? '-' : `${delta > 0 ? '+' : ''}${delta}`}
             </strong>
             <div className="s">vs previous completed report</div>
           </div>
@@ -120,7 +120,7 @@ export default function Dashboard() {
               <Gauge className="lucide svg" /> Avg score
             </div>
             <strong>
-              {completed.length ? Math.round(completed.reduce((s, r) => s + r.overall_score, 0) / completed.length) : '—'}
+              {completed.length ? Math.round(completed.reduce((s, r) => s + r.overall_score, 0) / completed.length) : '-'}
             </strong>
             <div className="s">across completed runs</div>
           </div>
@@ -172,7 +172,7 @@ export default function Dashboard() {
                     <Status value={r.status} />
                   </td>
                   <td>
-                    <strong>{r.overall_score ?? '—'}</strong>
+                    <strong>{r.overall_score ?? '-'}</strong>
                     {delta != null && r.id === latest?.id && (
                       <span className={`dash-delta ${delta >= 0 ? 'up' : 'dn'}`}>
                         {delta >= 0 ? <TrendingUp className="lucide svg" /> : <TrendingDown className="lucide svg" />}

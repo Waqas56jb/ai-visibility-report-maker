@@ -184,7 +184,7 @@ function drawTable(doc, cols, rows) {
 
 function drawReport(doc, report) {
   const score = Number(report.overall_score) || 0;
-  const band = report.score_band || '—';
+  const band = report.score_band || '-';
   const metrics = report.metrics || {};
   const website = String(report.website || '').replace(/^https?:\/\//, '');
   const accent = scoreColor(score);
@@ -221,10 +221,10 @@ function drawReport(doc, report) {
   doc.y = heroY + heroH + 10;
 
   doc.y = kpiStrip(doc, [
-    { label: 'MENTION RATE', value: metrics.mention_rate != null ? `${metrics.mention_rate}%` : '—', hint: metrics.mention_label || 'of opportunity queries', color: INDIGO },
-    { label: 'AVG POSITION', value: metrics.avg_position ?? '—', hint: 'when you are named', color: CYAN },
-    { label: 'CITATIONS', value: metrics.citations ?? '—', hint: 'browsing answers with a link', color: MINT },
-    { label: 'AI-READINESS', value: report.readability_score != null ? `${report.readability_score}/100` : '—', hint: 'website technical audit', color: AMBER },
+    { label: 'MENTION RATE', value: metrics.mention_rate != null ? `${metrics.mention_rate}%` : '-', hint: metrics.mention_label || 'of opportunity queries', color: INDIGO },
+    { label: 'AVG POSITION', value: metrics.avg_position ?? '-', hint: 'when you are named', color: CYAN },
+    { label: 'CITATIONS', value: metrics.citations ?? '-', hint: 'browsing answers with a link', color: MINT },
+    { label: 'AI-READINESS', value: report.readability_score != null ? `${report.readability_score}/100` : '-', hint: 'website technical audit', color: AMBER },
   ], doc.y);
 
   if (report.executive_summary) {
@@ -287,7 +287,7 @@ function drawReport(doc, report) {
       ],
       weights.map((row, i) => ({
         _alt: i % 2 === 1,
-        cells: [row.name, row.weight, row.score == null ? '—' : `${row.score}`],
+        cells: [row.name, row.weight, row.score == null ? '-' : `${row.score}`],
       }))
     );
   }
@@ -332,9 +332,9 @@ function drawReport(doc, report) {
         _alt: i % 2 === 1,
         cells: [
           c.you ? `${c.name}  (you)` : c.name,
-          c.mention_rate != null ? `${c.mention_rate}%` : '—',
-          c.avg_position != null && c.avg_position !== '' ? c.avg_position : '—',
-          c.share_of_voice != null ? `${c.share_of_voice}%` : '—',
+          c.mention_rate != null ? `${c.mention_rate}%` : '-',
+          c.avg_position != null && c.avg_position !== '' ? c.avg_position : '-',
+          c.share_of_voice != null ? `${c.share_of_voice}%` : '-',
         ],
       }))
     );

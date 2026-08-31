@@ -2,6 +2,14 @@ import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Landing from './pages/Landing.jsx';
 import ServicesPage from './pages/ServicesPage.jsx';
+import PlansPage from './pages/PlansPage.jsx';
+import UseCasesPage from './pages/UseCasesPage.jsx';
+import AboutPage from './pages/AboutPage.jsx';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage.jsx';
+import TermsPage from './pages/TermsPage.jsx';
+import NotFoundPage from './pages/NotFoundPage.jsx';
+import CheckerModal from './components/CheckerModal.jsx';
+import ChatWidget from './components/ChatWidget.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
 import ForgotPassword from './pages/ForgotPassword.jsx';
@@ -22,6 +30,10 @@ import Help from './pages/app/Help.jsx';
 import { ToastProvider } from './lib/toast.jsx';
 import { useAuth } from './store/auth.js';
 import { SiteProvider } from './store/site.jsx';
+
+function PageFade({ children }) {
+  return <div className="page-enter">{children}</div>;
+}
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -45,6 +57,12 @@ function AuthBoot() {
   return null;
 }
 
+function SiteChat() {
+  const { pathname } = useLocation();
+  const hidden = /^\/(app|login|signup|reset-password|forgot-password)/.test(pathname);
+  return hidden ? null : <ChatWidget />;
+}
+
 export default function App() {
   return (
     <ToastProvider>
@@ -52,17 +70,23 @@ export default function App() {
       <BrowserRouter>
         <AuthBoot />
         <ScrollToTop />
+        <a className="skip-link" href="#main">Skip to content</a>
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/" element={<PageFade><Landing /></PageFade>} />
+          <Route path="/services" element={<PageFade><ServicesPage /></PageFade>} />
+          <Route path="/plans" element={<PageFade><PlansPage /></PageFade>} />
+          <Route path="/use-cases" element={<PageFade><UseCasesPage /></PageFade>} />
+          <Route path="/about" element={<PageFade><AboutPage /></PageFade>} />
+          <Route path="/privacy-policy" element={<PageFade><PrivacyPolicyPage /></PageFade>} />
+          <Route path="/terms-and-conditions" element={<PageFade><TermsPage /></PageFade>} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/reset-password" element={<ForgotPassword />} />
           <Route path="/forgot-password" element={<Navigate to="/reset-password" replace />} />
           <Route path="/reset-password/confirm" element={<ResetPasswordConfirm />} />
-          <Route path="/report" element={<SampleReport />} />
-          <Route path="/report/:id" element={<PublicReport />} />
-          <Route path="/app" element={<AppLayout />}>
+          <Route path="/report" element={<PageFade><SampleReport /></PageFade>} />
+          <Route path="/report/:id" element={<PageFade><PublicReport /></PageFade>} />
+          <Route path="/app" element={<PageFade><AppLayout /></PageFade>}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="new" element={<NewReport />} />
@@ -75,7 +99,10 @@ export default function App() {
             <Route path="settings" element={<Settings />} />
             <Route path="help" element={<Help />} />
           </Route>
+          <Route path="*" element={<PageFade><NotFoundPage /></PageFade>} />
         </Routes>
+        <CheckerModal />
+        <SiteChat />
       </BrowserRouter>
       </SiteProvider>
     </ToastProvider>

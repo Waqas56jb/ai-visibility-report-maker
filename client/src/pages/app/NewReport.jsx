@@ -178,6 +178,7 @@ export default function NewReport() {
               <button
                 type="button"
                 className="btn btn-ghost btn-sm"
+                aria-label={`Remove competitor ${i + 1}`}
                 onClick={() => setValue('competitors', competitors.filter((_, idx) => idx !== i))}
                 disabled={competitors.length <= 1}
               >

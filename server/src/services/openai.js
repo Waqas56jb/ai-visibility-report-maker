@@ -56,13 +56,13 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-function isTimeout(err) {
+export function isTimeout(err) {
   const name = err?.name || '';
   const msg = String(err?.message || '');
   return name === 'TimeoutError' || name === 'AbortError' || /timeout|aborted|AbortError/i.test(msg);
 }
 
-function retryable(status, err) {
+export function retryable(status, err) {
   if (isTimeout(err)) return false;
   if (status === 429 || (status >= 500 && status < 600)) return true;
   const msg = String(err?.message || '');
@@ -107,6 +107,7 @@ export async function completeJson({
   max_tokens = 2000,
   stage,
   usage,
+  budgetMs,
 }) {
   const prompt = loadPrompt(promptStem);
   const payload = {
@@ -126,7 +127,9 @@ export async function completeJson({
   let lastErr;
   for (let i = 0; i <= BACKOFF.length; i++) {
     try {
-      const data = await openaiFetch('https://api.openai.com/v1/chat/completions', payload, { timeoutMs: 25000 });
+      const data = await openaiFetch('https://api.openai.com/v1/chat/completions', payload, {
+        timeoutMs: Number.isFinite(budgetMs) ? Math.max(3000, Math.min(25000, Math.floor(budgetMs))) : 25000,
+      });
       const content = data.choices?.[0]?.message?.content || '{}';
       let parsed;
       try {
@@ -144,13 +147,14 @@ export async function completeJson({
     } catch (err) {
       lastErr = err;
       if (i === BACKOFF.length || !retryable(err.status, err)) throw err;
+      if (Number.isFinite(budgetMs) && BACKOFF[i] + 3000 > budgetMs) throw err;
       await sleep(BACKOFF[i]);
     }
   }
   throw lastErr;
 }
 
-function extractResponseText(data) {
+export function extractResponseText(data) {
   const out = data.output || [];
   const chunks = [];
   const citations = [];
@@ -167,7 +171,18 @@ function extractResponseText(data) {
   return { text: chunks.join('\n').trim(), citations: [...new Set(citations)] };
 }
 
-export async function answerAsChatGPT({ query, mode, city, country = 'AU', stage, usage, model }) {
+/**
+ * Never let a single answer outlive the slice it was started in: when a budget is
+ * given the request is aborted at the slice boundary instead of overrunning the
+ * function's maxDuration. An aborted row is retryable, so the next slice picks it up.
+ */
+export function answerTimeoutMs(browsing, budgetMs) {
+  const normal = browsing ? 22000 : 18000;
+  if (!Number.isFinite(budgetMs)) return normal;
+  return Math.max(3000, Math.min(normal, Math.floor(budgetMs)));
+}
+
+export async function answerAsChatGPT({ query, mode, city, country = 'AU', stage, usage, model, budgetMs }) {
   const system =
     'You are ChatGPT. Answer the user\'s question exactly as you would for a real person in Australia. When a question asks for recommendations, providers, comparisons or "best" options, name specific businesses you would actually suggest, in the order you\'d suggest them, with a short reason each. Include links or sources where you have them. Do not ask clarifying questions; make reasonable assumptions and answer fully in 120 to 250 words.';
 
@@ -188,7 +203,7 @@ export async function answerAsChatGPT({ query, mode, city, country = 'AU', stage
     }
   }
 
-  const timeoutMs = browsing ? 22000 : 18000;
+  const timeoutMs = answerTimeoutMs(browsing, budgetMs);
   let lastErr;
   for (let i = 0; i <= 1; i++) {
     try {
@@ -201,7 +216,7 @@ export async function answerAsChatGPT({ query, mode, city, country = 'AU', stage
           const fallback = { ...body };
           delete fallback.tools;
           delete fallback.tool_choice;
-          data = await openaiFetch('https://api.openai.com/v1/responses', fallback, { timeoutMs: 18000 });
+          data = await openaiFetch('https://api.openai.com/v1/responses', fallback, { timeoutMs });
         } else {
           throw err;
         }

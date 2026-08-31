@@ -10,6 +10,6 @@ export function StatusBadge({ report }) {
 }
 
 export function ScorePill({ score }) {
-  if (score == null || score === '') return <span style={{ color: 'var(--text-3)' }}>—</span>;
+  if (score == null || score === '') return <span style={{ color: 'var(--text-3)' }}>-</span>;
   return <span className={`score-pill ${scoreClass(score)}`}>{score}</span>;
 }

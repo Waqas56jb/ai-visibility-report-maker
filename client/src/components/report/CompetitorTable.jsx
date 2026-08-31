@@ -23,14 +23,14 @@ export default function CompetitorTable({ rows = [] }) {
                   </span>
                 )}
               </td>
-              <td>{c.mention_rate != null ? `${c.mention_rate}%` : '—'}</td>
-              <td>{c.avg_position != null && c.avg_position !== '' ? Number(c.avg_position).toFixed(1) : '—'}</td>
+              <td>{c.mention_rate != null ? `${c.mention_rate}%` : '-'}</td>
+              <td>{c.avg_position != null && c.avg_position !== '' ? Number(c.avg_position).toFixed(1) : '-'}</td>
               <td>
                 <div className="sov">
                   <i>
                     <b style={{ width: `${Math.max(0, Math.min(100, Number(c.share_of_voice) || 0))}%` }} />
                   </i>
-                  {c.share_of_voice != null ? `${c.share_of_voice}%` : '—'}
+                  {c.share_of_voice != null ? `${c.share_of_voice}%` : '-'}
                 </div>
               </td>
               <td>

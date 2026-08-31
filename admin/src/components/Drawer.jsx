@@ -202,12 +202,12 @@ export default function Drawer({ id, onClose, onChanged }) {
                   </div>
                   <div className="mini">
                     {[
-                      ['Mention rate', metrics.mention_rate != null ? `${metrics.mention_rate}%` : '—'],
-                      ['Avg position', metrics.avg_position ?? '—'],
-                      ['Citations', metrics.citations ?? '—'],
-                      ['Readability', report.readability_score ?? '—'],
-                      ['Browsing', browsing ?? '—'],
-                      ['Knowledge', knowledge ?? '—'],
+                      ['Mention rate', metrics.mention_rate != null ? `${metrics.mention_rate}%` : '-'],
+                      ['Avg position', metrics.avg_position ?? '-'],
+                      ['Citations', metrics.citations ?? '-'],
+                      ['Readability', report.readability_score ?? '-'],
+                      ['Browsing', browsing ?? '-'],
+                      ['Knowledge', knowledge ?? '-'],
                     ].map(([label, value]) => (
                       <div key={label}>
                         <strong>{value}</strong>
@@ -218,10 +218,10 @@ export default function Drawer({ id, onClose, onChanged }) {
                 </div>
                 <div className="kv">
                   {[
-                    ['Contact', report.lead_name || '—'],
-                    ['Email', report.lead_email || '—'],
-                    ['Industry', report.industry || '—'],
-                    ['Location', report.city_region || '—'],
+                    ['Contact', report.lead_name || '-'],
+                    ['Email', report.lead_email || '-'],
+                    ['Industry', report.industry || '-'],
+                    ['Location', report.city_region || '-'],
                     ['Source', 'website'],
                     ['PDF', report.pdf_url ? 'Generated · stored in Supabase' : 'Not generated'],
                   ].map(([k, v]) => (
@@ -260,9 +260,9 @@ export default function Drawer({ id, onClose, onChanged }) {
                               {c.you ? ' (you)' : ''}
                             </strong>
                           </td>
-                          <td>{c.mention_rate ?? '—'}%</td>
-                          <td>{c.avg_position ?? '—'}</td>
-                          <td>{c.share_of_voice ?? '—'}%</td>
+                          <td>{c.mention_rate ?? '-'}%</td>
+                          <td>{c.avg_position ?? '-'}</td>
+                          <td>{c.share_of_voice ?? '-'}%</td>
                         </tr>
                       ))}
                     </tbody>
@@ -282,7 +282,7 @@ export default function Drawer({ id, onClose, onChanged }) {
                       {q.category && <span>{q.category}</span>}
                       {q.mode && <span>{q.mode}</span>}
                       {q.mentioned ? (
-                        <span className="yes">position {q.position ?? '—'}</span>
+                        <span className="yes">position {q.position ?? '-'}</span>
                       ) : (
                         <span className="no">{(q.competitors || []).length ? (q.competitors || []).slice(0, 3).join(', ') : 'competitors named'}</span>
                       )}
@@ -328,9 +328,9 @@ export default function Drawer({ id, onClose, onChanged }) {
                 <div className="cost">
                   {[
                     [`$${(report.cost || 0).toFixed(3)}`, 'Estimated cost'],
-                    [tokens ? tokens.toLocaleString() : '—', 'Total tokens'],
-                    [tokensIn ? tokensIn.toLocaleString() : '—', 'Input tokens'],
-                    [tokensOut ? tokensOut.toLocaleString() : '—', 'Output tokens'],
+                    [tokens ? tokens.toLocaleString() : '-', 'Total tokens'],
+                    [tokensIn ? tokensIn.toLocaleString() : '-', 'Input tokens'],
+                    [tokensOut ? tokensOut.toLocaleString() : '-', 'Output tokens'],
                   ].map(([v, l]) => (
                     <div key={l}>
                       <strong>{v}</strong>

@@ -54,10 +54,16 @@ export default function AppLayout() {
     <div className="app-shell">
       <Sidebar open={open} onClose={() => setOpen(false)} reportCount={reportCount} />
       <div className="app-main">
+        <div className="app-bg" aria-hidden="true">
+          <span />
+          <span />
+        </div>
         <Topbar title={title} onMenu={() => setOpen(true)} />
         <div className="app-content">
           <PageError>
-            <Outlet />
+            <div key={pathname} className="page-fade">
+              <Outlet />
+            </div>
           </PageError>
         </div>
       </div>

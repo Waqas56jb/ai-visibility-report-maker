@@ -183,7 +183,7 @@ export function scoreReport({ rows, crawl, competitorAnalysis }) {
       mention_label: `${opp.filter((r) => r.extraction.target_mentioned).length} of ${opp.length} queries`,
       avg_position: avg(mentioned.map((r) => r.extraction.target_position)),
       citations: browse.filter((r) => r.extraction.target_cited).length,
-      sentiment: sentiment_score >= 80 ? 'Positive' : sentiment_score >= 40 ? 'Neutral' : mentioned.length ? 'Mixed' : '—',
+      sentiment: sentiment_score >= 80 ? 'Positive' : sentiment_score >= 40 ? 'Neutral' : mentioned.length ? 'Mixed' : '-',
       opportunity_count: opp.length,
       no_opportunity_count: noOpp,
       weights: [

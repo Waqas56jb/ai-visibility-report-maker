@@ -67,7 +67,7 @@ export default function Login() {
             </div>
           </div>
         </div>
-        <p style={{ fontSize: 12 }}>© 2026 MakeFlow Pty Ltd</p>
+        <p style={{ fontSize: 12 }}>© 2026 MakeFlow</p>
       </div>
       <div className="login-form">
         <div className="login-box">
@@ -83,7 +83,7 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@makeflow.com.au"
                 required
-                style={{ borderColor: error && !/^\S+@\S+\.\S+$/.test(email) ? '#F0625A' : undefined }}
+                style={{ borderColor: error && !/^\S+@\S+\.\S+$/.test(email) ? 'var(--coral)' : undefined }}
               />
             </div>
             <div className="field">
@@ -95,7 +95,7 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••"
                   required
-                  style={{ borderColor: error && !password ? '#F0625A' : undefined }}
+                  style={{ borderColor: error && !password ? 'var(--coral)' : undefined }}
                 />
                 <button type="button" aria-label={show ? 'Hide password' : 'Show password'} onClick={() => setShow((s) => !s)}>
                   {show ? <EyeOff className="lucide" /> : <Eye className="lucide" />}

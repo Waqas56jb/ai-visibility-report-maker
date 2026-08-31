@@ -36,4 +36,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://ai-visibility-report-maker-client.vercel.app/sitemap.xml
+Sitemap: https://makeflow.com.au/sitemap.xml

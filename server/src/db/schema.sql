@@ -122,6 +122,24 @@ create table if not exists public.report_queries (
 
 create index if not exists report_queries_report_id_idx on public.report_queries (report_id);
 
+-- report_queries is written incrementally as answers land, so the pipeline needs a
+-- stable identity to upsert against. mode is normalised to '' (never null) so the
+-- unique index treats the query-seed rows as one key rather than as distinct nulls.
+update public.report_queries set mode = '' where mode is null;
+alter table public.report_queries alter column mode set default '';
+alter table public.report_queries alter column mode set not null;
+
+delete from public.report_queries a
+using public.report_queries b
+where a.report_id = b.report_id
+  and a.mode = b.mode
+  and a.text = b.text
+  and (coalesce(length(a.raw_answer), 0), a.created_at, a.id)
+    < (coalesce(length(b.raw_answer), 0), b.created_at, b.id);
+
+create unique index if not exists report_queries_report_mode_text_key
+  on public.report_queries (report_id, mode, text);
+
 alter table public.leads add column if not exists source text default 'website';
 alter table public.leads add column if not exists industry text default '';
 alter table public.leads add column if not exists location text default '';

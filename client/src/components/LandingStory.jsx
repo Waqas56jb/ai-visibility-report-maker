@@ -1,13 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-import { ScanSearch } from 'lucide-react';
 import Reveal from './Reveal.jsx';
-import { goToCheck } from './Navbar.jsx';
-import { useSite } from '../store/site.jsx';
 
 export default function LandingStory() {
-  const navigate = useNavigate();
-  const { content } = useSite();
-
   return (
     <section className="section why-ai" id="why">
       <div className="hero-glow" />
@@ -22,12 +15,6 @@ export default function LandingStory() {
             know you, you are invisible in a conversation you never get to see. This report shows
             you what it actually says.
           </p>
-          <div className="why-cta">
-            <button type="button" className="btn btn-grad" onClick={() => goToCheck(navigate, '/')}>
-              <ScanSearch className="lucide svg" /> {content.hero?.ctaPrimary || 'Run my free report'}
-            </button>
-            <span className="why-cta-note">{content.checker?.formSub || 'Takes about 3 minutes. One free report per email every 30 days.'}</span>
-          </div>
         </Reveal>
         <div className="why-grid">
           <Reveal className="card why-card">

@@ -101,7 +101,7 @@ export default function Signup() {
         </label>
         {errors.accept_terms && <span className="err">{errors.accept_terms}</span>}
         <button className="btn btn-grad" type="submit" disabled={loading}>
-          Create account <ArrowRight className="lucide svg" />
+          {loading ? 'Creating account…' : (<>Create account <ArrowRight className="lucide svg" /></>)}
         </button>
       </form>
       <p className="alt">

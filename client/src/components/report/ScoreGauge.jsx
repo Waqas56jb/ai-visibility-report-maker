@@ -5,7 +5,7 @@ export default function ScoreGauge({ score, band }) {
   const rawId = useId().replace(/:/g, '');
   const gid = `gauge-${rawId}`;
   const n = score == null || score === '' ? null : Number(score);
-  const label = band || (n == null ? '—' : bandOf(n));
+  const label = band || (n == null ? '-' : bandOf(n));
   const offset = 628 - (628 * (n || 0)) / 100;
   const bandClass = n == null ? '' : n <= 20 ? 'b1' : n <= 40 ? 'b2' : n <= 60 ? 'b3' : 'b4';
   return (
@@ -23,7 +23,7 @@ export default function ScoreGauge({ score, band }) {
         </svg>
         <div className="num">
           <div>
-            <strong>{n ?? '—'}</strong>
+            <strong>{n ?? '-'}</strong>
             <span>overall AI visibility</span>
           </div>
         </div>

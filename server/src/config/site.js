@@ -17,7 +17,7 @@ export const DEFAULT_CONTENT = {
   navCta: 'Check my visibility',
   bookCall: {
     label: 'Book a call',
-    url: 'https://makeflow.com.au/contact',
+    url: 'https://cal.com/isuruabhishek/30min',
   },
   strip: 'Tested against ChatGPT, the assistant your customers actually use',
   cities: ['Brisbane', 'Sydney', 'Melbourne', 'Perth', 'Adelaide', 'Gold Coast', 'Newcastle', 'Canberra'],
@@ -26,7 +26,7 @@ export const DEFAULT_CONTENT = {
     headline: 'When customers ask ChatGPT, does it',
     highlight: 'say your name?',
     lead:
-      "More Australians ask an AI assistant before they ever open Google. We run your customers' real questions through ChatGPT and show you exactly who it names.",
+      'Every day, customers ask AI who they should trust. MakeFlow finds where AI leaves you out, fills the gaps with the right content, and keeps you in the answer, across every engine, every day.',
     ctaPrimary: 'Run my free report',
     ctaSecondary: 'See a sample report',
     stat1n: '40+',
@@ -67,29 +67,39 @@ export const DEFAULT_CONTENT = {
   ],
   servicesPage: {
     eyebrow: 'What we do',
-    title: 'Six ways we put AI to work for you',
+    title: 'Nine ways we put AI to work for you',
     lead:
-      'The visibility report tells you where you stand. These are the services behind the fix, and the work we take on once the gaps are clear.',
-    ctaEyebrow: 'Not sure where to start?',
-    ctaTitle: 'Start with the free report',
+      'The visibility report tells you where you stand. These are the services behind the fix: answer engine optimisation, generative engine optimisation, automation and the sites we build them on.',
+    ctaEyebrow: 'Where to next',
+    ctaTitle: 'Tell us what you need built',
     ctaBody:
-      'It takes about three minutes and tells you which of these actually matters for your business right now.',
-    ctaButton: 'Run my free report',
+      'A short call is enough to work out which of these fits, what it would cost and how long it takes. No pitch deck.',
+    ctaButton: 'Book a call',
     items: [
       {
         title: 'AI Visibility',
         body:
-          'Get recommended by ChatGPT, Gemini and AI Overviews \u2014 not just ranked on Google. We check where you stand today, then fix it.',
+          'Get recommended by ChatGPT, Gemini and AI Overviews, not just ranked on Google. We measure where you stand today with the same report you can run for free, then fix what it finds.',
+      },
+      {
+        title: 'AEO: Answer Engine Optimisation',
+        body:
+          'Search used to send you traffic. Answer engines just reply. AEO is the work of making your site the source that reply gets built from: clear, quotable answers to the questions your customers actually ask.',
+      },
+      {
+        title: 'GEO: Generative Engine Optimisation',
+        body:
+          'A generative model does not read one website, it reads the web\u2019s opinion of you. GEO is the wider game: a consistent entity, credible third-party mentions and a citation footprint that lands you inside the generated answer.',
       },
       {
         title: 'AI Workflow Automation',
         body:
-          'The repetitive work your team does by hand every week, running itself \u2014 connected end to end with AI-powered no-code tooling.',
+          'The repetitive work your team does by hand every week, running itself, connected end to end with AI-powered no-code tooling.',
       },
       {
         title: 'AI Voice Agents',
         body:
-          'A phone agent that picks up every call, answers the usual questions and books the appointment \u2014 day, night and weekends.',
+          'A phone agent that picks up every call, answers the usual questions and books the appointment. Day, night and weekends.',
       },
       {
         title: 'AI Chatbots',
@@ -102,9 +112,14 @@ export const DEFAULT_CONTENT = {
           'No enquiry slips through. Every lead is captured, followed up on a schedule, and logged in your CRM without anyone remembering to do it.',
       },
       {
+        title: 'Web Design & Development',
+        body:
+          'A fast, modern site built to be read by people and machines alike. Clean structure, real content in real HTML, schema from day one, so the AEO and GEO work has something solid to stand on.',
+      },
+      {
         title: 'AI Integration & Custom Development',
         body:
-          'AI built directly into the product you already have \u2014 or a new one built from scratch around it. Our deepest, most tailored engagement.',
+          'AI built directly into the product you already have, or a new one built from scratch around it. Our deepest, most tailored engagement.',
       },
     ],
   },
@@ -152,8 +167,6 @@ export const DEFAULT_CONTENT = {
   },
   footerBlurb:
     'Australian AI studio. We make businesses visible in AI search, then build the chatbots and automations that turn it into customers.',
-  footerCopy: '© 2026 MakeFlow Pty Ltd · makeflow.com.au',
-  footerNote: 'Results tested against ChatGPT · Scores vary over time',
 };
 
 export function defaultSite() {

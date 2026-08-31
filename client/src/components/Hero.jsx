@@ -1,36 +1,176 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  BarChart3,
-  CalendarCheck,
   CheckCircle2,
-  FileText,
-  Globe2,
   Play,
   ScanSearch,
   Sparkles,
   User,
   XCircle,
-  Zap,
 } from 'lucide-react';
 import { goToCheck } from './Navbar.jsx';
 import { useSite } from '../store/site.jsx';
+import { AI_ENGINES, AUTOMATION_TOOLS, CopilotMark, SlackMark, MicrosoftMark } from '../lib/aiEngineIcons.jsx';
 
-// Replaces the word "ChatGPT" in a CMS-editable string with the ChatGPT
-// wordmark logo image, without assuming the word is always present.
-function withChatGptIcon(text) {
-  if (!text) return text;
-  const idx = text.indexOf('ChatGPT');
-  if (idx === -1) return text;
-  const before = text.slice(0, idx);
-  const after = text.slice(idx + 'ChatGPT'.length);
-  return (
-    <>
-      {before}
-      <img className="chatgpt-wordmark" src="/chatgpt-wordmark.png" alt="ChatGPT" />
-      {after}
-    </>
+// ChatGPT sits in the hub, dead center, and the eight tools we integrate with
+// are spaced evenly around it on the circumference of a single circle — a
+// true wheel/orbit layout, not a grid. The card is square (CARD_ASPECT = 1,
+// must match .hub-spoke's aspect-ratio) so that circle actually reads as a
+// circle instead of an ellipse.
+const CARD_ASPECT = 1; // height / width — must match .hub-spoke's aspect-ratio
+const CIRCLE_R = 38; // orbit radius, as a % of the card's width
+const CHATGPT = AI_ENGINES.find((e) => e.key === 'chatgpt');
+const CIRCLE_ORDER = ['zapier', 'slack', 'gmail', 'notion', 'calendly', 'hubspot', 'airtable', 'microsoft'];
+const CORNERS = CIRCLE_ORDER.map((key, i) => {
+  const tool = AUTOMATION_TOOLS.find((t) => t.key === key);
+  const angleDeg = -90 + i * 45; // start at 12 o'clock, evenly spaced clockwise
+  const rad = (angleDeg * Math.PI) / 180;
+  const dx = CIRCLE_R * Math.cos(rad);
+  const dy = CIRCLE_R * Math.sin(rad) * CARD_ASPECT;
+  return {
+    ...tool,
+    left: 50 + dx,
+    top: 50 + dy,
+    angle: angleDeg,
+    length: CIRCLE_R - 9,
+  };
+});
+
+const CUSTOM_MARKS = { copilot: CopilotMark, slack: SlackMark, microsoft: MicrosoftMark };
+
+function EngineIcon({ s }) {
+  const Mark = CUSTOM_MARKS[s.key];
+  return Mark ? (
+    <Mark />
+  ) : (
+    <svg viewBox="0 0 24 24">
+      <path d={s.d} fill={s.c} />
+    </svg>
   );
+}
+
+function HubSpoke() {
+  return (
+    <div className="hub-spoke">
+      <div className="hub-spoke-plane">
+        {CORNERS.map((s, i) => (
+          <div
+            key={s.key}
+            className="hub-line"
+            style={{ width: `${s.length}%`, transform: `rotate(${s.angle}deg)` }}
+          >
+            <span className="hub-line-strand a" />
+            <span className="hub-line-strand b">
+              <span className="hub-pulse" style={{ animationDelay: `${i * 0.4}s` }} />
+            </span>
+          </div>
+        ))}
+
+        {CORNERS.map((s) => (
+          <div key={s.key} className="hub-icon" style={{ left: `${s.left}%`, top: `${s.top}%` }} title={s.label}>
+            <EngineIcon s={s} />
+          </div>
+        ))}
+
+        <div className="hub-center" title={CHATGPT.label}>
+          <EngineIcon s={CHATGPT} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// The hero sits on the dark ink gradient, so each engine's flat brand colour
+// needs a lighter stand-in — ChatGPT's near-black in particular would vanish.
+const ENGINE_ON_DARK = {
+  chatgpt: '#FFFFFF',
+  gemini: '#A78BD9',
+  claude: '#E4885F',
+  perplexity: '#3FC8D8',
+  copilot: '#8FB6FF',
+};
+
+function EngineName({ s }) {
+  const Mark = CUSTOM_MARKS[s.key];
+  const colour = ENGINE_ON_DARK[s.key] || s.c;
+  return (
+    <span className="hero-engine">
+      <span className="hero-engine-icon" aria-hidden="true">
+        {Mark ? (
+          <Mark />
+        ) : (
+          <svg viewBox="0 0 24 24">
+            <path d={s.d} fill={colour} />
+          </svg>
+        )}
+      </span>
+      <span style={{ color: colour }}>{s.label}</span>
+    </span>
+  );
+}
+
+// A rotating word sits in a slot that is exactly as wide as the word currently
+// in it, and that width is animated. Reserving the widest option instead would
+// hold the layout perfectly still, but it leaves a visible pocket of dead space
+// around every short word ("Perth" sitting in a slot cut for "Gold Coast"), so
+// the slot is measured on each swap and transitions to the new width — the rest
+// of the line slides with it rather than jumping.
+function Slot({ cycle, className = '', children }) {
+  const measure = useRef(null);
+  const [width, setWidth] = useState(null);
+
+  // Observed rather than measured once per swap: the word's rendered width also
+  // changes when the word itself does not — the viewport crossing into a new
+  // clamp() font size, or the webfont landing after first paint. Measuring only
+  // on swap leaves the slot pinned to a width taken at the old size, which is
+  // wide enough to push the line over and cost the headline its fixed shape.
+  useLayoutEffect(() => {
+    const el = measure.current;
+    if (!el) return undefined;
+    setWidth(el.getBoundingClientRect().width);
+    if (typeof ResizeObserver === 'undefined') return undefined;
+    const ro = new ResizeObserver(([entry]) => {
+      const w = entry.contentRect.width;
+      if (w) setWidth(w);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [cycle, children]);
+
+  return (
+    <span className={`hero-slot ${className}`} style={width == null ? undefined : { width }}>
+      {/* Sized by the live value but never painted: it is what the animated
+          width is measured from, since the slot's own width is pinned. */}
+      <span className="hero-slot-measure" aria-hidden="true" ref={measure}>
+        {children}
+      </span>
+      <span className="hero-slot-live" key={cycle}>
+        {children}
+      </span>
+    </span>
+  );
+}
+
+// The middle of the question rotates as whole phrasings rather than as
+// independent words, so "who is the best gym" can never come out.
+const QUERIES = [
+  { ask: 'who', sup: 'best', trade: 'accountant' },
+  { ask: 'what', sup: 'top', trade: 'law firm' },
+  { ask: 'who', sup: '#1', trade: 'plumber' },
+  { ask: 'where', sup: 'best', trade: 'dentist' },
+  { ask: 'what', sup: 'best', trade: 'gym' },
+  { ask: 'who', sup: 'top', trade: 'electrician' },
+  { ask: 'where', sup: 'top', trade: 'cafe' },
+  { ask: 'who', sup: 'best', trade: 'physio' },
+];
+
+// The opening clause stays exactly as the CMS wrote it, minus the engine name
+// itself — that now rotates. "When customers ask ChatGPT, does it" gives back
+// "When customers ask".
+function openingClause(headline) {
+  if (typeof headline !== 'string') return 'When customers ask';
+  const cut = headline.split('ChatGPT')[0].trim();
+  return cut || 'When customers ask';
 }
 
 const SIM_QS = [
@@ -46,7 +186,7 @@ const SIM_QS = [
   },
   {
     q: 'Harbourview Accountants vs Bright Ledger: which is better?',
-    a: '<b class="b rival">Bright Ledger Advisory</b> is often cited for cloud accounting; <b class="b you">Harbourview Accountants</b> tends to be recommended for hands-on support…',
+    a: '<b class="b rival">Bright Ledger Advisory</b> is often cited for cloud accounting, while <b class="b you">Harbourview Accountants</b> tends to be recommended for hands-on support…',
     hit: true,
   },
   {
@@ -195,7 +335,7 @@ function Simulator() {
           Mentioned in <b>{hits}</b> answers
         </span>
         <span className="sim-score">
-          {score == null ? '—' : score}
+          {score == null ? '-' : score}
           <small>/100</small>
         </span>
       </div>
@@ -203,30 +343,36 @@ function Simulator() {
   );
 }
 
-// Extra endings that rotate alongside the CMS-edited hero.highlight, so the
-// hero keeps making the same point ("does it ___?") from a few angles
-// without needing a new admin field. The CMS value always plays first.
-const EXTRA_HIGHLIGHTS = ['get it right?', 'recommend you first?'];
+// Each slot runs on its own clock. Staggering them is what makes the question
+// read as a stream of different customer searches rather than one block of text
+// swapping over all at once.
+function useCycle(length, ms) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    if (length < 2) return undefined;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const id = window.setInterval(() => setI((n) => (n + 1) % length), ms);
+    return () => window.clearInterval(id);
+  }, [length, ms]);
+  return i % Math.max(length, 1);
+}
 
 export default function Hero() {
   const navigate = useNavigate();
   const { content } = useSite();
   const hero = content.hero || {};
-  const bookCall = content.bookCall || {};
-  const highlights = [hero.highlight, ...EXTRA_HIGHLIGHTS].filter(Boolean);
-  const [highlightIndex, setHighlightIndex] = useState(0);
+  const cities = (content.cities || []).filter(Boolean);
+  const cityList = cities.length ? cities : ['Brisbane'];
 
-  useEffect(() => {
-    if (highlights.length < 2) return undefined;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
-    const id = window.setInterval(() => {
-      setHighlightIndex((i) => (i + 1) % highlights.length);
-    }, 2600);
-    return () => window.clearInterval(id);
-  }, [highlights.length]);
-  const bookUrl = (bookCall.url || 'https://makeflow.com.au/contact').trim();
-  const bookExternal = /^https?:\/\//i.test(bookUrl);
-  const bookProps = bookExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+  const engineI = useCycle(AI_ENGINES.length, 3400);
+  const queryI = useCycle(QUERIES.length, 2200);
+  const cityI = useCycle(cityList.length, 2800);
+
+  const engine = AI_ENGINES[engineI];
+  const query = QUERIES[queryI];
+  const city = cityList[cityI];
+
+  const opening = openingClause(hero.headline);
 
   return (
     <section className="hero">
@@ -236,13 +382,48 @@ export default function Hero() {
       <div className="wrap">
         {/* hero-mock (Simulator card + floating badges) removed for now — Simulator kept above, add it back later */}
         <div className="hero-copy">
-          <h1>
-            {withChatGptIcon(hero.headline)}{' '}
-            <span className="hl" key={highlightIndex}>
-              {highlights[highlightIndex]}
+          {/* A flex row with hard breaks rather than free wrapping. Every line
+              is cut so that even its widest possible combination still fits the
+              column at the headline's own font size, which is what keeps the
+              question at four lines no matter which words are showing — if it
+              reflowed, the lead and everything under it would jump a whole line
+              on each swap. */}
+          <h1 className="hero-q">
+            <span>{opening}</span>
+            <i className="hero-q-break" aria-hidden="true" />
+            <Slot cycle={engineI}>
+              <EngineName s={engine} />
+            </Slot>
+            <Slot className="hero-slot-hl" cycle={queryI}>
+              {query.ask}
+            </Slot>
+            <span>is the</span>
+            <Slot className="hero-slot-hl" cycle={queryI}>
+              {query.sup}
+            </Slot>
+            <i className="hero-q-break" aria-hidden="true" />
+            <Slot className="hero-slot-hl" cycle={queryI}>
+              {query.trade}
+            </Slot>
+            <span>in</span>
+            <span className="hero-q-tail">
+              <Slot className="hero-slot-hl" cycle={cityI}>
+                {city}
+              </Slot>
+              ,
             </span>
+            <i className="hero-q-break" aria-hidden="true" />
+            <span>does it</span>
+            <span className="hl">{hero.highlight}</span>
           </h1>
           <p className="lead">{hero.lead}</p>
+          <div className="hero-engines" aria-label="The assistants your customers ask">
+            {AI_ENGINES.map((s) => (
+              <span key={s.key} className="hero-engine-chip" title={s.label}>
+                <EngineIcon s={s} />
+              </span>
+            ))}
+          </div>
           <div className="hero-ctas">
             <button type="button" className="btn btn-grad" onClick={() => goToCheck(navigate, '/')}>
               <ScanSearch className="lucide svg" /> {hero.ctaPrimary}
@@ -251,125 +432,17 @@ export default function Hero() {
               <Play className="lucide svg" /> {hero.ctaSecondary}
             </Link>
           </div>
-          <div className="hero-stats">
-            <div>
-              <strong>{hero.stat1n}</strong>
-              <span>{hero.stat1l}</span>
-            </div>
-            <div>
-              <strong>{hero.stat2n}</strong>
-              <span>{hero.stat2l}</span>
-            </div>
-            <div>
-              <strong>{hero.stat3n}</strong>
-              <span>{hero.stat3l}</span>
-            </div>
-          </div>
         </div>
 
         <div className="hero-side">
           <div className="hero-agency">
             <h2>AI, Made Personal.</h2>
             <p>We build the automation and AI-visibility systems behind this report. Book a call and we&rsquo;ll build yours.</p>
-            <div className="hero-agency-ctas">
-              <a href={bookUrl} className="btn btn-grad" {...bookProps}>
-                <CalendarCheck className="lucide svg" /> Book a free call
-              </a>
-              <Link to="/services" className="btn btn-ghost">
-                <Sparkles className="lucide svg" /> Discover services
-              </Link>
-            </div>
           </div>
 
           <div className="hero-mock">
-          <div className="mock-window">
-            <div className="mock-topbar">
-              <span className="mock-dots">
-                <i />
-                <i />
-                <i />
-              </span>
-              <span className="mock-url">app.makeflow.com.au/visibility</span>
-            </div>
-            <div className="mock-body">
-              <div className="mock-sidebar">
-                <span className="mock-side-icon active">
-                  <ScanSearch className="lucide svg" />
-                </span>
-                <span className="mock-side-icon">
-                  <BarChart3 className="lucide svg" />
-                </span>
-                <span className="mock-side-icon">
-                  <Globe2 className="lucide svg" />
-                </span>
-                <span className="mock-side-icon">
-                  <FileText className="lucide svg" />
-                </span>
-              </div>
-              <div className="mock-main">
-                <h4>AI Visibility Overview</h4>
-                <div className="mock-stats">
-                  <div className="mock-stat">
-                    <span>Visibility score</span>
-                    <strong>78%</strong>
-                  </div>
-                  <div className="mock-stat">
-                    <span>Questions tested</span>
-                    <strong>42</strong>
-                  </div>
-                </div>
-                <div className="mock-chart" aria-hidden="true">
-                  <svg viewBox="0 0 240 100" preserveAspectRatio="none">
-                    <defs>
-                      <linearGradient id="mockChartFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#7287fa" stopOpacity="0.55" />
-                        <stop offset="100%" stopColor="#7287fa" stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
-                    <path
-                      d="M0,80 L30,72 L60,76 L90,54 L120,58 L150,34 L180,38 L210,16 L240,20 L240,100 L0,100 Z"
-                      fill="url(#mockChartFill)"
-                    />
-                    <path
-                      d="M0,80 L30,72 L60,76 L90,54 L120,58 L150,34 L180,38 L210,16 L240,20"
-                      fill="none"
-                      stroke="#7287fa"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="hero-badge hero-badge-1 stat-card">
-            <div className="mock-bar-row">
-              <span>Mentioned</span>
-              <b>32/42</b>
-            </div>
-            <div className="mock-bar-track">
-              <i style={{ width: '76%' }} />
-            </div>
-            <div className="mock-bar-row">
-              <span>Cited</span>
-              <b>18/42</b>
-            </div>
-            <div className="mock-bar-track alt">
-              <i style={{ width: '43%' }} />
-            </div>
-          </div>
-
-          <div className="hero-badge hero-badge-2">
-            <Zap className="lucide svg" />
-            Report ready in ~3 min
-          </div>
-
-          <div className="hero-badge hero-badge-3">
-            <span className="dot" />
-            42 questions tested live
-          </div>
+            <HubSpoke />
+            <p className="hub-spoke-caption">Connected to the tools you already run, and the AI that recommends you</p>
           </div>
         </div>
       </div>

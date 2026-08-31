@@ -60,11 +60,15 @@ export default function Competitors() {
           variant="grad"
           onClick={async () => {
             if (!name.trim()) return;
-            await api.addCompetitor(businessId, { name: name.trim(), website });
-            setName('');
-            setWebsite('');
-            const d = await api.listCompetitors(businessId);
-            setTracked(d.items || []);
+            try {
+              await api.addCompetitor(businessId, { name: name.trim(), website });
+              setName('');
+              setWebsite('');
+              const d = await api.listCompetitors(businessId);
+              setTracked(d.items || []);
+            } catch (err) {
+              toast(err.message);
+            }
           }}
         >
           Add competitor
@@ -79,8 +83,12 @@ export default function Competitors() {
                 type="button"
                 className="link"
                 onClick={async () => {
-                  await api.deleteCompetitor(c.id);
-                  setTracked((prev) => prev.filter((x) => x.id !== c.id));
+                  try {
+                    await api.deleteCompetitor(c.id);
+                    setTracked((prev) => prev.filter((x) => x.id !== c.id));
+                  } catch (err) {
+                    toast(err.message);
+                  }
                 }}
               >
                 Remove

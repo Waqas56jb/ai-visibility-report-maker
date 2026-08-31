@@ -33,6 +33,9 @@ function getTransport() {
       user: process.env.SMTP_USER,
       pass: smtpPass(),
     },
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
   });
   return transport;
 }
@@ -47,7 +50,7 @@ function fromAddress() {
 
 function scoreLabel(score) {
   const n = Number(score);
-  return Number.isFinite(n) ? String(n) : '—';
+  return Number.isFinite(n) ? String(n) : '-';
 }
 
 function htmlBody({ business, score, band, appUrl, publicUrl }) {

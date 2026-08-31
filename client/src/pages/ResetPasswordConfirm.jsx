@@ -70,7 +70,7 @@ export default function ResetPasswordConfirm() {
             <Field label="New password" type="password" value={values.new_password} onChange={(e) => setValues((v) => ({ ...v, new_password: e.target.value }))} error={errors.new_password} disabled={loading} />
             <Field label="Confirm" type="password" value={values.confirm} onChange={(e) => setValues((v) => ({ ...v, confirm: e.target.value }))} error={errors.confirm} disabled={loading} />
             <button className="btn btn-primary" type="submit" disabled={loading}>
-              Update password
+              {loading ? 'Updating…' : 'Update password'}
             </button>
           </form>
         </>

@@ -74,14 +74,14 @@ export default function Reports() {
               </thead>
               <tbody>
                 {data.items.map((r) => (
-                  <tr key={r.id} style={{ cursor: 'pointer' }} onClick={() => navigate(`/app/reports/${r.id}`)}>
+                  <tr key={r.id} className="row-clickable" onClick={() => navigate(`/app/reports/${r.id}`)}>
                     <td>
                       <strong>{r.business_name}</strong>
                       <div className="muted">{r.website}</div>
                     </td>
                     <td><span className={`dash-status ${r.status === 'completed' ? 'completed' : r.status === 'failed' ? 'failed' : 'queued'}`}>{r.status}</span></td>
-                    <td>{r.score_band || '—'}</td>
-                    <td>{r.overall_score ?? '—'}</td>
+                    <td>{r.score_band || '-'}</td>
+                    <td>{r.overall_score ?? '-'}</td>
                     <td>{new Date(r.created_at).toLocaleString()}</td>
                     <td className="table-actions" onClick={(e) => e.stopPropagation()}>
                       <Button variant="ghost" className="btn-sm" onClick={() => navigate(`/app/reports/${r.id}`)}>
@@ -146,9 +146,13 @@ export default function Reports() {
           <Button
             variant="primary"
             onClick={async () => {
-              await api.deleteReport(del.id);
-              setDel(null);
-              load();
+              try {
+                await api.deleteReport(del.id);
+                setDel(null);
+                load();
+              } catch (err) {
+                toast(err.message);
+              }
             }}
           >
             Delete

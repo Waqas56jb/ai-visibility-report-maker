@@ -60,7 +60,7 @@ export default function ForgotPassword() {
           <form onSubmit={send} noValidate>
             <Field label="Email" type="email" value={email} onChange={(e) => { setEmail(e.target.value); setError(); }} error={error} disabled={loading} />
             <button className="btn btn-primary" type="submit" disabled={loading}>
-              Send reset link <Send className="lucide svg" />
+              {loading ? 'Sending…' : (<>Send reset link <Send className="lucide svg" /></>)}
             </button>
           </form>
         </>

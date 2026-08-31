@@ -74,7 +74,7 @@ export default function Leads() {
             {items.map((l) => (
               <tr key={l.id} onClick={() => l.report_id && openReport(l.report_id)}>
                 <td>
-                  <strong>{l.name || '—'}</strong>
+                  <strong>{l.name || '-'}</strong>
                 </td>
                 <td>{l.business_name}</td>
                 <td>
@@ -83,14 +83,14 @@ export default function Leads() {
                       {l.email}
                     </a>
                   ) : (
-                    '—'
+                    '-'
                   )}
                 </td>
                 <td className="mono" style={{ fontSize: 12 }}>
                   {l.website}
                 </td>
-                <td>{l.industry || '—'}</td>
-                <td>{l.location || '—'}</td>
+                <td>{l.industry || '-'}</td>
+                <td>{l.location || '-'}</td>
                 <td>
                   <ScorePill score={l.latest_score} />
                 </td>

@@ -95,7 +95,7 @@ export default function Login() {
           <span>Remember me</span>
         </label>
         <button className="btn btn-primary" type="submit" disabled={loading}>
-          Log in <ArrowRight className="lucide svg" />
+          {loading ? 'Logging in…' : (<>Log in <ArrowRight className="lucide svg" /></>)}
         </button>
       </form>
       <p className="alt">

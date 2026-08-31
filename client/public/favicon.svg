@@ -1,17 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="MakeFlow">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1259.3 1250" role="img" aria-label="MakeFlow">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#1d1264"/>
-      <stop offset=".55" stop-color="#160c51"/>
-      <stop offset="1" stop-color="#0f0a3a"/>
-    </linearGradient>
-    <linearGradient id="mk" x1="629.6" y1="903.6" x2="629.6" y2="148.5" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#7287fa"/>
-      <stop offset="1" stop-color="#c5cbff"/>
+    <linearGradient id="mk" x1="0" y1="1250" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5b6ef0"/>
+      <stop offset="1" stop-color="#8b9bfb"/>
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
-  <g transform="translate(256 256) scale(.34745) translate(-629.65 -625)">
-    <path d="M1160,445h-318.9c-27.4,0-41,33.1-21.7,52.5l340.7,340.6v160.2h-367.2v-196.3h-326.4v196.3H99.2v-160.2l340.6-340.6c19.3-19.4,5.6-52.5-21.7-52.5H99.2v-193.3c102.7,0,205.4,0,308,0l86.6,191.7h0c0,0,12.5,27.6,12.5,27.6l123.2,272.3,123.1-272.3,12.5-27.6h0c0,0,86.6-191.6,86.6-191.6,102.7.4,205.4.9,308,1.3v192Z" fill="url(#mk)"/>
-  </g>
+  <path d="M1160,445h-318.9c-27.4,0-41,33.1-21.7,52.5l340.7,340.6v160.2h-367.2v-196.3h-326.4v196.3H99.2v-160.2l340.6-340.6c19.3-19.4,5.6-52.5-21.7-52.5H99.2v-193.3c102.7,0,205.4,0,308,0l86.6,191.7h0c0,0,12.5,27.6,12.5,27.6l123.2,272.3,123.1-272.3,12.5-27.6h0c0,0,86.6-191.6,86.6-191.6,102.7.4,205.4.9,308,1.3v192Z" fill="url(#mk)"/>
 </svg>

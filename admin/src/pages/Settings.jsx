@@ -353,16 +353,6 @@ export default function Settings() {
               <label>Footer blurb</label>
               <textarea rows={3} value={content.footerBlurb || ''} onChange={(e) => setContent({ footerBlurb: e.target.value })} />
             </div>
-            <div className="row2">
-              <div className="field">
-                <label>Footer copyright</label>
-                <input value={content.footerCopy || ''} onChange={(e) => setContent({ footerCopy: e.target.value })} />
-              </div>
-              <div className="field">
-                <label>Footer note</label>
-                <input value={content.footerNote || ''} onChange={(e) => setContent({ footerNote: e.target.value })} />
-              </div>
-            </div>
             <div style={{ textAlign: 'right' }}>
               <button className="btn btn-primary" type="button" disabled={busy === 'site'} onClick={() => save('Website updated')}>
                 <Save className="lucide" /> Publish to website

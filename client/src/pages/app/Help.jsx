@@ -6,12 +6,12 @@ const FAQ = [
 ];
 
 const WEIGHTS = [
-  { name: 'Mention rate', weight: '35%', score: '—' },
-  { name: 'Prominence', weight: '20%', score: '—' },
-  { name: 'AI-readiness', weight: '15%', score: '—' },
-  { name: 'Citation rate', weight: '10%', score: '—' },
-  { name: 'Sentiment', weight: '10%', score: '—' },
-  { name: 'Competitive position', weight: '10%', score: '—' },
+  { name: 'Mention rate', weight: '35%', score: '-' },
+  { name: 'Prominence', weight: '20%', score: '-' },
+  { name: 'AI-readiness', weight: '15%', score: '-' },
+  { name: 'Citation rate', weight: '10%', score: '-' },
+  { name: 'Sentiment', weight: '10%', score: '-' },
+  { name: 'Competitive position', weight: '10%', score: '-' },
 ];
 
 export default function Help() {
