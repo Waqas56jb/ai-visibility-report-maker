@@ -14,7 +14,7 @@ export default function Landing() {
   const { content } = useSite();
 
   useEffect(() => {
-    document.title = content.documentTitle || 'AI Visibility Report for Australian Businesses | MakeFlow';
+    document.title = content.documentTitle || 'MakeFlow | AI Automation & AI Visibility for Australian Businesses';
   }, [content.documentTitle]);
 
   return (

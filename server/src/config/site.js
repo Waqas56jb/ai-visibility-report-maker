@@ -13,7 +13,7 @@ export const DEFAULT_THEME = {
 
 export const DEFAULT_CONTENT = {
   brandName: 'MakeFlow',
-  documentTitle: 'AI Visibility Report | Free ChatGPT and AI Search Check | MakeFlow',
+  documentTitle: 'MakeFlow | AI Automation & AI Visibility for Australian Businesses',
   navCta: 'Check my visibility',
   bookCall: {
     label: 'Book a call',
