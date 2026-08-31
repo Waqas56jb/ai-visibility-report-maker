@@ -87,7 +87,7 @@ function decorate(doc, meta) {
   doc.rect(0, height - 42, width, 42).fill(INK);
   tx(
     doc,
-    `Confidential  ·  Tested against ChatGPT  ·  ${meta.date || ''}  ·  Snapshot only — re-run to track change`,
+    `Confidential  ·  Tested against ChatGPT  ·  ${meta.date || ''}  ·  Snapshot only, re-run to track change`,
     36,
     height - 26,
     { size: 7, color: '#94A3B8', width: width - 90, height: 12 }
@@ -184,7 +184,7 @@ function drawTable(doc, cols, rows) {
 
 function drawReport(doc, report) {
   const score = Number(report.overall_score) || 0;
-  const band = report.score_band || '—';
+  const band = report.score_band || '-';
   const metrics = report.metrics || {};
   const website = String(report.website || '').replace(/^https?:\/\//, '');
   const accent = scoreColor(score);
@@ -221,10 +221,10 @@ function drawReport(doc, report) {
   doc.y = heroY + heroH + 10;
 
   doc.y = kpiStrip(doc, [
-    { label: 'MENTION RATE', value: metrics.mention_rate != null ? `${metrics.mention_rate}%` : '—', hint: metrics.mention_label || 'of opportunity queries', color: INDIGO },
-    { label: 'AVG POSITION', value: metrics.avg_position ?? '—', hint: 'when you are named', color: CYAN },
-    { label: 'CITATIONS', value: metrics.citations ?? '—', hint: 'browsing answers with a link', color: MINT },
-    { label: 'AI-READINESS', value: report.readability_score != null ? `${report.readability_score}/100` : '—', hint: 'website technical audit', color: AMBER },
+    { label: 'MENTION RATE', value: metrics.mention_rate != null ? `${metrics.mention_rate}%` : '-', hint: metrics.mention_label || 'of opportunity queries', color: INDIGO },
+    { label: 'AVG POSITION', value: metrics.avg_position ?? '-', hint: 'when you are named', color: CYAN },
+    { label: 'CITATIONS', value: metrics.citations ?? '-', hint: 'browsing answers with a link', color: MINT },
+    { label: 'AI-READINESS', value: report.readability_score != null ? `${report.readability_score}/100` : '-', hint: 'website technical audit', color: AMBER },
   ], doc.y);
 
   if (report.executive_summary) {
@@ -287,7 +287,7 @@ function drawReport(doc, report) {
       ],
       weights.map((row, i) => ({
         _alt: i % 2 === 1,
-        cells: [row.name, row.weight, row.score == null ? '—' : `${row.score}`],
+        cells: [row.name, row.weight, row.score == null ? '-' : `${row.score}`],
       }))
     );
   }
@@ -332,9 +332,9 @@ function drawReport(doc, report) {
         _alt: i % 2 === 1,
         cells: [
           c.you ? `${c.name}  (you)` : c.name,
-          c.mention_rate != null ? `${c.mention_rate}%` : '—',
-          c.avg_position != null && c.avg_position !== '' ? c.avg_position : '—',
-          c.share_of_voice != null ? `${c.share_of_voice}%` : '—',
+          c.mention_rate != null ? `${c.mention_rate}%` : '-',
+          c.avg_position != null && c.avg_position !== '' ? c.avg_position : '-',
+          c.share_of_voice != null ? `${c.share_of_voice}%` : '-',
         ],
       }))
     );
@@ -343,7 +343,7 @@ function drawReport(doc, report) {
   const gaps = (report.gaps || []).slice(0, 12);
   if (gaps.length) {
     heading(doc, 'Highest-value gaps');
-    tx(doc, 'Questions where ChatGPT named someone else — or named nobody — instead of you.', ML, doc.y, {
+    tx(doc, 'Questions where ChatGPT named someone else, or nobody at all, instead of you.', ML, doc.y, {
       size: 7.5,
       color: MUTED,
       width: cw(doc),
@@ -481,7 +481,7 @@ export function buildPdfBuffer(report) {
       size: 'A4',
       margins: { top: MT, bottom: MB, left: ML, right: MR },
       info: {
-        Title: `${report.business_name || 'Business'} — AI Visibility Report`,
+        Title: `${report.business_name || 'Business'} | AI Visibility Report`,
         Author: 'MakeFlow',
         Subject: 'ChatGPT AI visibility report',
       },

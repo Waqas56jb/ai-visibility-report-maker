@@ -25,6 +25,6 @@ export const SERVICE_KEYS = Object.keys(SERVICES);
 
 export function serviceKeysWithDescriptions() {
   return Object.entries(SERVICES)
-    .map(([key, s]) => `${key}: ${s.name} — ${s.description}`)
+    .map(([key, s]) => `${key}: ${s.name}. ${s.description}`)
     .join('\n');
 }

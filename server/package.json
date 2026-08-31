@@ -8,7 +8,8 @@
     "start": "node src/index.js",
     "migrate": "node src/db/migrate.js",
     "ensure-accounts": "node src/scripts/ensureAccounts.js",
-    "prompt:test": "node src/scripts/promptTest.js"
+    "prompt:test": "node src/scripts/promptTest.js",
+    "test": "node --experimental-test-module-mocks --test --test-reporter=spec"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",

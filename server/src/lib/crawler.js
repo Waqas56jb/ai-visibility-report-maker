@@ -168,7 +168,7 @@ function scoreReadiness({ pages, robotsMeta, llms, aiTxt, sitemap, serverRendere
         status: 'unknown',
         points_awarded: 0,
         points_max: max,
-        evidence: 'Site returned 403; could not audit',
+        evidence: 'Site returned 403, could not audit',
       })),
       readability_score: 0,
       audit_incomplete: true,
@@ -239,7 +239,7 @@ function scoreReadiness({ pages, robotsMeta, llms, aiTxt, sitemap, serverRendere
     15,
     !gpt && !oai ? 'pass' : gpt !== oai ? 'partial' : 'fail',
     !gpt && !oai ? 15 : gpt !== oai ? 8 : 0,
-    `GPTBot ${gpt ? 'disallowed' : 'allowed'}; OAI-SearchBot ${oai ? 'disallowed' : 'allowed'}`
+    `GPTBot ${gpt ? 'disallowed' : 'allowed'}, OAI-SearchBot ${oai ? 'disallowed' : 'allowed'}`
   );
   const sr = serverRendered;
   add(
@@ -256,7 +256,7 @@ function scoreReadiness({ pages, robotsMeta, llms, aiTxt, sitemap, serverRendere
     15,
     strongServices.length >= 3 ? 'pass' : servicePages.length >= 1 ? 'partial' : 'fail',
     strongServices.length >= 3 ? 15 : servicePages.length ? 6 : 0,
-    `${strongServices.length} service page(s) ≥300 words; ${servicePages.length} ≥150 words`
+    `${strongServices.length} service page(s) ≥300 words, ${servicePages.length} ≥150 words`
   );
   const napStatus = !phones.length && !addresses.length ? 'unknown' : phoneMode >= 0.8 && addrMode >= 0.8 ? 'pass' : 'partial';
   add(

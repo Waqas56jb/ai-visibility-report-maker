@@ -1,4 +1,7 @@
 import { supabase } from '../supabase.js';
+import { changedRows, toDbRow } from './visibilityRows.js';
+
+export { testsFinished } from './visibilityRows.js';
 
 export function rowFromDb(q) {
   return {
@@ -7,7 +10,7 @@ export function rowFromDb(q) {
     category: q.category,
     topic: q.topic,
     intent: q.intent,
-    mode: q.mode,
+    mode: q.mode || '',
     raw_answer: q.raw_answer || '',
     citations: q.citations || [],
     extraction: q.extraction || null,
@@ -24,29 +27,32 @@ export async function loadQueryRows(reportId) {
   return (data || []).map(rowFromDb);
 }
 
+/**
+ * Upsert on (report_id, mode, text). The previous delete-then-insert rewrote all
+ * 76 rows on every progress tick and, if the function was killed between the two
+ * statements, lost every answer computed so far.
+ */
 export async function saveQueryRows(reportId, rows) {
   if (!rows?.length) return;
-  try {
-    await supabase.from('report_queries').delete().eq('report_id', reportId);
-    await supabase.from('report_queries').insert(
-      rows.map((q) => ({
-        report_id: reportId,
-        text: q.text,
-        category: q.category,
-        topic: q.topic || null,
-        intent: q.intent || null,
-        mode: q.mode || null,
-        raw_answer: String(q.raw_answer || '').slice(0, 8000),
-        citations: q.citations || [],
-        extraction: q.extraction,
-        error: q.error || null,
-      }))
-    );
-  } catch (err) {
-    console.warn('report_queries persist', err.message);
-  }
+  const { error } = await supabase
+    .from('report_queries')
+    .upsert(rows.map((q) => toDbRow(reportId, q)), { onConflict: 'report_id,mode,text' });
+  if (error) console.warn('report_queries persist', error.message);
 }
 
-export function testsFinished(rows) {
-  return Boolean(rows?.length) && rows.every((r) => r.raw_answer || r.error || r.attempted);
+/**
+ * Persists only the rows whose stored shape changed since the caller's last
+ * write. `sent` is the bookkeeping map to carry into the next call.
+ */
+export async function saveChangedQueryRows(reportId, rows, sent) {
+  const delta = changedRows(reportId, rows, sent);
+  if (!delta.rows.length) return sent;
+  const { error } = await supabase
+    .from('report_queries')
+    .upsert(delta.rows, { onConflict: 'report_id,mode,text' });
+  if (error) {
+    console.warn('report_queries persist', error.message);
+    return sent;
+  }
+  return delta.sent;
 }

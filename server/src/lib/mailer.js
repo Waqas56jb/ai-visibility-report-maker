@@ -33,6 +33,9 @@ function getTransport() {
       user: process.env.SMTP_USER,
       pass: smtpPass(),
     },
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
   });
   return transport;
 }
@@ -47,7 +50,7 @@ function fromAddress() {
 
 function scoreLabel(score) {
   const n = Number(score);
-  return Number.isFinite(n) ? String(n) : '—';
+  return Number.isFinite(n) ? String(n) : '-';
 }
 
 function htmlBody({ business, score, band, appUrl, publicUrl }) {
@@ -128,7 +131,7 @@ export async function sendCompletedReportEmail(row) {
   await tx.sendMail({
     from: fromAddress(),
     to,
-    subject: `${business} — AI visibility score ${scoreLabel(row.overall_score)}/100`,
+    subject: `${business}: AI visibility score ${scoreLabel(row.overall_score)}/100`,
     text: [
       `Your MakeFlow AI visibility report for ${business} is ready.`,
       '',

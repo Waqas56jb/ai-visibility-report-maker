@@ -3,7 +3,7 @@
   "functions": {
     "src/index.js": {
       "maxDuration": 60,
-      "includeFiles": "prompts/**"
+      "includeFiles": "{prompts/**,node_modules/pdfkit/js/**}"
     }
   }
 }

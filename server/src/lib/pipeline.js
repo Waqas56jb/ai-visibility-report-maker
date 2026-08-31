@@ -13,7 +13,9 @@ import { renderPdf } from './renderPdf.js';
 import { sendCompletedReportEmail } from './mailer.js';
 import { settings } from '../config/env.js';
 import { createDeadline, keepAlive, SliceYield } from './keepAlive.js';
-import { loadQueryRows, saveQueryRows, testsFinished } from './reportQueries.js';
+import { loadQueryRows, saveChangedQueryRows, saveQueryRows, testsFinished } from './reportQueries.js';
+import { createProgressWriter } from './progressWriter.js';
+import { progressCounts, queriesFromRows } from './visibilityRows.js';
 
 const queue = new PQueue({ concurrency: 2 });
 const running = new Map();
@@ -122,16 +124,7 @@ async function run(reportId) {
     let summary = report.business_summary;
     let queries = [];
     const existingRows = await loadQueryRows(reportId);
-    if (existingRows.length) {
-      const seen = new Set();
-      queries = existingRows
-        .filter((r) => {
-      if (!r.text || seen.has(r.text)) return false;
-      seen.add(r.text);
-      return true;
-    })
-        .map((r) => ({ text: r.text, category: r.category, topic: r.topic, intent: r.intent }));
-    }
+    if (existingRows.length) queries = queriesFromRows(existingRows);
 
     if (!summary || !queries.length) {
       await setStep(reportId, 'generating_queries');
@@ -148,7 +141,16 @@ async function run(reportId) {
     let rows = existingRows.filter((r) => r.mode);
     if (!testsFinished(rows)) {
       await setStep(reportId, 'testing');
-      let writes = 0;
+      let sent = new Map();
+      const progress = createProgressWriter({
+        write: async (current) => {
+          sent = await saveChangedQueryRows(reportId, current, sent);
+          await patch(reportId, {
+            token_usage: usage.entries,
+            metrics: { ...(report.metrics || {}), ...progressCounts(current) },
+          });
+        },
+      });
       try {
         rows = await runVisibilityTests(
           { ...report, _existingRows: rows.length ? rows : existingRows },
@@ -157,41 +159,27 @@ async function run(reportId) {
           usage,
           {
             deadline,
-            onProgress: async (current) => {
-              writes += 1;
-              if (writes % 4 !== 0) return;
-              await saveQueryRows(reportId, current);
-              await patch(reportId, {
-                token_usage: usage.entries,
-                metrics: {
-                  ...(report.metrics || {}),
-                  tests_done: current.filter((r) => r.raw_answer || r.error).length,
-                  tests_total: current.length,
-                },
-              });
-            },
+            onProgress: (current) => progress.mark(current),
+            flushProgress: (current) => progress.flush(current),
           }
         );
       } catch (err) {
         if (err instanceof SliceYield) {
           const current = err.rows || rows;
-          await saveQueryRows(reportId, current);
+          await progress.flush(current);
           await patch(reportId, {
             status: 'processing',
             progress_step: 'testing',
             token_usage: usage.entries,
             truncated: usage.truncated,
-            metrics: {
-              ...(report.metrics || {}),
-              tests_done: current.filter((r) => r.raw_answer || r.error).length,
-              tests_total: current.length,
-            },
+            metrics: { ...(report.metrics || {}), ...progressCounts(current) },
           });
           return;
         }
+        await progress.settle();
         throw err;
       }
-      await saveQueryRows(reportId, rows);
+      await progress.flush(rows);
     }
 
     if (deadline.hit(12000)) throw new SliceYield();
@@ -268,7 +256,7 @@ async function run(reportId) {
       token_usage: usage.entries,
       prompt_versions,
       truncated,
-      error: crawl.audit_incomplete ? 'Site could not be fully crawled; readiness audit is incomplete.' : null,
+      error: crawl.audit_incomplete ? 'Site could not be fully crawled, readiness audit is incomplete.' : null,
     });
 
     try {
