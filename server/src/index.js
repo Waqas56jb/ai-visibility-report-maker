@@ -23,6 +23,7 @@ const DEFAULT_ORIGINS = [
   'https://ai-visibility-report-maker-admin.vercel.app',
   'https://www.makeflow.com.au',
   'https://makeflow.com.au',
+  'https://admin.makeflow.com.au',
 ];
 const origins = [
   ...DEFAULT_ORIGINS,
