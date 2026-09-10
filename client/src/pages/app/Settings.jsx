@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import api from '../../api/index.js';
 import { passwordSchema } from '../../schemas/profile.js';
 import Input from '../../components/ui/Input.jsx';
+import Select from '../../components/ui/Select.jsx';
 import Toggle from '../../components/ui/Toggle.jsx';
 import Button from '../../components/ui/Button.jsx';
 import { useAuth } from '../../store/auth.js';
@@ -70,8 +71,8 @@ export default function Settings() {
       </div>
       <div className="card panel" style={{ maxWidth: 560, marginTop: 16 }}>
         <h3>Defaults for new reports</h3>
-        <label>Default country</label>
-        <select
+        <Select
+          label="Default country"
           value={defaults.default_country}
           onChange={(e) => setDefaults((d) => ({ ...d, default_country: e.target.value }))}
         >
@@ -79,7 +80,7 @@ export default function Settings() {
           <option>New Zealand</option>
           <option>United Kingdom</option>
           <option>United States</option>
-        </select>
+        </Select>
         <Toggle
           label="Browsing mode on by default"
           checked={defaults.default_modes.browsing}

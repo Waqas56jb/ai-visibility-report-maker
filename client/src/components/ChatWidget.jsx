@@ -10,7 +10,9 @@ import { matchRule, OPENING } from '../lib/chatRules.js';
    as a conversation rather than a lookup table. */
 const THINK_MS = 420; // pause before the first word lands
 const WORD_MS = 26; // per-word reveal while "typing"
-const TEASER_MS = 8000; // how long before the closed launcher offers a nudge
+const TEASER_MS = 14000; // how long before the closed launcher offers a nudge
+const TEASER_SCROLL = 600; // …and only once the visitor is past the hero
+const TEASER_LINGER_MS = 9000; // retract it on its own if it goes ignored
 
 let seq = 0;
 const uid = () => `m${(seq += 1)}`;
@@ -177,8 +179,18 @@ export default function ChatWidget() {
     if (!draft) grow(inputRef.current);
   }, [draft]);
 
-  /* A single, dismissible nudge on the closed launcher. Once per session only —
-     a bubble that keeps reappearing is an annoyance, not an invitation. */
+  const markTeaserSeen = useCallback(() => {
+    try {
+      sessionStorage.setItem('mf-chat-teaser', '1');
+    } catch {
+      /* storage blocked — the nudge simply shows again next visit */
+    }
+  }, []);
+
+  /* A single, dismissible nudge on the closed launcher. Once per session, and
+     only after the visitor has read a little and scrolled past the hero — a
+     bubble that covers the headline on load is an interruption, not an invite.
+     If it goes ignored it retracts itself rather than sitting over the page. */
   useEffect(() => {
     if (open) return undefined;
     let seen = false;
@@ -188,17 +200,40 @@ export default function ChatWidget() {
       seen = false;
     }
     if (seen) return undefined;
-    const t = setTimeout(() => setTeaser(true), TEASER_MS);
-    return () => clearTimeout(t);
-  }, [open]);
+
+    let linger;
+    const reveal = () => {
+      setTeaser(true);
+      linger = setTimeout(() => {
+        setTeaser(false);
+        markTeaserSeen();
+      }, TEASER_LINGER_MS);
+    };
+    const armed = setTimeout(() => {
+      if (window.scrollY >= TEASER_SCROLL) {
+        reveal();
+        return;
+      }
+      const onScroll = () => {
+        if (window.scrollY >= TEASER_SCROLL) {
+          window.removeEventListener('scroll', onScroll);
+          reveal();
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      linger = () => window.removeEventListener('scroll', onScroll);
+    }, TEASER_MS);
+
+    return () => {
+      clearTimeout(armed);
+      if (typeof linger === 'function') linger();
+      else clearTimeout(linger);
+    };
+  }, [open, markTeaserSeen]);
 
   const dropTeaser = () => {
     setTeaser(false);
-    try {
-      sessionStorage.setItem('mf-chat-teaser', '1');
-    } catch {
-      /* storage blocked — the nudge simply shows again next visit */
-    }
+    markTeaserSeen();
   };
 
   // Only the newest assistant turn offers chips; older ones would pile into a

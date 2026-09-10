@@ -16,7 +16,8 @@ export default function FAQ() {
           {items.map((item, i) => (
             <details key={item.q || i} open={i === 0}>
               <summary>
-                {item.q} <Plus className="lucide svg" />
+                <span>{item.q}</span>
+                <span className="faq-i" aria-hidden="true"><Plus className="lucide svg" /></span>
               </summary>
               <p>{item.a}</p>
             </details>

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import api from '../../api/index.js';
-import Select from '../../components/ui/Select.jsx';
 import Skeleton from '../../components/ui/Skeleton.jsx';
 import EmptyState from '../../components/ui/EmptyState.jsx';
 
@@ -55,14 +54,14 @@ export default function History() {
   return (
     <>
       <div className="filters">
-        <Select value={businessId} onChange={(e) => setBusinessId(e.target.value)}>
+        <select value={businessId} onChange={(e) => setBusinessId(e.target.value)}>
           <option value="">All businesses</option>
           {businesses.map((b) => (
             <option key={b.id} value={b.id}>
               {b.name}
             </option>
           ))}
-        </Select>
+        </select>
         <select value={range} onChange={(e) => setRange(e.target.value)}>
           <option value="30">Last 30 days</option>
           <option value="90">Last 90 days</option>
@@ -89,6 +88,7 @@ export default function History() {
         </svg>
       </div>
       <div className="card panel" style={{ marginTop: 16 }}>
+        <div className="table-wrap">
         <table>
           <thead>
             <tr>
@@ -113,6 +113,7 @@ export default function History() {
             })}
           </tbody>
         </table>
+        </div>
       </div>
     </>
   );

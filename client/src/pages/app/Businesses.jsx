@@ -61,6 +61,7 @@ export default function Businesses() {
         <EmptyState title="No businesses saved" body="Add one so you can re-run reports faster." />
       ) : (
         <div className="card panel" style={{ marginTop: 16 }}>
+          <div className="table-wrap">
           <table>
             <thead>
               <tr>
@@ -105,6 +106,7 @@ export default function Businesses() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
       <Modal open={open} title={editing ? 'Edit business' : 'Add business'} onClose={() => setOpen(false)}>

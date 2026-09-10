@@ -391,7 +391,8 @@ export default function ServicesPage() {
               {FAQS.map((f, i) => (
                 <details key={f.q} open={i === 0}>
                   <summary>
-                    {f.q} <Plus className="lucide svg" />
+                    <span>{f.q}</span>
+                    <span className="faq-i" aria-hidden="true"><Plus className="lucide svg" /></span>
                   </summary>
                   <p>{f.a}</p>
                 </details>
