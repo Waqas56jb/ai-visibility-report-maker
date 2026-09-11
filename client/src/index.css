@@ -850,8 +850,19 @@ body.nav-open{overflow:hidden}
 .plan-feats{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:12px}
 .plan-feats li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;color:var(--text-2)}
 .plan-feats .svg{width:17px;height:17px;flex:0 0 17px;margin-top:3px;color:var(--indigo)}
+/* "Everything in Foundation" is the one line that is not a deliverable, so it
+   does not get a tick. It is the hinge between two cards, and reads as one. */
+.plan-inherits{margin-top:24px;font-family:var(--font-m);font-size:12.5px;font-weight:600;color:var(--ink);padding:11px 14px;border-radius:var(--r-sm);background:var(--tint-2)}
+/* The group labels carry half this page's message — they are what says we do
+   AEO, GEO, SEO and social, before anyone reads a single line item. The rule
+   running off the label keeps them scanning as dividers rather than as list
+   items competing with the ticks underneath. */
+.plan-groups{margin-top:26px;display:flex;flex-direction:column;gap:20px}
+.plan-group-label{display:flex;align-items:center;gap:10px;font-family:var(--font-m);font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--ordinal-strong)}
+.plan-group-label::after{content:"";flex:1;height:1px;background:var(--line)}
+.plan-group .plan-feats{margin-top:11px;gap:10px}
 .plan-note{margin-top:auto;padding-top:22px;font-family:var(--font-m);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);line-height:1.6}
-.plan-feats+.plan-note{margin-top:26px;border-top:1px solid var(--line)}
+.plan-feats+.plan-note,.plan-groups+.plan-note{margin-top:26px;border-top:1px solid var(--line)}
 .plans-note{max-width:680px;margin:40px auto 0;text-align:center}
 .plans-note p{font-size:14.5px;color:var(--text-3);line-height:1.7}
 .plans-note p+p{margin-top:8px}
