@@ -1,4 +1,4 @@
-import { ScanSearch, Clock, ShieldCheck, Sparkles } from 'lucide-react';
+import { ScanSearch, Clock, ShieldCheck } from 'lucide-react';
 import Reveal from './Reveal.jsx';
 import { useSite } from '../store/site.jsx';
 import { useCheckerModal } from '../store/checkerModal.js';
@@ -6,7 +6,6 @@ import { useCheckerModal } from '../store/checkerModal.js';
 const POINTS = [
   { icon: Clock, label: 'About 3 minutes' },
   { icon: ShieldCheck, label: 'No credit card' },
-  { icon: Sparkles, label: 'ChatGPT & Gemini' },
 ];
 
 export default function Checker() {
