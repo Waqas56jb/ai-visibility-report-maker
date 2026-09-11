@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Building2, Globe2, Lock, Mail, Plus, ScanSearch, Zap } from 'lucide-react';
+import { Building2, Globe2, Lock, Mail, Plus, Zap } from 'lucide-react';
 import { useToast } from '../lib/toast.jsx';
 import { useAuth } from '../store/auth.js';
 import api from '../api/index.js';
@@ -90,9 +90,6 @@ export default function CheckerForm({ autoFocus = false, onLeave }) {
 
   return (
     <>
-      <span className="form-badge">
-        <ScanSearch className="lucide svg" />
-      </span>
       <h3>{checker.formTitle || 'Check your AI visibility'}</h3>
       <p className="sub">{checker.formSub || 'Takes about 3 minutes. One free report per email every 30 days.'}</p>
       <form onSubmit={onSubmit} noValidate>
@@ -144,7 +141,9 @@ export default function CheckerForm({ autoFocus = false, onLeave }) {
           onClick={() => setOpen((v) => !v)}
         >
           <Plus className="lucide svg" />
-          Add industry, location &amp; competitors <em>(improves accuracy)</em>
+          <span>
+            Add industry, location &amp; competitors <em>(improves accuracy)</em>
+          </span>
         </button>
         <div className={`optional${open ? ' open' : ''}`}>
           <div className="optional-inner">
@@ -178,11 +177,7 @@ export default function CheckerForm({ autoFocus = false, onLeave }) {
             </div>
           </div>
         </div>
-        <button
-          className="btn btn-grad"
-          style={{ width: '100%', justifyContent: 'center', marginTop: 6 }}
-          type="submit"
-        >
+        <button className="btn btn-grad form-submit" type="submit">
           <Zap className="lucide svg" /> Generate my report
         </button>
         <p className="fine">

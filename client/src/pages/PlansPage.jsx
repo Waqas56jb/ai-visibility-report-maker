@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, CalendarCheck, Check, MessagesSquare, Plus, ScanSearch } from 'lucide-react';
+import { ArrowRight, CalendarCheck, Check, MessagesSquare, Plus, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Navbar, { goToCheck } from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
@@ -148,7 +148,7 @@ export default function PlansPage() {
                       className="btn btn-ghost"
                       onClick={() => goToCheck(navigate, '/plans')}
                     >
-                      <ScanSearch className="lucide svg" /> {plan.ctaLabel}
+                      <Search className="lucide svg" /> {plan.ctaLabel}
                     </button>
                   ) : (
                     <a
@@ -217,7 +217,7 @@ export default function PlansPage() {
                     className="btn btn-light"
                     onClick={() => goToCheck(navigate, '/plans')}
                   >
-                    <ScanSearch className="lucide svg" /> Run my free report
+                    <Search className="lucide svg" /> Run my free report
                   </button>
                   <a
                     className="btn btn-ghost-light"

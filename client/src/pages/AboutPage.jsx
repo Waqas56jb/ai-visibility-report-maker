@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, CalendarCheck, ScanSearch } from 'lucide-react';
+import { ArrowRight, CalendarCheck, Search } from 'lucide-react';
 import Navbar, { goToCheck } from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import Reveal from '../components/Reveal.jsx';
@@ -120,7 +120,7 @@ export default function AboutPage() {
                     className="btn btn-light"
                     onClick={() => goToCheck(navigate, '/about')}
                   >
-                    <ScanSearch className="lucide svg" /> Run my free report
+                    <Search className="lucide svg" /> Run my free report
                   </button>
                   <a
                     className="btn btn-ghost-light"

@@ -7,6 +7,7 @@ import {
   Plus,
   Scale,
   ScanSearch,
+  Search,
   Stethoscope,
   UtensilsCrossed,
   Wrench,
@@ -153,7 +154,7 @@ export default function UseCasesPage() {
                 className="btn btn-grad"
                 onClick={() => goToCheck(navigate, '/use-cases')}
               >
-                <ScanSearch className="lucide svg" /> Run my free report
+                <Search className="lucide svg" /> Run my free report
               </button>
               <div className="hero-pills">
                 <span>Local services</span>
@@ -205,7 +206,7 @@ export default function UseCasesPage() {
                   className="btn btn-grad btn-sm"
                   onClick={() => goToCheck(navigate, '/use-cases')}
                 >
-                  <ScanSearch className="lucide svg" /> Run my free report
+                  <Search className="lucide svg" /> Run my free report
                 </button>
               </Reveal>
             </div>
@@ -305,7 +306,7 @@ export default function UseCasesPage() {
                     className="btn btn-light"
                     onClick={() => goToCheck(navigate, '/use-cases')}
                   >
-                    <ScanSearch className="lucide svg" /> Run my free report
+                    <Search className="lucide svg" /> Run my free report
                   </button>
                   <a
                     className="btn btn-ghost-light"

@@ -33,7 +33,6 @@ export default function Footer() {
               <ul>
                 <li><a href="#check">AI Visibility Report</a></li>
                 <li><a href="#measure">Methodology</a></li>
-                <li><Link to="/report">Sample report</Link></li>
                 <li><Link to="/plans">Plans</Link></li>
                 <li><Link to="/use-cases">Use cases</Link></li>
               </ul>

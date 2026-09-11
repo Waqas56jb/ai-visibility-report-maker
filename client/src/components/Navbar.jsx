@@ -8,7 +8,7 @@ import {
   LogIn,
   Menu,
   PlusCircle,
-  ScanSearch,
+  Search,
   Sparkles,
   UserPlus,
   Users,
@@ -117,7 +117,7 @@ export default function Navbar({ variant = 'landing' }) {
               goToCheck(navigate, pathname);
             }}
           >
-            <ScanSearch className="lucide svg" /> {navCta}
+            <Search className="lucide svg" /> {navCta}
           </button>
         )}
         <Link to="/services">

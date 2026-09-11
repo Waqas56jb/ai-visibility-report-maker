@@ -206,15 +206,9 @@ export default function Settings() {
               <label>Lead paragraph</label>
               <textarea rows={4} value={hero.lead || ''} onChange={(e) => setHero({ lead: e.target.value })} />
             </div>
-            <div className="row2">
-              <div className="field">
-                <label>Primary CTA</label>
-                <input value={hero.ctaPrimary || ''} onChange={(e) => setHero({ ctaPrimary: e.target.value })} />
-              </div>
-              <div className="field">
-                <label>Secondary CTA</label>
-                <input value={hero.ctaSecondary || ''} onChange={(e) => setHero({ ctaSecondary: e.target.value })} />
-              </div>
+            <div className="field">
+              <label>Primary CTA</label>
+              <input value={hero.ctaPrimary || ''} onChange={(e) => setHero({ ctaPrimary: e.target.value })} />
             </div>
           </div>
 

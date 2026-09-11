@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import { AlertTriangle, ClipboardCheck, Eye, FileDown, Gauge, Table } from 'lucide-react';
+import { AlertTriangle, ClipboardCheck, FileDown, Gauge, Table } from 'lucide-react';
 import Reveal from './Reveal.jsx';
 
 const CHIPS = [
@@ -62,13 +61,6 @@ export default function Preview() {
               </span>
             );
           })}
-        </Reveal>
-        <Reveal delay="d3">
-          <div style={{ textAlign: 'center', marginTop: 34 }}>
-            <Link to="/report" className="btn btn-primary">
-              <Eye className="lucide svg" /> Open the sample report
-            </Link>
-          </div>
         </Reveal>
       </div>
     </section>

@@ -22,6 +22,17 @@
   --coral:#E0544A; --amber:#D08A1F; --mint:#16A34A;
   --grad:linear-gradient(160deg,#C5CBFF 0%,#8B9BFB 55%,#5B6EF0 100%);
   --ink-grad:linear-gradient(160deg,#1D1264 0%,#160C51 55%,#0F0A3A 100%);
+  /* The button ramp. --grad runs up into #C5CBFF, which is only 2.2:1 against
+     a white label, so buttons cannot use it directly. Mixing the two themeable
+     brand hues toward ink in oklab holds every point of the ramp above 4.5:1
+     while keeping the chroma a flat black scrim would wash out. */
+  --grad-btn:linear-gradient(150deg,color-mix(in oklab,var(--indigo) 80%,#0B0726),color-mix(in oklab,var(--cyan) 80%,#0B0726));
+  /* The primary button's fill on light ground. A gradient across two neighbouring
+     blues reads as murk at button size — the eye cannot see the transition, only
+     the muddiness it leaves. One saturated, confident blue instead: --cyan taken
+     down just far enough to hold 5.46:1 with a white label, and no further. Still
+     composed from a themeable hue, so the admin palette still drives it. */
+  --btn-solid:color-mix(in oklab,var(--cyan) 86%,#0B0726);
   --r:18px; --r-lg:28px; --r-sm:12px;
   --shadow:0 1px 2px rgba(22,12,81,.05),0 10px 28px -16px rgba(22,12,81,.16);
   --shadow-lg:0 24px 70px -28px rgba(22,12,81,.22);
@@ -58,23 +69,68 @@ img{display:block;max-width:100%}
    px on the `.svg` class or by the parent's font-size — never the stroke. */
 svg.lucide{width:1em;height:1em;stroke-width:2;flex-shrink:0}
 .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
-.eyebrow{font-family:var(--font-m);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);display:inline-flex;align-items:center;gap:9px}
-.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+/* The section label. No capsule, no dot, no rule — no ornament of any kind. A
+   caption earns its place by being set well, not by being decorated: 11.5px,
+   .18em of tracking so the caps have air, and a colour a step below the
+   headline so it introduces the heading instead of competing with it.
+   --cyan is admin-themeable and can drift pale; --ordinal-strong is fixed and
+   clears AA on paper. */
+.eyebrow{display:block;font-family:var(--font-m);font-size:11.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;line-height:1;color:var(--ordinal-strong)}
 .muted{color:var(--text-2)}
-.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 24px;border-radius:999px;font-weight:600;font-size:15px;letter-spacing:-.005em;line-height:1;white-space:nowrap;transition:transform .24s var(--ease),box-shadow .24s var(--ease),background .24s var(--ease),border-color .24s var(--ease),color .24s var(--ease)}
+/* background-position carries the sheen sweep (see .btn-grad) and is the one
+   property here that is deliberately slow — a highlight that crosses a button
+   in a quarter second reads as a glitch, in three quarters it reads as light. */
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:13px 24px;border-radius:999px;font-weight:600;font-size:15px;letter-spacing:-.005em;line-height:1;white-space:nowrap;background-repeat:no-repeat;transition:transform .24s var(--ease),box-shadow .24s var(--ease),background-color .24s var(--ease),border-color .24s var(--ease),color .24s var(--ease),background-position .75s var(--ease)}
+/* lucide draws on a 24px grid, so at a 15px label a stroke of 2 lands optically
+   lighter than the 600-weight text beside it. Size up and thicken inside
+   buttons only, so glyph and label read at the same weight. */
+.btn .lucide{width:1.06em;height:1.06em;stroke-width:2.25}
 .btn:active{transform:translateY(0) scale(.97)}
 /* The global :focus-visible sets border-radius:6px — override so the ring hugs the pill. */
 .btn:focus-visible{border-radius:999px;outline-offset:3px}
-.btn-primary{background:var(--ink);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 1px 2px rgba(22,12,81,.22),0 10px 24px -10px rgba(22,12,81,.5)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 2px 6px rgba(22,12,81,.26),0 22px 44px -14px rgba(22,12,81,.58)}
-/* --grad is admin-themeable and can land on a light cyan; the scrim + shadow keep white legible whatever it is. */
-.btn-grad{background:linear-gradient(rgba(9,6,32,.16),rgba(9,6,32,.16)),var(--grad);color:#fff;text-shadow:0 1px 2px rgba(9,6,32,.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.26),0 1px 2px rgba(22,12,81,.2),0 12px 30px -10px rgba(114,135,250,.68)}
-.btn-grad:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 2px 8px rgba(22,12,81,.22),0 24px 48px -14px rgba(114,135,250,.85)}
-.btn-ghost{background:transparent;border:1px solid var(--line-2);color:var(--ink)}
-.btn-ghost:hover{background:#fff;border-color:var(--ordinal);transform:translateY(-2px);box-shadow:0 12px 28px -16px rgba(22,12,81,.32)}
-.btn-light{background:#fff;color:var(--ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 1px 2px rgba(22,12,81,.1),0 10px 24px -14px rgba(22,12,81,.26)}
-.btn-light:hover{transform:translateY(-2px);box-shadow:0 2px 6px rgba(22,12,81,.14),0 22px 44px -16px rgba(22,12,81,.4)}
-.btn-sm{padding:9px 17px;font-size:13.5px}
+/* Every filled button is built from the same three background layers, kept as
+   longhands rather than a `background:` shorthand so a state can change one of
+   them without silently resetting the other two:
+     1. the sheen  — a narrow bright band on an oversized canvas, parked off the
+                     left edge and slid across on hover. This is the whole of the
+                     hover interest; the fill colour never changes, so the button
+                     never looks like a different button when you point at it.
+     2. the sheet  — a light from above: a highlight that fades out before the
+                     label sits on it.
+     3. the fill   — background-color, so one custom property can restyle it.
+   Plus, on every one: a 1px lit top edge, a 1px shaded bottom edge, a close
+   contact shadow and a wide ambient one. That pair is what makes a pill read as
+   an object resting on the page rather than a coloured hole cut into it. */
+.btn-primary{background-image:linear-gradient(100deg,transparent 38%,rgba(255,255,255,.16) 48%,transparent 58%),linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 52%);background-color:var(--ink);background-size:220% 100%,100% 100%;background-position:100% 0,0 0;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -1px 0 rgba(0,0,0,.34),0 1px 2px rgba(22,12,81,.22),0 10px 24px -10px rgba(22,12,81,.5)}
+.btn-primary:hover{transform:translateY(-2px);background-position:0 0,0 0;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),inset 0 -1px 0 rgba(0,0,0,.34),0 2px 6px rgba(22,12,81,.26),0 22px 44px -14px rgba(22,12,81,.58)}
+/* The primary call to action. One rule decides its colour: it is the maximum
+   contrast to whatever it sits on. On light ground that is saturated blue; on
+   the navy heroes below it is white. A blue button on a blue hero is the same
+   hue family as its own background — it reads as part of the scenery, which is
+   the one thing a call to action must never do.
+   The bloom under it is its own colour rather than a grey shadow, so the button
+   appears to cast light onto the page instead of just blocking it. */
+.btn-grad{background-image:linear-gradient(100deg,transparent 38%,rgba(255,255,255,.3) 48%,transparent 58%),linear-gradient(180deg,rgba(255,255,255,.17),rgba(255,255,255,0) 48%);background-color:#4F5ED0;background-size:220% 100%,100% 100%;background-position:100% 0,0 0;color:#fff;box-shadow:0 0 0 1px rgba(38,47,132,.24),inset 0 1px 0 rgba(255,255,255,.34),inset 0 -1px 0 rgba(9,6,32,.28),0 1px 2px rgba(22,12,81,.2),0 8px 18px -8px rgba(79,94,208,.5),0 20px 40px -20px rgba(22,12,81,.45)}
+.btn-grad:hover{transform:translateY(-2px);background-position:0 0,0 0;box-shadow:0 0 0 1px rgba(38,47,132,.28),inset 0 1px 0 rgba(255,255,255,.4),inset 0 -1px 0 rgba(9,6,32,.28),0 2px 5px rgba(22,12,81,.22),0 14px 26px -10px rgba(79,94,208,.62),0 30px 56px -22px rgba(22,12,81,.5)}
+@supports(background-color:color-mix(in oklab,red 50%,blue)){
+  .btn-grad{background-color:var(--btn-solid)}
+}
+/* Every dark band on the site. The primary action inverts to white with an ink
+   label — 17:1, the highest contrast the palette can produce, and the same
+   material .btn-light already uses in the CTA band, so the conversion button is
+   one object wherever the visitor meets it.
+   Two things keep a white pill from looking pasted onto navy: a dark contact
+   shadow that sits it down on the surface, and a cool halo around it that reads
+   as the hero's own light catching its edge. The sheen turns indigo here —
+   white over white would be nothing at all. */
+.hero .btn-grad,.page-hero .btn-grad,.checker .btn-grad,.automate .btn-grad,.why-ai .btn-grad,.btn-light{background-image:linear-gradient(100deg,transparent 38%,rgba(110,132,250,.22) 48%,transparent 58%),linear-gradient(180deg,#fff,#F1F3FF);background-color:#fff;background-size:220% 100%,100% 100%;background-position:100% 0,0 0;color:var(--ink);box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(22,12,81,.14),0 2px 5px rgba(5,3,20,.3),0 14px 30px -12px rgba(5,3,20,.55),0 0 34px -8px rgba(150,170,255,.35)}
+.hero .btn-grad:hover,.page-hero .btn-grad:hover,.checker .btn-grad:hover,.automate .btn-grad:hover,.why-ai .btn-grad:hover,.btn-light:hover{transform:translateY(-2px);background-position:0 0,0 0;box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(22,12,81,.14),0 3px 7px rgba(5,3,20,.34),0 24px 46px -16px rgba(5,3,20,.62),0 0 48px -8px rgba(160,180,255,.5)}
+/* The secondary. It has to be legible as a second option without competing, so
+   it holds the same silhouette and lift as the primary and gives up only its
+   fill — an outline, not a weaker version of the same button. */
+.btn-ghost{background-color:rgba(255,255,255,.7);border:1px solid var(--line-2);color:var(--ink);box-shadow:0 1px 2px rgba(22,12,81,.05)}
+.btn-ghost:hover{background-color:#fff;border-color:var(--ordinal);transform:translateY(-2px);box-shadow:0 1px 2px rgba(22,12,81,.06),0 14px 30px -16px rgba(22,12,81,.34)}
+.btn-sm{padding:9px 17px;font-size:13.5px;gap:8px}
 .btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;filter:saturate(.7)}
 .card{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
@@ -114,7 +170,10 @@ body.nav-open{overflow:hidden}
 .nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:var(--cyan);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .25s}
 .nav-links a:hover::after{transform:scaleX(1)}
 .nav-actions{display:flex;gap:10px;align-items:center;flex:none}
-.nav .btn-primary{background:var(--ink);color:#fff}.nav .btn-primary:hover{background:var(--ink-3)}
+/* The nav button keeps the base material and changes only the fill on hover —
+   restating the whole background here is what used to make it drift out of sync
+   with every other primary on the site. */
+.nav .btn-primary:hover{background-color:var(--ink-3)}
 .burger{display:none;align-items:center;justify-content:center;font-size:22px;width:44px;height:44px;border-radius:12px;flex:none;flex-shrink:0;margin-left:auto;color:var(--text)}
 .mobile-menu{display:none;position:fixed;inset:calc(68px + 30px + env(safe-area-inset-top,0px)) 16px auto 16px;max-height:calc(100dvh - 68px - 46px);background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(255,255,255,.88));backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.6);border-radius:var(--r-lg);box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 0 0 1px rgba(197,203,255,.32),0 24px 60px -28px rgba(22,12,81,.4);z-index:var(--z-menu);padding:16px;flex-direction:column;gap:4px;overflow-y:auto}
 .mobile-menu.open{display:flex}
@@ -215,15 +274,27 @@ body.nav-open{overflow:hidden}
    its line box (without them this line sits 14px lower than its neighbours),
    and translateY then drops the wordmark's own baseline onto the text baseline. */
 .hero p.lead{font-size:19px;line-height:1.6;color:rgba(255,255,255,.74);max-width:var(--measure);margin:24px 0 22px}
-.hero .eyebrow,.page-hero .eyebrow{color:#D6DBFF;margin-bottom:22px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);padding:9px 18px;border-radius:999px}
-.hero .btn-ghost,.page-hero .btn-ghost{border-color:rgba(255,255,255,.32);color:#fff}
-.hero .btn-ghost:hover,.page-hero .btn-ghost:hover{background:rgba(255,255,255,.12);transform:translateY(-1px)}
+/* A step below --line-2 so the label introduces the headline rather than
+   shouting alongside it; still 7:1 on the navy. The tighter margin binds it to
+   the h1 as one unit instead of leaving it floating. */
+.hero .eyebrow,.page-hero .eyebrow{color:#A3ACE0;margin-bottom:16px}
+/* On the hero gradient a bare hairline reads as an unfinished outline, so the
+   secondary gets a real translucent surface. The blur is doing work here: it
+   lifts the pill off the grid lines and glow behind it. No drop shadow — the
+   lack of one is what keeps it subordinate to the primary. */
+.hero .btn-ghost,.page-hero .btn-ghost{background-color:rgba(255,255,255,.09);background-image:none;border-color:rgba(255,255,255,.26);color:#fff;backdrop-filter:blur(10px) saturate(1.4);-webkit-backdrop-filter:blur(10px) saturate(1.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+.hero .btn-ghost:hover,.page-hero .btn-ghost:hover{background-color:rgba(255,255,255,.17);border-color:rgba(255,255,255,.44);transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.26),0 14px 30px -18px rgba(0,0,0,.6)}
+/* var(--cyan) is too close to the hero navy to read as a focus ring. */
+.hero .btn:focus-visible,.page-hero .btn:focus-visible{outline-color:#fff}
 .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 /* The hero's primary action carries more weight than a body-copy button: a hair
    more size and an inner highlight so it reads as the one thing to do here. */
 .hero-ctas .btn{padding:15px 26px;font-size:16px}
-.hero-ctas .btn-grad{box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 14px 34px -10px rgba(114,135,250,.8)}
-.hero-ctas .btn-grad:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 18px 40px -10px rgba(114,135,250,.9)}
+/* The hero CTA is the largest button on the site, so it carries a deeper drop
+   than the same material elsewhere — enough to sit clearly in front of the grid
+   lines and glow behind it. */
+.hero-ctas .btn-grad{box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(22,12,81,.14),0 2px 6px rgba(5,3,20,.34),0 22px 46px -16px rgba(5,3,20,.65),0 0 52px -8px rgba(150,170,255,.45)}
+.hero-ctas .btn-grad:hover{box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(22,12,81,.14),0 3px 8px rgba(5,3,20,.38),0 32px 60px -18px rgba(5,3,20,.72),0 0 70px -8px rgba(165,185,255,.6)}
 .hero-stats{display:flex;gap:28px;margin-top:38px;flex-wrap:wrap;justify-content:center}
 .hero-stats div{text-align:center}
 .hero-stats div strong{font-family:var(--font-d);font-size:26px;display:block;letter-spacing:-.02em;color:#fff}
@@ -329,7 +400,7 @@ body.nav-open{overflow:hidden}
   .hero{padding:100px 0 52px}
   .hero .wrap{gap:34px}
   .hero h1{font-size:clamp(26px,8vw,34px)}
-  .hero .eyebrow{font-size:11px;padding:8px 14px}
+  .hero .eyebrow{font-size:11px}
   .hero p.lead{font-size:16px;margin:18px 0 16px}
   .hero-ctas{width:100%;flex-direction:row;flex-wrap:wrap;gap:10px}
   .hero-ctas .btn{width:auto;flex:0 1 auto;justify-content:center;padding:14px 22px;font-size:15px}
@@ -370,7 +441,10 @@ body.nav-open{overflow:hidden}
 .page-hero p.lead{font-size:18px;color:rgba(255,255,255,.7);max-width:var(--measure);margin:22px 0 32px}
 .page-hero .hero-alt{color:rgba(255,255,255,.64)}
 .page-hero .hero-alt a{color:#fff}
-.page-hero .hero-pills span{color:#fff;background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14)}
+/* Same translucent material as the hero's secondary button, one step quieter:
+   the blur lifts them off the grid lines behind, the lit top edge gives the
+   capsule an actual edge instead of the old 14%-white hairline that vanished. */
+.page-hero .hero-pills span{color:#E4E8FF;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);backdrop-filter:blur(10px) saturate(1.3);-webkit-backdrop-filter:blur(10px) saturate(1.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
 @media(max-width:900px){.page-hero{padding:132px 0 64px}.page-hero p.lead{font-size:16px;margin:16px 0 26px}}
 @media(max-width:640px){.page-hero{padding:116px 0 54px}.page-hero .hero-ctas .btn{width:100%;justify-content:center}}
 
@@ -391,7 +465,7 @@ body.nav-open{overflow:hidden}
 .automate{position:relative;overflow:hidden;background:linear-gradient(180deg,#0F0A3A 0%,#160C51 46%,#0F0A3A 100%);color:#fff;padding:var(--sec-y) 0}
 .automate::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(52% 40% at 12% 0%,rgba(114,135,250,.22),transparent 68%),radial-gradient(50% 42% at 90% 96%,rgba(124,58,237,.18),transparent 70%)}
 .automate>*{position:relative;z-index:1}
-.automate .eyebrow{color:#D6DBFF;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);padding:9px 18px;border-radius:999px}
+.automate .eyebrow{color:#A3ACE0}
 .automate .section-head{margin-bottom:44px}
 .automate .section-head h2{color:#fff;max-width:20ch;margin-left:auto;margin-right:auto}
 .automate .section-head h2 .hl{background:linear-gradient(90deg,#8B9BFB,#67E8F9);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -444,7 +518,7 @@ body.nav-open{overflow:hidden}
    continuous dark field; the indigo only blooms through the middle. */
 .why-ai{position:relative;background:linear-gradient(180deg,#0F0A3A 0%,#1A1056 44%,#150B4E 72%,#0F0A3A 100%);color:#fff;overflow:hidden}
 .why-ai .hero-glow{opacity:.8}
-.why-ai .eyebrow{color:#D6DBFF;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);padding:9px 18px;border-radius:999px}
+.why-ai .eyebrow{color:#A3ACE0}
 .why-ai .section-head h2{color:#fff}
 .why-ai .section-head h2 .hl{background:linear-gradient(90deg,#8B9BFB,#67E8F9);-webkit-background-clip:text;background-clip:text;color:transparent}
 .why-ai .section-head p{color:rgba(255,255,255,.66)}
@@ -536,7 +610,7 @@ body.nav-open{overflow:hidden}
 .section-head p{font-size:17px;color:var(--text-2);max-width:var(--measure)}
 .center{text-align:center;margin-left:auto;margin-right:auto}
 .center h2,.center p{margin-inline:auto}
-.center .eyebrow{justify-content:center}
+.center .eyebrow{text-align:center}
 
 /* checker — the mid-page conversion beat. Flows straight out of the dark
    automation band (no colour break, no dead gap) and lands the primary
@@ -557,47 +631,73 @@ body.nav-open{overflow:hidden}
 .check-pts li .svg{width:15px;height:15px;color:#A9B4FF;flex:none}
 .checker-modal{position:fixed;inset:0;z-index:var(--z-modal);display:flex;align-items:flex-start;justify-content:center;padding:24px 18px 40px;overflow-y:auto;overscroll-behavior:contain;background:rgba(15,10,58,.58);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:modal-fade .2s ease}
 .checker-modal-card{margin:auto;animation:modal-rise .28s cubic-bezier(.2,.7,.2,1)}
-.checker-modal-card .form-badge{animation:none}
-.checker-modal-close{position:absolute;top:14px;right:14px;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--text-3);transition:color .2s,border-color .2s,background .2s}
+.checker-modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--text-3);transition:color .2s,border-color .2s,background .2s}
 .checker-modal-close:hover{color:var(--ink);border-color:var(--line-2);background:var(--tint)}
 .checker-modal-close .svg{width:17px;height:17px}
 @keyframes modal-fade{from{opacity:0}to{opacity:1}}
 @keyframes modal-rise{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.checker-modal,.checker-modal-card{animation:none}}
 @media(max-width:640px){.checker-modal{padding:16px 12px 28px}}
-.form-card{position:relative;background:#fff;color:var(--text);border:1px solid var(--line);border-radius:24px;padding:clamp(28px,5vw,40px) clamp(22px,5vw,36px) 30px;box-shadow:0 2px 8px -4px rgba(22,12,81,.06),0 30px 70px -30px rgba(22,12,81,.35);width:100%;max-width:520px;overflow:hidden}
-.form-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--indigo),var(--cyan))}
+/* The conversion form. Everything inside it is either something to fill in or
+   something that says it is safe to — ornament was neither, so the gradient
+   rail across the card's top and the floating gradient tile above the title
+   are both gone. A form that asks for a work address earns trust by looking
+   like it has nothing to sell you, so what is left is the question, the three
+   fields and the button. */
+.form-card{position:relative;background:#fff;color:var(--text);border:1px solid var(--line);border-radius:24px;padding:clamp(30px,5vw,40px) clamp(22px,5vw,36px) 28px;box-shadow:0 2px 8px -4px rgba(22,12,81,.06),0 30px 70px -30px rgba(22,12,81,.35);width:100%;max-width:520px}
 .form-badge{display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:15px;background:linear-gradient(150deg,var(--indigo),var(--cyan));box-shadow:0 12px 26px -10px rgba(91,110,240,.65);margin-bottom:16px;animation:floaty 5s ease-in-out infinite}
 .form-badge .svg{width:21px;height:21px;color:#fff}
-.form-card h3{font-family:var(--font-d);font-size:clamp(21px,4.5vw,24px);font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
-.form-card .sub{font-family:var(--font-b);font-size:14.5px;color:var(--text-2);margin-bottom:28px;line-height:1.5}
-.field{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
-.field label{font-family:var(--font-m);font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3)}
+/* The title clears the close button rather than running under it. */
+.form-card h3{font-family:var(--font-d);font-size:clamp(22px,4.5vw,25px);font-weight:800;letter-spacing:-.025em;line-height:1.15;margin-bottom:7px;padding-right:40px}
+.form-card .sub{font-family:var(--font-b);font-size:14.5px;color:var(--text-2);margin-bottom:26px;line-height:1.55;max-width:44ch}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.field label{font-family:var(--font-m);font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-3)}
 .field label span{text-transform:none;letter-spacing:0;color:var(--text-3);font-weight:400}
-.field input,.field select{font-family:var(--font-b);font-size:16px;font-weight:500;color:var(--text);padding:14px 15px;border:1.5px solid var(--line-2);border-radius:14px;background:var(--bg-alt,#f7f8ff);transition:border-color .2s,box-shadow .2s,background .2s,transform .15s;width:100%}
+/* One enclosure per field, not two. A tinted slab inside a heavy border is the
+   field drawn twice; a hairline on white with a single hint of inner shadow
+   sits the slot into the card and leaves focus as the only moment colour
+   appears anywhere in the form. */
+.field input,.field select{font-family:var(--font-b);font-size:16px;font-weight:500;color:var(--text);padding:13px 15px;border:1px solid var(--line-2);border-radius:12px;background:#fff;box-shadow:inset 0 1px 2px rgba(22,12,81,.055);transition:border-color .18s var(--ease),box-shadow .18s var(--ease);width:100%}
 .field input::placeholder{font-weight:400;color:var(--text-3)}
-.field input:focus,.field select:focus{outline:none;border-color:var(--indigo);background:#fff;box-shadow:0 0 0 5px rgba(114,135,250,.14)}
+.field input:hover,.field select:hover{border-color:#AAB3F2}
+.field input:focus,.field select:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px rgba(114,135,250,.2)}
 .field input.bad{border-color:#F0625A}
-.field input.bad:focus{box-shadow:0 0 0 5px rgba(240,98,90,.14)}
+.field input.bad:focus{box-shadow:0 0 0 3px rgba(240,98,90,.2)}
 .field .err{font-family:var(--font-m);font-size:12px;color:#F0625A}
 .input-icon{position:relative}
 .input-icon>.svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--text-3);pointer-events:none;transition:color .2s}
 .input-icon input{padding-left:42px}
 .input-icon:focus-within>.svg{color:var(--indigo)}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.fine{display:flex;align-items:flex-start;gap:10px;font-family:var(--font-m);font-size:12px;color:var(--text-2);line-height:1.5;margin-top:18px;background:var(--bg-alt,#f7f8ff);border-radius:14px;padding:13px 15px}
-.fine .svg{color:var(--indigo);flex:none;margin-top:2px}
-.optional-toggle{width:100%;font-family:var(--font-m);font-size:12.5px;color:var(--indigo);font-weight:600;letter-spacing:.01em;line-height:1.4;text-align:left;display:flex;align-items:center;gap:10px;margin:6px 0 6px;padding:13px 14px;border:1.5px dashed var(--line-2);border-radius:14px;background:var(--bg-alt,#f7f8ff);transition:border-color .2s,background .2s,transform .15s}
-.optional-toggle:hover{border-color:var(--indigo);background:var(--tint)}
-.optional-toggle:active{transform:scale(.99)}
-.optional-toggle .svg{flex:none;width:15px;height:15px;padding:2px;border-radius:50%;background:rgba(114,135,250,.15);color:var(--indigo);box-sizing:content-box;transition:transform .25s cubic-bezier(.2,.7,.2,1)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-submit{width:100%;margin-top:4px;padding:15px 24px;font-size:15.5px}
+/* Reassurance, not a field. In its old tinted box it carried the same weight
+   and the same radius as the three inputs above it, so a footnote looked like
+   one more thing to fill in. A hairline and quiet type put it back in its
+   place: the last thing you read, not the fourth thing you answer. */
+.fine{display:flex;align-items:flex-start;gap:9px;font-family:var(--font-m);font-size:12px;color:var(--text-3);line-height:1.55;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.fine .svg{width:14px;height:14px;color:var(--text-3);flex:none;margin-top:2px}
+/* "Add industry, location & competitors" is an offer, not a control of the
+   same rank as the fields. The dashed box it used to sit in read as an
+   unfinished drop zone — the one thing in this card that looked like a
+   placeholder someone forgot to style. As plain text with a small plus it
+   reads as exactly what it is: optional, and safe to skip. */
+.optional-toggle{display:flex;align-items:flex-start;gap:9px;width:100%;font-family:var(--font-m);font-size:13px;font-weight:600;color:var(--ordinal-strong);line-height:1.45;text-align:left;margin:2px 0 18px;padding:4px 2px;border:0;background:none;transition:color .18s var(--ease)}
+.optional-toggle:hover{color:var(--ink)}
+/* The label and its aside are one sentence, so they share one flex child —
+   as siblings they became two columns that each wrapped on their own. */
+.optional-toggle>span{flex:1}
+.optional-toggle .svg{flex:none;width:14px;height:14px;margin-top:1px;padding:3px;border-radius:50%;background:rgba(114,135,250,.15);color:var(--ordinal-strong);box-sizing:content-box;transition:transform .25s var(--ease),background .18s var(--ease)}
+.optional-toggle:hover .svg{background:rgba(114,135,250,.26)}
 .optional-toggle.open .svg{transform:rotate(45deg)}
 .optional-toggle em{font-style:normal;font-weight:500;color:var(--text-3)}
 .optional{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .35s cubic-bezier(.2,.7,.2,1),opacity .3s ease}
 .optional.open{grid-template-rows:1fr;opacity:1}
 .optional-inner{min-height:0;overflow:hidden;padding-top:2px}
-.optional-inner .row2{margin-bottom:16px}
-@media(max-width:960px){.checker .wrap{grid-template-columns:1fr}.form-card{max-width:480px}.row2{grid-template-columns:1fr}}
+/* Once the pair stacks it is no longer a pair, so it should space itself like
+   every other field: drop the grid gap and let each field's own bottom margin
+   do the work. Keeping the gap instead double-spaced the pair, and zeroing the
+   margins closed the seam between the last paired field and the next one. */
+@media(max-width:960px){.checker .wrap{grid-template-columns:1fr}.form-card{max-width:480px}.row2{grid-template-columns:1fr;gap:0}}
 @media(max-width:520px){.form-card{border-radius:20px}.form-badge{width:44px;height:44px;border-radius:13px}}
 
 /* how it works */
@@ -740,7 +840,10 @@ body.nav-open{overflow:hidden}
 .plan-featured::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:var(--grad);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
 .plan-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .plan-head h3{font-size:22px;letter-spacing:-.02em}
-.plan-badge{font-family:var(--font-m);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--grad);padding:6px 11px;border-radius:999px;white-space:nowrap}
+/* --grad tops out at #C5CBFF, which is ~1.7:1 against a white label — the same
+   failure the buttons had. --grad-btn is the contrast-held ramp, and it stays
+   admin-themeable because it composes from the same two brand hues. */
+.plan-badge{font-family:var(--font-m);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 55%),var(--grad-btn);padding:6px 11px;border-radius:999px;white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
 .plan-scope{font-family:var(--font-d);font-weight:800;font-size:30px;line-height:1.1;letter-spacing:-.03em;color:var(--ink);margin-top:16px}
 .plan-desc{font-size:14.5px;color:var(--text-2);margin-top:10px;min-height:3.4em}
 .plan .btn{width:100%;justify-content:center;margin-top:22px}
@@ -827,8 +930,10 @@ body.nav-open{overflow:hidden}
 .sv-hero h1{max-width:18ch;margin-left:auto;margin-right:auto}
 .sv-hero p.lead{max-width:var(--measure);margin-left:auto;margin-right:auto}
 .sv-hero .hero-ctas{justify-content:center}
+/* These are a real set of things, so they stay pills — but they are labels, not
+   controls, so they sit a step quieter than any button: no shadow, no lift. */
 .hero-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:30px}
-.hero-pills span{font-family:var(--font-m);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ordinal-strong);background:rgba(255,255,255,.7);border:1px solid var(--line);padding:7px 13px;border-radius:999px}
+.hero-pills span{font-family:var(--font-m);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ordinal-strong);background:#fff;border:1px solid var(--line);padding:7px 13px;border-radius:999px;box-shadow:0 1px 2px rgba(22,12,81,.05)}
 .sv-hero .hero-alt{margin-top:22px}
 
 .sv-ic{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:var(--tint-2);border:1px solid var(--line);flex:none}
@@ -941,12 +1046,15 @@ body.nav-open{overflow:hidden}
 .cta::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 55% at 50% 0%,rgba(197,203,255,.42),transparent 70%),radial-gradient(48% 55% at 6% 100%,rgba(124,58,237,.3),transparent 70%),radial-gradient(45% 55% at 96% 88%,rgba(91,110,240,.45),transparent 70%)}
 .cta::after{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.14) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(85% 85% at 50% 45%,#000 30%,transparent 100%);-webkit-mask-image:radial-gradient(85% 85% at 50% 45%,#000 30%,transparent 100%);animation:grid-pulse 7s ease-in-out infinite}
 .cta>*{position:relative;z-index:1}
-.cta .eyebrow{color:rgba(255,255,255,.8)}
+.cta .eyebrow{color:rgba(255,255,255,.92)}
 .cta-copy{display:flex;flex-direction:column;align-items:center}
 .cta h2{font-size:clamp(30px,4vw,46px);margin-bottom:16px;line-height:1.1;max-width:16ch}
 .cta p{color:rgba(255,255,255,.82);max-width:520px;margin:0 auto 32px;font-size:17px}
 /* --cyan is admin-themeable and can drift pale; --ordinal-strong is fixed and clears AA on white. */
-.cta .btn-light{color:var(--ordinal-strong)}
+/* The white button carries an ink label everywhere on the site, including here.
+   An indigo label was a step quieter than the ink one for no reason the visitor
+   can see — and the button in this band is the same object as the one in the
+   hero, so it should not change its mind about its own colour. */
 
 /* footer */
 footer{position:relative;overflow:hidden;background:var(--ink-grad);color:#fff;padding:86px 0 0}
@@ -1042,14 +1150,15 @@ footer .logo .logo-light{opacity:1;pointer-events:auto}
 .analysis-hero{display:grid;grid-template-columns:1fr 340px;gap:26px;align-items:stretch;margin-bottom:20px;background:rgba(255,255,255,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);color:var(--text);border-radius:var(--r-lg);padding:34px;overflow:hidden;position:relative;box-shadow:var(--shadow)}
 .analysis-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(114,135,250,.2),transparent 70%);pointer-events:none}
 .analysis-hero-copy{position:relative;z-index:1}
-.analysis-hero .eyebrow{color:var(--cyan)}
+.analysis-hero .eyebrow{color:var(--ordinal-strong)}
 .analysis-hero h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.03em;margin:14px 0 12px}
 .analysis-hero .meta{display:flex;gap:10px;flex-wrap:wrap;font-family:var(--font-m);font-size:12px;color:var(--text-3);margin-bottom:12px}
 .analysis-hero .desc{color:var(--text-2);font-size:15.5px;line-height:1.7;max-width:640px;margin:10px 0 20px}
 .analysis-hero .muted{color:var(--text-3);font-size:13.5px}
 .analysis-hero .gauge-card{position:relative;z-index:1}
 .analysis-chips{display:flex;gap:8px;flex-wrap:wrap}
-.analysis-chips span{font-family:var(--font-m);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:999px;background:var(--tint-2);border:1px solid var(--line);color:var(--ordinal-strong)}
+/* Same spec as .uc-tag — one tag, one size, wherever it appears. */
+.analysis-chips span{font-family:var(--font-m);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;border-radius:999px;background:var(--tint-2);border:1px solid var(--line);color:var(--ordinal-strong)}
 .analysis-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
 @media(max-width:960px){.analysis-hero{grid-template-columns:1fr}.analysis-kpis{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.analysis-kpis{grid-template-columns:1fr}}
@@ -1135,8 +1244,8 @@ td .sov i b{display:block;height:100%;background:var(--grad)}
 .tag.svc-link .go{width:12px;height:12px;opacity:.6;transition:opacity .2s,transform .2s}
 .tag.svc-link:hover{background:#5B6EF0;border-color:#5B6EF0;color:#fff;transform:translateY(-1px)}
 .tag.svc-link:hover .go{opacity:1;transform:translate(1px,-1px)}
-.btn-ghost-light{background:rgba(255,255,255,.04);color:#fff;border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-.btn-ghost-light:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.5);transform:translateY(-2px);box-shadow:0 16px 34px -18px rgba(0,0,0,.5)}
+.btn-ghost-light{background-color:rgba(255,255,255,.04);background-image:none;color:#fff;border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.btn-ghost-light:hover{background-color:rgba(255,255,255,.12);border-color:rgba(255,255,255,.5);transform:translateY(-2px);box-shadow:0 16px 34px -18px rgba(0,0,0,.5)}
 .toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;display:flex;gap:10px;align-items:center;opacity:0;transition:.3s;z-index:99;pointer-events:none;box-shadow:var(--shadow-lg)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .spin{animation:spin 1s linear infinite}

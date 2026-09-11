@@ -28,7 +28,6 @@ export const DEFAULT_CONTENT = {
     lead:
       'Every day, customers ask AI who they should trust. MakeFlow finds where AI leaves you out, fills the gaps with the right content, and keeps you in the answer, across every engine, every day.',
     ctaPrimary: 'Run my free report',
-    ctaSecondary: 'See a sample report',
     stat1n: '40+',
     stat1l: 'real questions tested',
     stat2n: '2 modes',

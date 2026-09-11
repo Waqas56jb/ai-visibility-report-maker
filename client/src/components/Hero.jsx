@@ -1,9 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   CheckCircle2,
-  Play,
-  ScanSearch,
+  Search,
   Sparkles,
   User,
   XCircle,
@@ -426,11 +425,8 @@ export default function Hero() {
           </div>
           <div className="hero-ctas">
             <button type="button" className="btn btn-grad" onClick={() => goToCheck(navigate, '/')}>
-              <ScanSearch className="lucide svg" /> {hero.ctaPrimary}
+              <Search className="lucide svg" /> {hero.ctaPrimary}
             </button>
-            <Link to="/report" className="btn btn-ghost">
-              <Play className="lucide svg" /> {hero.ctaSecondary}
-            </Link>
           </div>
         </div>
 
