@@ -69,11 +69,9 @@ function textH(doc, str, width, size, bold = false) {
     .heightOfString(t(str), { width, lineGap: 1.5 });
 }
 
-let decorating = false;
-
 function decorate(doc, meta) {
-  if (decorating) return;
-  decorating = true;
+  if (doc.__decorating) return;
+  doc.__decorating = true;
   const { width, height } = doc.page;
   const saved = { ...doc.page.margins };
   doc.page.margins = { top: 0, bottom: 0, left: 0, right: 0 };
@@ -97,7 +95,7 @@ function decorate(doc, meta) {
   doc.page.margins = saved;
   doc.x = ML;
   doc.y = MT;
-  decorating = false;
+  doc.__decorating = false;
 }
 
 function heading(doc, title) {

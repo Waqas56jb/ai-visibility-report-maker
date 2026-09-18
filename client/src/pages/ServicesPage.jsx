@@ -1,186 +1,47 @@
-import { useEffect } from 'react';
-import {
-  ArrowRight,
-  Blocks,
-  CalendarCheck,
-  Contact,
-  Gauge,
-  Globe2,
-  ListChecks,
-  MessagesSquare,
-  MonitorSmartphone,
-  PhoneCall,
-  Plus,
-  Quote,
-  Rocket,
-  ScanSearch,
-  Search,
-  Workflow,
-} from 'lucide-react';
-import Navbar from '../components/Navbar.jsx';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight, CalendarCheck, Plus, Search, Sparkles } from 'lucide-react';
+import Navbar, { goToCheck } from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import Reveal from '../components/Reveal.jsx';
+import FinalCta from '../components/FinalCta.jsx';
 import { useSite } from '../store/site.jsx';
+import { DEFAULT_CONTENT } from '../lib/siteDefaults.js';
+import { enrichServices, SERVICE_GROUPS } from '../lib/seoServices.js';
 
-// Titles come from the CMS (content.servicesPage.items) so they stay editable.
-// The icon, grouping and deliverable bullets are presentation, so they live here
-// and are attached by slug — an item the CMS renames simply renders without them.
-const slug = (s) =>
-  String(s || '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+// The page is built around one idea: a search now has three layers (the
+// ranked link, the quoted answer, the model's recommendation), and each SEO
+// discipline wins one of them. The hero shows the layers, the rest explains them.
+//
+// Copy lives here rather than in the CMS: the CMS still carries the old agency
+// services list, and this page must stay SEO only.
 
-const DETAIL = {
-  'ai-visibility': {
-    group: 'found',
-    icon: ScanSearch,
-    points: [
-      'A scored report across mentions, prominence, sentiment and citations',
-      'Competitor share on the questions that actually matter',
-      'A ranked fix list, not a data dump',
-    ],
-  },
-  'aeo-answer-engine-optimisation': {
-    group: 'found',
-    icon: Quote,
-    points: [
-      'Question-led pages written to be quoted verbatim',
-      'Schema and structured data an engine can parse',
-      'Content shaped for AI Overviews and featured answers',
-    ],
-  },
-  'geo-generative-engine-optimisation': {
-    group: 'found',
-    icon: Globe2,
-    points: [
-      'Entity and business-detail consistency across the sources models trust',
-      'Third-party mentions, directories and citation building',
-      'Crawler access for GPTBot, PerplexityBot and the rest',
-    ],
-  },
-  'ai-workflow-automation': {
-    group: 'run',
-    icon: Workflow,
-    points: [
-      'The repeat jobs mapped end to end before anything is built',
-      'AI and no-code tooling wired between the apps you already pay for',
-      'Handover docs so your team owns it, not us',
-    ],
-  },
-  'ai-voice-agents': {
-    group: 'run',
-    icon: PhoneCall,
-    points: [
-      'Answers the usual questions in your own words',
-      'Books straight into your calendar',
-      'Every call transcribed and logged',
-    ],
-  },
-  'ai-chatbots': {
-    group: 'run',
-    icon: MessagesSquare,
-    points: [
-      'Trained on your real services, pricing and policies',
-      'Website, Instagram and Messenger from one brain',
-      'Qualifies and captures before they click away',
-    ],
-  },
-  'lead-crm-automation': {
-    group: 'run',
-    icon: Contact,
-    points: [
-      'Every enquiry captured, from every channel',
-      'Follow-up sequences that run without anyone remembering',
-      'Clean records in the CRM you already use',
-    ],
-  },
-  'web-design-development': {
-    group: 'build',
-    icon: MonitorSmartphone,
-    points: [
-      'A new build, or a rebuild of what you have',
-      'Fast, responsive and accessible by default',
-      'AI-readable structure baked in, not bolted on later',
-    ],
-  },
-  'ai-integration-custom-development': {
-    group: 'build',
-    icon: Blocks,
-    points: [
-      'AI built into the product you already run',
-      'Or a new one built from scratch around it',
-      'Our deepest, most tailored engagement',
-    ],
-  },
-};
-
-const GROUPS = [
-  {
-    key: 'found',
-    eyebrow: 'Get found',
-    title: 'Being the answer, not a link',
-    body: 'The three disciplines that decide whether an assistant says your name.',
-  },
-  {
-    key: 'run',
-    eyebrow: 'Run it for you',
-    title: 'The work that runs itself',
-    body: 'Once the enquiries arrive, none of them should depend on somebody remembering.',
-  },
-  {
-    key: 'build',
-    eyebrow: 'Build it properly',
-    title: 'The thing it all sits on',
-    body: 'A site and a product an assistant can actually read, and a team can actually run.',
-  },
-];
-
-const DISCIPLINES = [
+const JOBS = [
   {
     tag: 'SEO',
-    icon: Search,
     title: 'Rank on the page',
     body: 'Ten blue links. You compete for a position and hope the click follows. It still matters, it is just no longer the whole picture, or even the front of it.',
-    line: 'Wins you a position.',
+    wins: 'Wins you a position.',
   },
   {
     tag: 'AEO',
-    icon: Quote,
     title: 'Be the answer',
     body: 'The engine replies instead of listing. AEO makes your content the thing it quotes, so you are named inside the reply rather than buried three scrolls beneath it.',
-    line: 'Wins you the reply.',
+    wins: 'Wins you the reply.',
   },
   {
     tag: 'GEO',
-    icon: Globe2,
     title: 'Be in the model',
     body: 'Generative models draw on what the web says about you, not only what you say about yourself. GEO builds the entities, mentions and citations that put you in the answer at all.',
-    line: 'Wins you the recommendation.',
+    wins: 'Wins you the recommendation.',
   },
 ];
 
 const STEPS = [
-  {
-    icon: Gauge,
-    title: 'Measure',
-    body: 'Start with the free visibility report. Three minutes, and it tells us more about where you stand than a discovery call would.',
-  },
-  {
-    icon: ListChecks,
-    title: 'Prioritise',
-    body: 'We walk the results with you and agree the shortest path to a better answer. Sometimes that is a content programme. Sometimes it is one line in your robots.txt.',
-  },
-  {
-    icon: Rocket,
-    title: 'Build',
-    body: 'AEO, GEO, a new site, an automation, or all four. Scoped in stages so you see something move early rather than at the end.',
-  },
-  {
-    icon: ScanSearch,
-    title: 'Re-measure',
-    body: 'Run the report again. The score is the scoreboard, which is the whole reason we start there instead of finishing there.',
-  },
+  ['Measure', 'Start with the free visibility report. Three minutes, and it tells me more about where you stand than a discovery call would.'],
+  ['Prioritise', 'I walk the results with you and agree the shortest path to a better answer. Sometimes a content programme, sometimes one line in your robots.txt.'],
+  ['Fix', 'Technical, on-page and content, local SEO, AEO and GEO, in the order the report says matters. Scoped in stages so you see something move early.'],
+  ['Re-measure', 'Run the report again. The score is the scoreboard, which is why I start there instead of finishing there.'],
 ];
 
 const FAQS = [
@@ -190,11 +51,11 @@ const FAQS = [
   },
   {
     q: 'Do I have to buy a package?',
-    a: 'No. Every engagement starts with the free report and we scope from what it finds. Sometimes the honest answer is that you need one of these, not six.',
+    a: 'No. Every engagement starts with the free report and I scope it from what it finds. Sometimes the honest answer is that you need one of these, not six.',
   },
   {
     q: 'Can you work on a site you did not build?',
-    a: 'Usually, yes. If the platform makes AI-readable structure genuinely impossible, we will tell you that before you spend anything on content rather than after.',
+    a: 'Usually, yes. If the platform makes AI-readable structure genuinely impossible, I will tell you that before you spend anything on content rather than after.',
   },
   {
     q: 'How long before AI starts naming us?',
@@ -202,190 +63,246 @@ const FAQS = [
   },
   {
     q: 'Do you handle the writing?',
-    a: 'Yes. Answer pages only work when they are specific, so we write from your actual expertise instead of generating filler that every competitor could have published.',
-  },
-  {
-    q: 'Is web design available on its own?',
-    a: 'Yes. We build every site AI-readable by default, so you get the structural half of AEO whether you asked for it or not.',
+    a: 'Yes. Answer pages only work when they are specific, so I write from your actual expertise instead of generating filler that every competitor could have published.',
   },
 ];
 
-export default function ServicesPage() {
-  const { content } = useSite();
-  const page = content.servicesPage || {};
-  const items = page.items || [];
-  const brand = content.brandName || 'MakeFlow';
-  const contactUrl = (content.bookCall?.url || 'https://cal.com/isuruabhishek/30min').trim();
-  const contactExternal = /^https?:\/\//i.test(contactUrl);
-  const contactProps = contactExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+// Hero illustration: the same search, three layers deep. Placeholder names
+// only, it shows where you can appear, not a result anyone got.
+function SearchStack({ active, onPick }) {
+  return (
+    <div className="sx-stack-wrap">
+      <div className="sx-stack" aria-hidden="true">
+        <div className={`sx-layer sx-l-seo${active === 0 ? ' on' : ''}`}>
+          <span className="sx-layer-k">Search results</span>
+          <span className="sx-url">yourbusiness.com.au</span>
+          <span className="sx-title">Your Business | The service, in your suburb</span>
+          <span className="sx-bar" /><span className="sx-bar short" />
+        </div>
+        <div className={`sx-layer sx-l-aeo${active === 1 ? ' on' : ''}`}>
+          <span className="sx-layer-k"><Sparkles className="lucide svg" /> AI Overview</span>
+          <span className="sx-answer">
+            The quickest fix is usually a service call. <mark>Your Business</mark> explains the
+            three signs to look for first.
+          </span>
+          <span className="sx-cite">yourbusiness.com.au</span>
+        </div>
+        <div className={`sx-layer sx-l-geo${active === 2 ? ' on' : ''}`}>
+          <span className="sx-layer-k">AI assistant</span>
+          <span className="sx-ask">Who should I call near me?</span>
+          <span className="sx-reply">A well-reviewed local option is <mark>Your Business</mark>.</span>
+        </div>
+      </div>
+      <div className="sx-tabs" role="tablist" aria-label="Where you can show up">
+        {JOBS.map((j, i) => (
+          <button
+            key={j.tag}
+            type="button"
+            role="tab"
+            aria-selected={active === i}
+            className={active === i ? 'on' : ''}
+            onClick={() => onPick(i)}
+          >
+            {j.tag}
+          </button>
+        ))}
+      </div>
+      <p className="sx-wins" aria-live="polite">
+        <strong>{JOBS[active].tag}.</strong> {JOBS[active].wins}
+      </p>
+    </div>
+  );
+}
 
-  const enriched = items.map((item, i) => ({
-    ...item,
-    n: i + 1,
-    ...(DETAIL[slug(item.title)] || {}),
-  }));
-  // Anything the CMS added under a title we do not recognise still gets shown,
-  // parked in the last group rather than silently dropped.
-  const grouped = GROUPS.map((g, gi) => ({
-    ...g,
-    items: enriched.filter((s) =>
-      s.group ? s.group === g.key : gi === GROUPS.length - 1,
-    ),
-  })).filter((g) => g.items.length);
+export default function ServicesPage() {
+  const navigate = useNavigate();
+  const { content } = useSite();
+  const brand = content.brandName || 'MakeFlow';
+  const bookUrl = (content.bookCall?.url || 'https://cal.com/isuruabhishek/30min').trim();
+
+  const [layer, setLayer] = useState(1);
+  const [paused, setPaused] = useState(false);
+  const [filter, setFilter] = useState('all');
+  const [open, setOpen] = useState(1);
+
+  const services = enrichServices(DEFAULT_CONTENT.servicesPage.items);
+  const groupOf = Object.fromEntries(SERVICE_GROUPS.map((g) => [g.key, g]));
+  const shown = services.filter((s) => filter === 'all' || s.group === filter);
 
   useEffect(() => {
-    document.title = `${page.title || 'Services'} | ${brand}`;
-  }, [page.title, brand]);
+    document.title = `SEO Services | ${brand}`;
+  }, [brand]);
+
+  // Walk the three layers until the visitor picks one themselves.
+  useEffect(() => {
+    if (paused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const t = setInterval(() => setLayer((l) => (l + 1) % 3), 3400);
+    return () => clearInterval(t);
+  }, [paused]);
 
   return (
     <>
       <Navbar />
       <main id="main" tabIndex={-1}>
-        <section className="page-hero sv-hero">
-          <div className="hero-glow" />
-          <div className="hero-grid" />
-          <div className="wrap">
-            <Reveal className="page-hero-in">
-              <span className="eyebrow">{page.eyebrow}</span>
-              <h1>{page.title}</h1>
-              <p className="lead">{page.lead}</p>
-              <div className="hero-pills">
-                <span>AEO</span>
-                <span>GEO</span>
-                <span>AI visibility</span>
-                <span>Automation</span>
-                <span>Web design</span>
-              </div>
-              <p className="hero-alt">
-                Already know which service you need?{' '}
-                <a href={contactUrl} {...contactProps}>
-                  Talk to us directly <ArrowRight className="lucide svg" />
+        <section className="sx-hero">
+          <div className="wrap sx-hero-in">
+            <Reveal className="sx-hero-copy">
+              <span className="eyebrow">SEO services</span>
+              <h1>
+                SEO for Google, and for the <span className="hl">AI answers</span> above it
+              </h1>
+              <p className="sx-lead">
+                I do SEO and only SEO. Technical, local, content, AEO and GEO: the work that gets
+                you ranked, cited and recommended, measured before and after.
+              </p>
+              <div className="sx-ctas">
+                <button type="button" className="btn btn-grad" onClick={() => goToCheck(navigate, '/services')}>
+                  Get my free report <ArrowRight className="lucide svg" />
+                </button>
+                <a className="btn btn-ghost btn-lead" href={bookUrl} target="_blank" rel="noopener noreferrer">
+                  <CalendarCheck className="lucide svg" /> Book a call
                 </a>
-              </p>
+              </div>
+            </Reveal>
+            <Reveal delay="d1" className="sx-hero-art">
+              <SearchStack
+                active={layer}
+                onPick={(i) => {
+                  setPaused(true);
+                  setLayer(i);
+                }}
+              />
             </Reveal>
           </div>
         </section>
 
-        <section className="section sv-disciplines">
+        <section className="section sx-jobs">
           <div className="wrap">
-            <Reveal className="section-head center">
-              <span className="eyebrow">SEO vs AEO vs GEO</span>
-              <h2>Search has split into three jobs</h2>
-              <p>
-                They get used interchangeably and they are not the same work. Here is the difference,
-                in the order it now matters.
-              </p>
+            <Reveal className="section-head">
+              <div>
+                <span className="eyebrow">SEO vs AEO vs GEO</span>
+                <h2>
+                  Search has split into <span className="hl">three jobs</span>
+                </h2>
+              </div>
+              <p>They get used interchangeably and they are not the same work. Here is the difference, in the order it now matters.</p>
             </Reveal>
-            <div className="sv-disc-grid">
-              {DISCIPLINES.map((d, i) => {
-                const Icon = d.icon;
-                return (
-                  <Reveal
-                    key={d.tag}
-                    delay={i === 0 ? '' : `d${i}`}
-                    className={`sv-disc${i > 0 ? ' sv-disc-on' : ''}`}
-                  >
-                    <div className="sv-disc-top">
-                      <span className="sv-disc-tag">{d.tag}</span>
-                      <span className="sv-ic">
-                        <Icon className="lucide svg" />
-                      </span>
-                    </div>
-                    <h3>{d.title}</h3>
-                    <p>{d.body}</p>
-                    <p className="sv-disc-line">
-                      <ArrowRight className="lucide svg" /> {d.line}
-                    </p>
-                  </Reveal>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section className="section sv-catalog" id="services">
-          <div className="wrap">
-            <Reveal className="section-head center">
-              <span className="eyebrow">The full list</span>
-              <h2>Everything we can take off your hands</h2>
-              <p>
-                Start with one. Most people do. The report is what tells you which one is worth
-                starting with.
-              </p>
-            </Reveal>
-            {grouped.map((g) => (
-              <div className="sv-group" key={g.key}>
-                <Reveal className="sv-group-head">
-                  <span className="eyebrow">{g.eyebrow}</span>
-                  <h3>{g.title}</h3>
-                  <p>{g.body}</p>
+            <ol className="sx-job-list">
+              {JOBS.map((j, i) => (
+                <Reveal as="li" key={j.tag} delay={i ? `d${i}` : ''} className="sx-job">
+                  <span className="sx-job-tag">{j.tag}</span>
+                  <div>
+                    <h3>{j.title}</h3>
+                    <p>{j.body}</p>
+                  </div>
+                  <p className="sx-job-wins">{j.wins}</p>
                 </Reveal>
-                <div className="sv-cards">
-                  {g.items.map((s, i) => {
-                    const Icon = s.icon;
-                    return (
-                      <Reveal
-                        key={s.title || i}
-                        delay={i === 0 ? '' : `d${i % 3}`}
-                        className="sv-card"
-                      >
-                        <div className="sv-card-top">
-                          <span className="sv-ic">
-                            {Icon ? <Icon className="lucide svg" /> : <Blocks className="lucide svg" />}
-                          </span>
-                          <span className="sv-num">{String(s.n).padStart(2, '0')}</span>
-                        </div>
-                        <h4>{s.title}</h4>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        <section className="section sx-index" id="services">
+          <div className="wrap sx-index-in">
+            <Reveal className="sx-index-side">
+              <span className="eyebrow">The full list</span>
+              <h2>
+                Every SEO job I can take <span className="hl">off your hands</span>
+              </h2>
+              <p>Start with one. Most people do. The report is what tells you which one is worth starting with.</p>
+              <div className="sx-filter" role="group" aria-label="Filter services">
+                {[{ key: 'all', eyebrow: 'All' }, ...SERVICE_GROUPS].map((g) => (
+                  <button
+                    key={g.key}
+                    type="button"
+                    aria-pressed={filter === g.key}
+                    className={filter === g.key ? 'on' : ''}
+                    onClick={() => {
+                      setFilter(g.key);
+                      setOpen(-1);
+                    }}
+                  >
+                    {g.eyebrow}
+                  </button>
+                ))}
+              </div>
+              {filter !== 'all' && groupOf[filter] ? (
+                <p className="sx-group-note">
+                  <strong>{groupOf[filter].title}.</strong> {groupOf[filter].body}
+                </p>
+              ) : null}
+            </Reveal>
+            <ul className="sx-rows">
+              {shown.map((s) => {
+                const Icon = s.icon || Search;
+                const isOpen = open === s.n;
+                return (
+                  <li key={s.title} className={`sx-row${isOpen ? ' open' : ''}`}>
+                    <button
+                      type="button"
+                      className="sx-row-head"
+                      aria-expanded={isOpen}
+                      onClick={() => setOpen(isOpen ? -1 : s.n)}
+                    >
+                      <span className="sx-row-n">{String(s.n).padStart(2, '0')}</span>
+                      <span className="sx-row-ic" aria-hidden="true"><Icon className="lucide svg" /></span>
+                      <span className="sx-row-t">{s.title}</span>
+                      <span className="sx-row-x" aria-hidden="true"><Plus className="lucide svg" /></span>
+                    </button>
+                    <div className="sx-row-body">
+                      <div>
                         <p>{s.body}</p>
                         {s.points ? (
-                          <ul className="sv-points">
-                            {s.points.map((p) => (
-                              <li key={p}>{p}</li>
-                            ))}
+                          <ul className="sx-points">
+                            {s.points.map((p) => <li key={p}>{p}</li>)}
                           </ul>
                         ) : null}
-                      </Reveal>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="section sv-process">
-          <div className="wrap">
-            <Reveal className="section-head center">
-              <span className="eyebrow">How it runs</span>
-              <h2>Measure first, then build, then measure again</h2>
-              <p>
-                No engagement starts with a proposal. It starts with a number, so we both know
-                whether the work moved anything.
-              </p>
-            </Reveal>
-            <div className="sv-steps">
-              {STEPS.map((s, i) => {
-                const Icon = s.icon;
-                return (
-                  <Reveal key={s.title} delay={i === 0 ? '' : `d${i % 3}`} className="sv-step">
-                    <span className="sv-step-n">{i + 1}</span>
-                    <span className="sv-ic">
-                      <Icon className="lucide svg" />
-                    </span>
-                    <h3>{s.title}</h3>
-                    <p>{s.body}</p>
-                  </Reveal>
+                        {groupOf[s.group] ? <span className="sx-row-g">{groupOf[s.group].eyebrow}</span> : null}
+                      </div>
+                    </div>
+                  </li>
                 );
               })}
-            </div>
+            </ul>
           </div>
         </section>
 
-        <section className="section sv-faq">
+        <section className="section sx-loop-sec">
           <div className="wrap">
-            <Reveal className="section-head center">
+            <Reveal className="section-head">
+              <div>
+                <span className="eyebrow">How it runs</span>
+                <h2>
+                  Measure, fix, then <span className="hl">measure again</span>
+                </h2>
+              </div>
+              <p>No engagement starts with a proposal. It starts with a number, so we both know whether the work moved anything.</p>
+            </Reveal>
+            <Reveal delay="d1" className="sx-loop">
+              <ol>
+                {STEPS.map(([t, b], i) => (
+                  <li key={t}>
+                    <span className="sx-loop-dot">{i + 1}</span>
+                    <h3>{t}</h3>
+                    <p>{b}</p>
+                  </li>
+                ))}
+              </ol>
+              <p className="sx-loop-back">
+                <span>And round again, with the score as the scoreboard</span>
+              </p>
+            </Reveal>
+          </div>
+        </section>
+
+        <section className="section sx-faq">
+          <div className="wrap sx-faq-in">
+            <Reveal className="sx-faq-side">
               <span className="eyebrow">FAQ</span>
-              <h2>Questions about the work itself</h2>
+              <h2>
+                Questions about <span className="hl">the work</span>
+              </h2>
+              <p>Anything else, ask me on the call. It is free and there is no pitch deck.</p>
             </Reveal>
             <Reveal delay="d1" className="faq">
               {FAQS.map((f, i) => (
@@ -401,22 +318,7 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        <section className="section sv-cta-sec">
-          <div className="wrap">
-            <Reveal className="cta">
-              <div className="cta-copy">
-                <span className="eyebrow">{page.ctaEyebrow}</span>
-                <h2>{page.ctaTitle}</h2>
-                <p>{page.ctaBody}</p>
-                <div className="cta-btns">
-                  <a className="btn btn-light" href={contactUrl} {...contactProps}>
-                    <CalendarCheck className="lucide svg" /> {page.ctaButton}
-                  </a>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </section>
+        <FinalCta />
       </main>
       <Footer />
     </>

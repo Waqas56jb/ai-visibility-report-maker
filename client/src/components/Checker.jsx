@@ -20,10 +20,10 @@ export default function Checker() {
           <span className="form-badge">
             <ScanSearch className="lucide svg" />
           </span>
-          <h2>{checker.formTitle || 'Check your AI visibility'}</h2>
+          <h2>{checker.formTitle || 'Check your search visibility'}</h2>
           <p>{checker.formSub || 'Takes about 3 minutes. One free report per email every 30 days.'}</p>
-          <button type="button" className="btn btn-grad" onClick={openChecker}>
-            <Search className="lucide svg" /> Run my free report
+          <button type="button" className="btn btn-grad btn-lead" onClick={openChecker}>
+            <Search className="lucide svg" /> {checker.submit || 'Get my free report'}
           </button>
           <ul className="check-pts">
             {POINTS.map(({ icon: Icon, label }) => (

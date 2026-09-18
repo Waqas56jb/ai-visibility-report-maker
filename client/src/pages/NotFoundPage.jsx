@@ -8,9 +8,9 @@ import { useSite } from '../store/site.jsx';
 
 /* The handful of places someone landing on a dead URL actually wanted. */
 const ROUTES = [
-  { to: '/services', label: 'Services', note: 'Everything we build' },
+  { to: '/services', label: 'Services', note: 'Every SEO service I offer' },
   { to: '/plans', label: 'Plans', note: 'What it costs' },
-  { to: '/use-cases', label: 'Use cases', note: 'Work we have shipped' },
+  { to: '/use-cases', label: 'Use cases', note: 'Where SEO pays off' },
   { to: '/about', label: 'About', note: 'Who you would be working with' },
 ];
 
@@ -56,7 +56,7 @@ export default function NotFoundPage() {
               ))}
             </Reveal>
             <Reveal className="nf-back">
-              <Link to="/" className="btn btn-dark">
+              <Link to="/" className="btn btn-dark btn-lead">
                 <ArrowLeft className="lucide svg" />
                 Back to home
               </Link>

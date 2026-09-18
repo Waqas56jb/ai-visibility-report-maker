@@ -1,37 +1,42 @@
-# MakeFlow AI Visibility Report
+# MakeFlow
 
-> A free report that shows Australian business owners how often ChatGPT
-> recommends them, who it recommends instead, and what to fix.
+> An independent SEO practice in Australia. Technical SEO, local SEO, on-page
+> and content SEO, plus AEO and GEO so businesses are named in AI answers too.
 
-MakeFlow is an Australian AI studio. We make businesses visible in AI search,
-then build the chatbots and automations that turn it into customers.
+MakeFlow does SEO and nothing else. The work gets businesses found on Google,
+in the local map pack, and named by AI assistants such as ChatGPT when a
+customer asks who to use.
 
-## What the report does
+## Services
+
+- Technical SEO: crawling, indexing, site speed, Core Web Vitals, schema and
+  crawler access for Googlebot and AI crawlers.
+- Local SEO: Google Business Profile, suburb and service-area pages, reviews
+  and consistent citations.
+- On-page and content SEO: keyword and intent mapping, service pages, FAQs and
+  articles, titles, headings and internal links.
+- Answer engine optimisation (AEO): content shaped to be quoted in AI Overviews
+  and featured snippets.
+- Generative engine optimisation (GEO): entity consistency, third-party
+  mentions and a citation footprint AI models draw on.
+
+## The free report
 
 - Crawls your website: homepage, service pages, schema, robots.txt, FAQ content
   and whether AI crawlers such as GPTBot are allowed in.
 - Writes 30 to 50 questions a real customer in your niche and city would type.
 - Runs every question through ChatGPT twice: once with web browsing on, once
   from its own knowledge. Both are scored separately.
-- Scores six signals: mention rate (35%), prominence (20%), website
-  AI-readiness (15%), citation rate (10%), sentiment (10%) and competitive
-  position (10%).
-- Returns an on-screen analysis and a branded A4 PDF with a prioritised fix list.
+- Returns an on-screen analysis and an A4 PDF with a prioritised fix list.
 
 ## Pages
 
-- [Home](/): run a free report.
-- [Sample report](/report): a full worked example.
-
-## Terms
-
-- AI visibility: how often an AI assistant names your business when someone asks
-  it for a recommendation.
-- Generative engine optimisation (GEO): the work of getting named in AI answers,
-  as distinct from ranking in a list of blue links.
-- Browsing mode vs knowledge mode: whether ChatGPT looked at the live web to
-  answer, or answered from its training data.
+- [Home](/): selected work and a free report.
+- [Services](/services): every SEO service in detail.
+- [Use cases](/use-cases): where SEO pays off, by business type.
+- [Plans](/plans): monthly SEO plans.
+- [About](/about): who does the work.
 
 ## Contact
 
-MakeFlow, Australia. One free report per email every 30 days.
+MakeFlow, Australia. hello@makeflow.com.au

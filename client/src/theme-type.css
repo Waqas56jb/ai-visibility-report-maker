@@ -1,0 +1,32 @@
+/* Site-wide type, modelled on whenevr.framer.website.
+   Inter everywhere: 500 for reading text, 600 for headings, buttons and labels.
+   Tracking is always tight and scales with size: -.04em text, -.05em
+   sub-heads, -.07em display. Accent words are Source Serif 4 SemiBold Italic.
+   Loaded last; the !important marks override older per-section tracking. */
+
+:root{
+  --font-d:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-b:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-m:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mf-serif:"Source Serif 4",Georgia,serif;
+}
+
+body{font-family:var(--font-b);font-weight:500;letter-spacing:-.04em;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+:root :is(input,select,textarea,button){font-family:var(--font-b);letter-spacing:-.04em}
+
+/* Display headings */
+:root :is(h1,h2){font-family:var(--font-d)!important;font-weight:600!important;letter-spacing:-.07em!important;line-height:1.04}
+/* Sub-heads and card titles */
+:root :is(h3,h4,h5,h6){font-family:var(--font-d)!important;font-weight:600!important;letter-spacing:-.05em!important;line-height:1.3}
+
+/* Accent word inside a heading */
+:root .hl,:root :is(h1,h2,h3) .hl{font-family:var(--mf-serif)!important;font-style:italic;font-weight:600!important;letter-spacing:-.08em!important}
+
+/* Reading text */
+:root :is(p,li,dd,blockquote,figcaption,td){font-weight:500}
+:root :is(.pf-lead,.pf-note-lead,.section-head p,.muted,.sub){letter-spacing:-.04em!important;line-height:1.55}
+
+/* Interface text: buttons, nav, chips, questions, strong labels */
+:root :is(.btn,.nav-links a,.mobile-menu a,.eyebrow,.badge,.faq summary,.pf-skill,.pf-status,.optional-toggle,.field label,strong,b){
+  font-weight:600;letter-spacing:-.04em!important}

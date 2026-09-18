@@ -1,7 +1,13 @@
+import { seoOnly } from '../lib/seoServices.js';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Mail } from 'lucide-react';
 import Logo from './Logo.jsx';
 import { useSite } from '../store/site.jsx';
+
+// Fixed here rather than read from the CMS, which still describes the old
+// automation agency on every page.
+const BLURB =
+  'Independent SEO consultant in Australia. I get businesses ranked on Google, cited in AI Overviews and named by ChatGPT.';
 
 const FOR_AI = [
   { href: '/llms.txt', label: 'llms.txt', note: 'Machine-readable summary' },
@@ -11,7 +17,7 @@ const FOR_AI = [
 
 export default function Footer() {
   const { content } = useSite();
-  const services = (content.servicesPage?.items || []).slice(0, 4);
+  const services = seoOnly(content.servicesPage?.items).slice(0, 4);
   const brand = content.brandName || 'MakeFlow';
   const year = new Date().getFullYear();
 
@@ -21,7 +27,7 @@ export default function Footer() {
         <div className="foot">
           <div className="foot-brand">
             <Logo />
-            <p>{content.footerBlurb}</p>
+            <p>{BLURB}</p>
             <a className="foot-mail" href="mailto:hello@makeflow.com.au">
               <Mail className="lucide svg" /> hello@makeflow.com.au
             </a>
@@ -31,9 +37,8 @@ export default function Footer() {
             <div className="foot-col">
               <h4>Product</h4>
               <ul>
-                <li><a href="#check">AI Visibility Report</a></li>
-                <li><a href="#measure">Methodology</a></li>
-                <li><Link to="/plans">Plans</Link></li>
+                <li><a href="#check">Free SEO &amp; AI visibility report</a></li>
+                                <li><Link to="/plans">Plans</Link></li>
                 <li><Link to="/use-cases">Use cases</Link></li>
               </ul>
             </div>

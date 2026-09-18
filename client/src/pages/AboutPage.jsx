@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, CalendarCheck, Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { CalendarCheck, Search } from 'lucide-react';
 import Navbar, { goToCheck } from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import Reveal from '../components/Reveal.jsx';
@@ -13,25 +13,25 @@ const STORY = [
     body: 'People used to type a few words and pick from ten blue links. Now they ask an assistant a full question and get one answer back, with two or three businesses named in it. If you are not one of them, the customer never learns you exist: there is no second page to be on.',
   },
   {
-    label: 'Our answer',
+    label: 'My answer',
     title: 'Measure it before you spend a dollar fixing it.',
-    body: 'Most advice about AI search is guesswork sold with confidence. So we built the measurement first: real customer questions, asked of ChatGPT in both browsing and knowledge mode, scored across six weighted metrics. You see exactly where you are named, where a competitor is named instead, and where nobody is.',
+    body: 'Most advice about AI search is guesswork sold with confidence. So I built the measurement first: real customer questions, asked of ChatGPT in both browsing and knowledge mode, scored across six weighted metrics. You see exactly where you are named, where a competitor is named instead, and where nobody is.',
   },
   {
-    label: 'How we work',
+    label: 'How I work',
     title: 'The report is free. The work is optional.',
-    body: 'You can run the report, read it, hand it to whoever already does your marketing, and never speak to us. If you would rather we did the work, we build the fixes too: content, structure, automation, chatbots. Either way you start from evidence instead of a pitch.',
+    body: 'You can run the report, read it, hand it to whoever already does your marketing, and never speak to me. If you would rather I did the work, I do the fixes too: technical SEO, on-page and content, local SEO, AEO and GEO. Either way you start from evidence instead of a pitch.',
   },
 ];
 
 const BELIEFS = [
   {
     title: 'Show the working.',
-    body: 'Every score in the report traces back to a question we asked and an answer we got. No black box, no vanity metric you cannot check.',
+    body: 'Every score in the report traces back to a question I asked and an answer I got. No black box, no vanity metric you cannot check.',
   },
   {
     title: 'Say the real number.',
-    body: 'AI answers move around. We say so, we tell you to re-run it, and we would rather report an uncomfortable score than a flattering one.',
+    body: 'Search and AI answers move around. I say so, I tell you to re-run it, and I would rather report an uncomfortable score than a flattering one.',
   },
   {
     title: 'Keep it simple.',
@@ -58,13 +58,13 @@ export default function AboutPage() {
           <div className="hero-grid" />
           <div className="wrap">
             <Reveal className="page-hero-in">
-              <span className="eyebrow">About us</span>
-              <h1>We build the thing that gets you named by AI.</h1>
+              <span className="eyebrow">About</span>
+              <h1>I get good businesses found in search.</h1>
               <p className="lead">
-                {brand} is an Australian AI automation studio. We started asking assistants the
-                questions our own clients' customers ask, and found most good businesses were
-                simply missing from the answer. So we built a way to measure it, then a way to fix
-                it.
+                {brand} is my independent SEO practice in Australia. I started asking Google and
+                the AI assistants the questions my clients' customers ask, and found most good
+                businesses were simply missing from the answer. So I built a way to measure it,
+                then I do the work to fix it.
               </p>
             </Reveal>
           </div>
@@ -73,7 +73,7 @@ export default function AboutPage() {
         <section className="section about-story">
           <div className="wrap">
             <Reveal className="section-head">
-              <span className="eyebrow">Why we exist</span>
+              <span className="eyebrow">Why I do this</span>
               <h2>The way people find a business changed. Most businesses have not.</h2>
             </Reveal>
             <div className="about-track">
@@ -91,8 +91,8 @@ export default function AboutPage() {
         <section className="section about-beliefs">
           <div className="wrap">
             <Reveal className="section-head center">
-              <span className="eyebrow">What we believe</span>
-              <h2>Three rules we hold ourselves to</h2>
+              <span className="eyebrow">How I work</span>
+              <h2>Three rules I hold myself to</h2>
             </Reveal>
             <div className="about-beliefs-grid">
               {BELIEFS.map((b, i) => (
@@ -112,7 +112,7 @@ export default function AboutPage() {
                 <h2>See where you stand today</h2>
                 <p>
                   The report is free and takes about three minutes to run. Read it yourself, or talk
-                  it through with us, no obligation either way.
+                  it through with me, no obligation either way.
                 </p>
                 <div className="cta-btns">
                   <button

@@ -139,7 +139,7 @@ export const Recommendations = obj(
           what_to_do: { type: 'string' },
           expected_impact: { type: 'string', enum: ['high', 'medium', 'low'] },
           effort: { type: 'string', enum: ['low', 'medium', 'high'] },
-          service_key: { type: 'string', enum: ['aiso', 'chatbot', 'automation', 'custom'] },
+          service_key: { type: 'string', enum: ['technical', 'local', 'content', 'aiso'] },
           evidence_refs: { type: 'array', items: { type: 'string' } },
         },
         ['title', 'why_it_matters', 'what_to_do', 'expected_impact', 'effort', 'service_key', 'evidence_refs']

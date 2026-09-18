@@ -1,0 +1,117 @@
+/* Buttons and icon tiles, one system for both themes.
+   Loaded after theme-seo.css and before theme-dark.css. The :root prefix lifts
+   these above the older section-specific button rules in index.css. */
+
+/* ---------- Buttons ---------- */
+:root .btn{
+  --b-h:50px; --b-px:24px;
+  min-height:var(--b-h);padding:0 var(--b-px);gap:10px;border-radius:999px;
+  font-family:var(--font-b);font-weight:600;font-size:15px;letter-spacing:-.01em;
+  background-image:none;border:0;
+  transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s,background-color .25s,color .25s;
+}
+:root .btn-sm{--b-h:40px;--b-px:18px;font-size:13.5px;gap:8px}
+:root .btn:active{transform:translateY(0) scale(.97)}
+
+/* Icons inside buttons sit in a small round chip that nudges on hover. */
+:root .btn>.lucide{box-sizing:content-box;width:16px;height:16px;padding:7px;margin:0 -12px 0 0;border-radius:50%;stroke-width:2.1;flex:none;
+  transition:transform .3s cubic-bezier(.2,.7,.2,1),background-color .25s,color .25s}
+:root .btn-lead>.lucide:first-child{margin:0 0 0 -12px}
+:root .btn-sm>.lucide{width:14px;height:14px;padding:5px;margin-right:-10px}
+:root .btn-sm.btn-lead>.lucide:first-child{margin:0 0 0 -10px}
+:root .btn:not(.btn-lead):hover>.lucide:last-child{transform:translateX(3px)}
+:root .btn-lead:hover>.lucide:first-child{transform:rotate(-10deg) scale(1.06)}
+
+/* Primary: solid ink with a soft top light. */
+:root .btn:is(.btn-grad,.btn-primary){
+  background-color:#160C51;color:#fff;
+  background-image:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 55%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 1px 2px rgba(22,12,81,.25),0 14px 30px -14px rgba(22,12,81,.6);
+}
+:root .btn:is(.btn-grad,.btn-primary)>.lucide{background:rgba(255,255,255,.14);color:#fff}
+:root .btn:is(.btn-grad,.btn-primary):hover{
+  background-color:#261A78;transform:translateY(-2px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 2px 4px rgba(22,12,81,.25),0 22px 40px -16px rgba(91,110,240,.75);
+}
+:root .btn:is(.btn-grad,.btn-primary):hover>.lucide{background:#fff;color:#160C51}
+
+/* Secondary: clean white pill with a hairline. */
+:root .btn:is(.btn-ghost,.btn-outline,.btn-light){
+  background-color:#fff;color:#160C51;
+  box-shadow:inset 0 0 0 1px rgba(22,12,81,.12),0 1px 2px rgba(22,12,81,.06);
+}
+:root .btn:is(.btn-ghost,.btn-outline,.btn-light)>.lucide{background:#EEF0FF;color:#4F5ED0}
+:root .btn:is(.btn-ghost,.btn-outline,.btn-light):hover{
+  background-color:#fff;transform:translateY(-2px);
+  box-shadow:inset 0 0 0 1px rgba(91,110,240,.45),0 16px 30px -18px rgba(22,12,81,.45);
+}
+:root .btn:is(.btn-ghost,.btn-outline,.btn-light):hover>.lucide{background:#160C51;color:#fff}
+
+/* On always-dark panels (final CTA, ink cards): white primary, glass secondary. */
+:root :is(.cta,.pf-vs-me,.uc-card-cta) .btn:is(.btn-grad,.btn-primary),
+html.mf-dark .btn:is(.btn-grad,.btn-primary){
+  background-color:#fff;color:#160C51;
+  background-image:linear-gradient(180deg,#fff,#EEF0FF);
+  box-shadow:inset 0 -1px 0 rgba(22,12,81,.08),0 2px 6px rgba(0,0,0,.25),0 18px 40px -16px rgba(165,177,255,.55);
+}
+:root :is(.cta,.pf-vs-me,.uc-card-cta) .btn:is(.btn-grad,.btn-primary)>.lucide,
+html.mf-dark .btn:is(.btn-grad,.btn-primary)>.lucide{background:#160C51;color:#fff}
+:root :is(.cta,.pf-vs-me,.uc-card-cta) .btn:is(.btn-grad,.btn-primary):hover,
+html.mf-dark .btn:is(.btn-grad,.btn-primary):hover{
+  background-color:#fff;background-image:linear-gradient(180deg,#fff,#fff);
+  box-shadow:inset 0 -1px 0 rgba(22,12,81,.08),0 3px 8px rgba(0,0,0,.3),0 24px 50px -16px rgba(165,177,255,.8);
+}
+:root :is(.cta,.pf-vs-me,.uc-card-cta) .btn:is(.btn-grad,.btn-primary):hover>.lucide,
+html.mf-dark .btn:is(.btn-grad,.btn-primary):hover>.lucide{background:#5B6EF0;color:#fff}
+
+:root :is(.cta,.pf-vs-me,.uc-card-cta) .btn:is(.btn-ghost,.btn-outline,.btn-light),
+html.mf-dark .btn:is(.btn-ghost,.btn-outline,.btn-light){
+  background-color:rgba(255,255,255,.07);color:#fff;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.2),inset 0 1px 0 rgba(255,255,255,.12);
+}
+:root :is(.cta,.pf-vs-me,.uc-card-cta) .btn:is(.btn-ghost,.btn-outline,.btn-light)>.lucide,
+html.mf-dark .btn:is(.btn-ghost,.btn-outline,.btn-light)>.lucide{background:rgba(255,255,255,.12);color:#fff}
+:root :is(.cta,.pf-vs-me,.uc-card-cta) .btn:is(.btn-ghost,.btn-outline,.btn-light):hover,
+html.mf-dark .btn:is(.btn-ghost,.btn-outline,.btn-light):hover{
+  background-color:rgba(255,255,255,.14);
+  box-shadow:inset 0 0 0 1px rgba(197,203,255,.5),0 16px 34px -18px rgba(0,0,0,.6);
+}
+:root :is(.cta,.pf-vs-me,.uc-card-cta) .btn:is(.btn-ghost,.btn-outline,.btn-light):hover>.lucide,
+html.mf-dark .btn:is(.btn-ghost,.btn-outline,.btn-light):hover>.lucide{background:#fff;color:#160C51}
+
+:root .btn:focus-visible{outline:2px solid #5B6EF0;outline-offset:3px}
+html.mf-dark .btn:focus-visible{outline-color:#C5CBFF}
+
+/* ---------- Icon tiles ---------- */
+:root :is(.pf-svc-ic,.sv-ic,.uc-ic,.seo-svc-ic,.why-ic,.sv-disc .ic,.metric .ic,.step .ic,.journey-step .ic,.inside-card .ic){
+  width:48px;height:48px;border-radius:16px;display:grid;place-items:center;flex:none;border:0;
+  background:linear-gradient(160deg,#FFFFFF 0%,#EEF0FF 100%);color:#4F5ED0;
+  box-shadow:inset 0 0 0 1px rgba(91,110,240,.18),inset 0 1px 0 #fff,0 10px 22px -14px rgba(22,12,81,.45);
+  transition:transform .35s cubic-bezier(.2,.7,.2,1),background .3s,color .3s,box-shadow .3s;
+}
+:root :is(.pf-svc-ic,.sv-ic,.uc-ic,.seo-svc-ic,.why-ic,.sv-disc .ic,.metric .ic,.step .ic,.journey-step .ic,.inside-card .ic) :is(.svg,.lucide){
+  width:22px;height:22px;color:inherit;stroke-width:1.75;
+}
+:root :is(.pf-svc,.sv-disc,.uc-card,.step,.metric,.inside-card):hover :is(.pf-svc-ic,.sv-ic,.uc-ic,.seo-svc-ic,.why-ic,.ic){
+  background:linear-gradient(160deg,#2A1F86 0%,#160C51 100%);color:#fff;transform:translateY(-2px) rotate(-6deg);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 16px 30px -14px rgba(22,12,81,.7);
+}
+/* Feature badge (checker band, forms): the brand gradient, always. */
+:root :is(.form-badge,.check-band .form-badge){
+  width:52px;height:52px;border-radius:17px;color:#fff;
+  background:linear-gradient(160deg,#C5CBFF 0%,#8B9BFB 45%,#5B6EF0 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 14px 30px -12px rgba(91,110,240,.8);
+}
+:root .form-badge .svg{width:23px;height:23px;color:#fff;stroke-width:1.9}
+
+html.mf-dark :is(.pf-svc-ic,.sv-ic,.uc-ic,.seo-svc-ic,.why-ic,.sv-disc .ic,.metric .ic,.step .ic,.journey-step .ic,.inside-card .ic){
+  background:linear-gradient(160deg,rgba(165,177,255,.2) 0%,rgba(165,177,255,.05) 100%);color:#C5CBFF;
+  box-shadow:inset 0 0 0 1px rgba(165,177,255,.26),inset 0 1px 0 rgba(255,255,255,.12),0 14px 30px -16px rgba(0,0,0,.7);
+}
+html.mf-dark :is(.pf-svc,.sv-disc,.uc-card,.step,.metric,.inside-card):hover :is(.pf-svc-ic,.sv-ic,.uc-ic,.seo-svc-ic,.why-ic,.ic){
+  background:#fff;color:#160C51;box-shadow:0 0 0 4px rgba(165,177,255,.14),0 16px 34px -12px rgba(165,177,255,.6);
+}
+@media (prefers-reduced-motion:reduce){
+  :root .btn,:root .btn>.lucide,:root :is(.pf-svc-ic,.sv-ic,.uc-ic,.ic){transition:none}
+}
