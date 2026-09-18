@@ -1,9 +1,11 @@
 /* MakeFlow SEO theme.
-   Loaded after index.css and overrides it. Grey paper, white cards, black
-   pills, one electric-blue accent, a serif-italic accent word, and a soft
-   blue/violet blob as the only decoration. CMS colour vars (--ink, --cyan …)
-   are set inline by store/site.jsx, so anything that must hold regardless of
-   the admin palette uses the --mf-* tokens below. */
+   Loaded after index.css and overrides it. Soft gradient paper, white cards,
+   the brand blue/violet gradient carried through nav, buttons, icon tiles and
+   every section ground, a serif-italic accent word (kept flat for legibility),
+   and the ink gradient for dark hero moments (footer, CTA, auth, chat).
+   CMS colour vars (--ink, --cyan …) are set inline by store/site.jsx, so
+   anything that must hold regardless of the admin palette uses the --mf-*
+   tokens below. */
 
 :root{
   --mf-bg:#F5F6FF; --mf-card:#FFFFFF; --mf-card-2:#F9FAFF;
@@ -17,7 +19,9 @@
   --tint:#F3F4FF; --tint-2:#EEF0FF; --line:rgba(22,12,81,.08); --line-2:rgba(22,12,81,.14);
   --ordinal:#5B6EF0; --ordinal-strong:#5B6EF0;
   --text-2:#4E4880; --text-3:#6B6790;
-  --ink-grad:#160C51;
+  --ink-grad:linear-gradient(160deg,#1D1264 0%,#160C51 55%,#0F0A3A 100%);
+  --grad:linear-gradient(160deg,#C5CBFF 0%,#8B9BFB 55%,#5B6EF0 100%);
+  --grad-btn:linear-gradient(150deg,#4657D6,#5B6EF0 55%,#7287FA);
   --shadow:var(--mf-sh); --shadow-lg:var(--mf-sh-lg);
   --r:20px; --r-lg:28px; --r-sm:14px;
   --font-d:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -56,12 +60,12 @@ h3,h4{letter-spacing:-.045em;line-height:1.3}
 .btn{font-family:var(--font-b);font-weight:500;letter-spacing:-.01em;transition:transform .2s var(--ease),background-color .2s,box-shadow .2s,color .2s}
 .btn-grad,.btn-primary,
 .hero .btn-grad,.page-hero .btn-grad,.checker .btn-grad,.why-ai .btn-grad,.hero-ctas .btn-grad{
-  background-image:none;background-color:var(--mf-ink);color:#fff;border:0;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 1px 2px rgba(22,12,81,.2),0 12px 28px -14px rgba(22,12,81,.55)}
+  background-image:var(--grad-btn);background-color:#5B6EF0;color:#fff;border:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 1px 2px rgba(22,12,81,.2),0 14px 30px -14px rgba(70,87,214,.6)}
 .btn-grad:hover,.btn-primary:hover,.nav .btn-primary:hover,
 .hero .btn-grad:hover,.page-hero .btn-grad:hover,.checker .btn-grad:hover,.why-ai .btn-grad:hover,.hero-ctas .btn-grad:hover{
-  background-image:none;background-color:#262626;transform:translateY(-2px);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 2px 4px rgba(22,12,81,.2),0 18px 36px -16px rgba(22,12,81,.6)}
+  background-image:var(--grad-btn);filter:brightness(1.08);transform:translateY(-2px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 2px 4px rgba(22,12,81,.2),0 20px 40px -16px rgba(70,87,214,.68)}
 .btn-ghost,.btn-outline,.hero .btn-ghost,.page-hero .btn-ghost{
   background-image:none;background-color:var(--mf-card);color:var(--mf-ink);border:1px solid var(--mf-line);
   box-shadow:0 1px 2px rgba(22,12,81,.04),0 8px 20px -14px rgba(22,12,81,.25);backdrop-filter:none}
@@ -73,7 +77,8 @@ h3,h4{letter-spacing:-.045em;line-height:1.3}
 
 /* ---------- Nav ---------- */
 .nav .wrap,.nav.scrolled .wrap{
-  background:rgba(255,255,255,.86);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);
+  background:linear-gradient(135deg,rgba(255,255,255,.92) 0%,rgba(238,240,255,.86) 100%);
+  backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);
   border-radius:999px;box-shadow:0 0 0 1px var(--mf-line),0 10px 30px -22px rgba(22,12,81,.35)}
 .nav-links a{color:#3A3374;font-weight:500}
 .nav-links a:hover{color:var(--mf-ink)}
@@ -165,10 +170,11 @@ h3,h4{letter-spacing:-.045em;line-height:1.3}
   .hero-side{flex:1 1 500px;max-width:520px}
 }
 
-/* ---------- Sections: one grey ground, no lavender washes ---------- */
+/* ---------- Sections: one soft gradient ground, brand-tinted ---------- */
 .section,.seo-svcs,.work,.measure,#faq,#faq+.section,
 .plans-sec,.plans-faq,.plans-cta-sec,.uc-industry,.uc-outcome,.uc-scenarios,.uc-faq,.uc-cta-sec,
-.sv-disciplines,.sv-catalog,.sv-process,.sv-faq,.sv-cta-sec,.about-story,.about-beliefs,.about-cta-sec{background:var(--mf-bg)}
+.sv-disciplines,.sv-catalog,.sv-process,.sv-faq,.sv-cta-sec,.about-story,.about-beliefs,.about-cta-sec{
+  background:linear-gradient(180deg,#F5F6FF 0%,#EEF0FF 55%,#F5F6FF 100%)}
 .checker::before,.checker::after,.measure::before,.measure::after,#faq::before,#faq::after,#faq+.section::after,
 .plans-sec::before,.plans-sec::after,.plans-faq::before,.plans-faq::after,.plans-cta-sec::before,.plans-cta-sec::after,
 .uc-industry::before,.uc-industry::after,.uc-outcome::before,.uc-outcome::after,.uc-scenarios::before,.uc-scenarios::after,
@@ -195,9 +201,9 @@ h3,h4{letter-spacing:-.045em;line-height:1.3}
 .seo-svcs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .seo-svc{display:flex;flex-direction:column;padding:26px;transition:transform .25s var(--ease),box-shadow .25s}
 .seo-svc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px}
-.seo-svc-ic,.why-ic,.uc-ic,.sv-disc .ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--mf-bg);color:var(--mf-ink);border:0}
+.seo-svc-ic,.why-ic,.uc-ic,.sv-disc .ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(160deg,#EEF0FF,#DDE1FF);color:var(--mf-ink);border:0}
 .seo-svc-ic .svg,.why-ic .svg{width:20px;height:20px}
-.seo-svc:hover .seo-svc-ic{background:var(--mf-ink);color:#fff}
+.seo-svc:hover .seo-svc-ic{background-image:var(--grad-btn);background-color:#5B6EF0;color:#fff}
 .seo-svc-n{font-size:13px;font-weight:500;color:var(--mf-mute);font-variant-numeric:tabular-nums}
 .seo-svc h3{font-size:20px;margin-bottom:8px}
 .seo-svc p{font-size:14.5px;line-height:1.6;color:var(--mf-body)}
@@ -256,7 +262,7 @@ h3,h4{letter-spacing:-.045em;line-height:1.3}
 .check-pts li .svg{color:var(--mf-blue)}
 
 /* Measure */
-.measure-art{background:#160C51}
+.measure-art{background:var(--ink-grad)}
 .measure-art-grid{opacity:.5}
 .measure-art-glow{background:radial-gradient(50% 44% at 22% 16%,rgba(60,75,255,.55),transparent 66%),radial-gradient(46% 40% at 86% 90%,rgba(155,107,255,.45),transparent 66%)}
 .measure-scan-grid span.on{background:linear-gradient(160deg,#7C88FF,#5B6EF0)}
@@ -270,9 +276,9 @@ h3,h4{letter-spacing:-.045em;line-height:1.3}
 .faq details:hover{box-shadow:0 0 0 1px var(--mf-line-2),var(--mf-sh)}
 .faq summary{font-weight:500;letter-spacing:-.01em}
 .faq summary:hover{color:var(--mf-ink)}
-.faq-i{background:var(--mf-bg);color:var(--mf-ink)}
-.faq summary:hover .faq-i{background:#E4E4E4}
-.faq details[open] .faq-i,.faq details[open] summary:hover .faq-i{background:var(--mf-ink);color:#fff}
+.faq-i{background:linear-gradient(160deg,#EEF0FF,#DDE1FF);color:var(--mf-ink)}
+.faq summary:hover .faq-i{background:linear-gradient(160deg,#DDE1FF,#C5CBFF)}
+.faq details[open] .faq-i,.faq details[open] summary:hover .faq-i{background-image:var(--grad-btn);background-color:#5B6EF0;color:#fff}
 .faq details p{color:var(--mf-body)}
 
 /* Final CTA: the one dark moment on the page. */
@@ -290,12 +296,13 @@ h3,h4{letter-spacing:-.045em;line-height:1.3}
 .cta-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
 
 /* Footer */
-footer{background:#160C51}
+footer{background:var(--ink-grad)}
 .foot-mail .svg,.foot-ai .svg{color:#AEB5FF}
 .foot-mark{color:rgba(255,255,255,.05)}
 
 /* ---------- Sub-page heroes: light, not navy ---------- */
-.page-hero,.plans-hero,.uc-hero,.sv-hero,.about-hero,.nf-hero,.legal-hero{background:var(--mf-bg);color:var(--mf-ink)}
+.page-hero,.plans-hero,.uc-hero,.sv-hero,.about-hero,.nf-hero,.legal-hero{
+  background:radial-gradient(120% 60% at 50% 0%,#DDE1FF 0%,transparent 60%),linear-gradient(180deg,#F5F6FF 0%,#EEF0FF 100%);color:var(--mf-ink)}
 .page-hero h1{color:var(--mf-ink);letter-spacing:-.06em;font-weight:600;max-width:18ch}
 .page-hero p.lead{color:var(--mf-body)}
 .page-hero .hero-alt{color:var(--mf-mute)}
@@ -304,22 +311,22 @@ footer{background:#160C51}
 .page-hero .hero-glow,.page-hero .hero-grid{display:none}
 
 /* Sub-page details that carried the old palette */
-.plan-featured{background:var(--mf-ink);color:#fff;box-shadow:var(--mf-sh-lg)}
+.plan-featured{background:var(--ink-grad);color:#fff;box-shadow:var(--mf-sh-lg)}
 .plan-featured::before{display:none}
 .plan-featured h3,.plan-featured .plan-price,.plan-featured strong{color:#fff}
 .plan-featured p,.plan-featured li{color:rgba(255,255,255,.74)}
-.uc-card-cta{background:var(--mf-ink);box-shadow:var(--mf-sh-lg)}
+.uc-card-cta{background:var(--ink-grad);box-shadow:var(--mf-sh-lg)}
 .uc-card-cta h3{color:#fff}
 .sv-disc-on{box-shadow:0 0 0 2px var(--mf-ink),var(--mf-sh)}
 .sv-step-n{font-family:var(--font-d);font-weight:600;color:#DCDFFB}
 .about-step::before{background:var(--mf-ink);box-shadow:0 0 0 4px var(--mf-bg)}
 .legal h2,.legal h3{color:var(--mf-ink)}
 .legal a{color:var(--mf-blue)}
-.auth-art{background:#160C51}
+.auth-art{background:var(--ink-grad)}
 .auth-art::after{background:linear-gradient(180deg,rgba(22,12,81,.2),rgba(22,12,81,.9))}
 
 /* Chat widget */
-.chat-fab,.chat-head{background:#160C51}
+.chat-fab,.chat-head{background:var(--ink-grad)}
 
 /* ---------- Portfolio (Cohesion reference) ---------- */
 .pf-hero{min-height:auto;padding:150px 0 110px;display:block;background:
