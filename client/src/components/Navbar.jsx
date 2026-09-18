@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
+  Briefcase,
   Building2,
   CalendarCheck,
   Gem,
@@ -38,7 +39,7 @@ export default function Navbar({ variant = 'landing' }) {
   const bookLabel = bookCall.label || 'Book a call';
   const bookExternal = /^https?:\/\//i.test(bookUrl);
   const bookProps = bookExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {};
-  const dark = variant === 'landing';
+  const dark = false;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30 || variant === 'report');
@@ -62,9 +63,9 @@ export default function Navbar({ variant = 'landing' }) {
         <div className="wrap">
           <Logo />
           <nav className="nav-links">
+            <Link to="/#measure">AI Visibility</Link>
             <Link to="/services">Services</Link>
             <Link to="/use-cases">Use cases</Link>
-            <Link to="/plans">Plans</Link>
             <Link to="/about">About</Link>
           </nav>
           <div className="nav-actions">
@@ -122,6 +123,9 @@ export default function Navbar({ variant = 'landing' }) {
         )}
         <Link to="/services">
           <Sparkles className="lucide svg" /> Services
+        </Link>
+        <Link to="/#measure" onClick={() => setOpen(false)}>
+          <Briefcase className="lucide svg" /> AI Visibility
         </Link>
         <Link to="/use-cases">
           <Building2 className="lucide svg" /> Use cases

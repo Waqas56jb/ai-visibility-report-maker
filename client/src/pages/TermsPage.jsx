@@ -42,8 +42,8 @@ export default function TermsPage() {
               <h2>The service</h2>
               <p>
                 {brand} provides an AI visibility report that checks how businesses appear in
-                answers from AI assistants, plus AI automation services (chatbots, voice agents,
-                workflow automation, integrations) delivered as separate paid engagements. The free
+                answers from AI assistants, plus SEO services (technical SEO, local SEO, on-page and
+                content work, AEO and GEO) delivered as separate paid engagements. The free
                 report is provided as a snapshot at a point in time — see Report accuracy below.
               </p>
 

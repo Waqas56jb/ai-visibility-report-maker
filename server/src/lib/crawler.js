@@ -347,6 +347,31 @@ export async function crawlWebsite(website) {
     home = await fetchLimited(httpUrl).catch(() => home);
   }
 
+  // A plain fetch() with our bot UA can be blocked by Cloudflare/WAF-style
+  // bot protection even when the site is perfectly reachable to a real
+  // browser. Retry once with a headless browser before writing the site off
+  // as "blocked" (which otherwise hard-codes a 0 readability score for a
+  // site that may just be bot-shy, not actually broken).
+  if (!home.ok || home.status >= 400) {
+    let browser;
+    try {
+      const { chromium } = await import('playwright');
+      browser = await chromium.launch({ headless: true });
+      const page = await browser.newPage({
+        userAgent:
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+      });
+      const resp = await page.goto(fetchUrl, { timeout: 15000, waitUntil: 'domcontentloaded' });
+      if (resp && resp.status() < 400) {
+        home = { ok: true, status: resp.status(), text: await page.content(), url: page.url() };
+      }
+    } catch {
+      // Leave `home` as-is; falls through to the blocked path below.
+    } finally {
+      await browser?.close().catch(() => {});
+    }
+  }
+
   if (!home.ok || home.status >= 400) {
     const blocked = {
       domain,
@@ -407,16 +432,19 @@ export async function crawlWebsite(website) {
   const rawWords = homePage.word_count;
   let renderedWords = rawWords;
   if (rawWords < 200) {
+    let browser;
     try {
       const { chromium } = await import('playwright');
-      const browser = await chromium.launch({ headless: true });
+      browser = await chromium.launch({ headless: true });
       const page = await browser.newPage();
       await page.goto(home.url, { timeout: 15000, waitUntil: 'domcontentloaded' });
       const txt = await page.evaluate(() => document.body?.innerText || '');
       renderedWords = txt.split(/\s+/).filter(Boolean).length;
-      await browser.close();
     } catch {
       renderedWords = Math.max(rawWords, 1);
+    } finally {
+      // A failed page load must not leave a headless browser running.
+      await browser?.close().catch(() => {});
     }
   }
   const serverRendered = rawWords / Math.max(renderedWords, 1);

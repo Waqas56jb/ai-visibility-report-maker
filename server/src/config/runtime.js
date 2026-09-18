@@ -2,7 +2,10 @@ import { supabase } from '../supabase.js';
 import { applyEngineOverlay, settings } from './env.js';
 import { WEIGHTS } from './weights.js';
 import { EXCLUDED_NAMES } from './exclusions.js';
-import { SERVICES } from './services.js';
+import { SERVICES, SERVICE_KEYS } from './services.js';
+
+// Captured before any saved overlay, so stale non-SEO services in the DB are ignored.
+const SEO_SERVICE_KEYS = [...SERVICE_KEYS];
 import { defaultSite, mergeSite } from './site.js';
 
 export const WEIGHT_DEFS = [
@@ -81,6 +84,20 @@ export function defaultSettingsPayload() {
   };
 }
 
+// The SEO relaunch retired the old agency copy (automation, chatbots, voice, CRM).
+// A stored site saved before it carries no edition mark and is ignored, so the SEO
+// defaults show; every save from here on is stamped, so admin edits still apply.
+export const SITE_EDITION = 'seo';
+
+export function liveSite(row) {
+  return row?.site?.edition === SITE_EDITION ? row.site : null;
+}
+
+export function liveServices(row, fallback) {
+  const list = Array.isArray(row?.services) ? row.services.filter((s) => SEO_SERVICE_KEYS.includes(s?.key)) : [];
+  return list.length ? list : fallback;
+}
+
 export function applySaved(row = {}) {
   if (Array.isArray(row.weights)) {
     for (const w of row.weights) {
@@ -104,7 +121,7 @@ export function applySaved(row = {}) {
   }
   if (Array.isArray(row.services)) {
     for (const svc of row.services) {
-      if (!svc?.key) continue;
+      if (!svc?.key || !SEO_SERVICE_KEYS.includes(svc.key)) continue;
       SERVICES[svc.key] = {
         name: svc.name || svc.key,
         description: svc.description || '',
@@ -135,10 +152,10 @@ export async function saveAdminSettings(patch = {}) {
   }
   const next = {
     weights: patch.weights || existing.weights || defaults.weights,
-    services: patch.services || existing.services || defaults.services,
+    services: liveServices(patch, null) || liveServices(existing, defaults.services),
     engine: { ...defaults.engine, ...(existing.engine || {}), ...(patch.engine || {}) },
     limits: normalizeLimits({ ...(existing.limits || {}), ...(patch.limits || {}) }),
-    site: mergeSite(defaults.site, existing.site, patch.site),
+    site: { ...mergeSite(defaults.site, liveSite(existing), patch.site), edition: SITE_EDITION },
     updated_at: new Date().toISOString(),
   };
   applySaved(next);
@@ -153,7 +170,7 @@ export async function publicSitePayload() {
     const { data, error } = await supabase.from('admin_settings').select('site, updated_at').eq('id', 'default').maybeSingle();
     if (error) throw error;
     return {
-      ...mergeSite(defaults, data?.site),
+      ...mergeSite(defaults, liveSite(data)),
       updated_at: data?.updated_at || null,
     };
   } catch (err) {

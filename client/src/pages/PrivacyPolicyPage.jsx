@@ -34,7 +34,7 @@ export default function PrivacyPolicyPage() {
           <div className="wrap">
             <Reveal className="legal">
               <p>
-                {brand} ("we", "us", "our") builds AI visibility reports and AI automation systems
+                {brand} ("we", "us", "our") provides SEO services and free search and AI visibility reports
                 for businesses. This policy explains what we collect when you use our website or
                 run a report, why we collect it, and what we do with it.
               </p>

@@ -22,22 +22,22 @@ const INDUSTRIES = [
   {
     icon: Wrench,
     title: 'Local & home services',
-    body: '"Best electrician in Brisbane" is an AI question now, not a Google one. We ask it the way your customers actually phrase it and show you whether ChatGPT names you or the franchise up the road.',
+    body: '"Best electrician in Brisbane" is an AI question now, not a Google one. I ask it the way your customers actually phrase it and show you whether ChatGPT names you or the franchise up the road.',
   },
   {
     icon: Stethoscope,
     title: 'Clinics & allied health',
-    body: 'Patients ask an assistant who to see before they ask a friend. We test the treatment and suburb questions that bring new patients in, and show which ones return someone else.',
+    body: 'Patients ask an assistant who to see before they ask a friend. I test the treatment and suburb questions that bring new patients in, and show which ones return someone else.',
   },
   {
     icon: Scale,
     title: 'Professional services',
-    body: 'Law, accounting, consulting. Trust decisions start with "who should I hire?" We show whether the answer contains your name, and whether the reasoning behind it is right about you.',
+    body: 'Law, accounting, consulting. Trust decisions start with "who should I hire?" I show whether the answer contains your name, and whether the reasoning behind it is right about you.',
   },
   {
     icon: UtensilsCrossed,
     title: 'Hospitality & venues',
-    body: 'Menus stuck in PDFs and a story that lives only on Instagram give AI nothing to cite. We check what it can actually read on your site, and what it says when someone asks where to eat.',
+    body: 'Menus stuck in PDFs and a story that lives only on Instagram give AI nothing to cite. I check what it can actually read on your site, and what it says when someone asks where to eat.',
   },
   {
     icon: Building2,
@@ -104,7 +104,7 @@ const FAQS = [
   },
   {
     q: 'Are the example scenarios real customers?',
-    a: 'No, and we label them as illustrative on purpose. They are composites built from the patterns the report keeps finding: a blocked crawler, a menu trapped in a PDF, a firm named last instead of first. We would rather show you the shape of the problem than invent a testimonial.',
+    a: 'No, and I label them as illustrative on purpose. They are composites built from the patterns the report keeps finding: a blocked crawler, a menu trapped in a PDF, a firm named last instead of first. I would rather show you the shape of the problem than invent a testimonial.',
   },
   {
     q: 'How is this different from an SEO audit?',
@@ -120,7 +120,7 @@ const FAQS = [
   },
   {
     q: 'I have the report. What do I do with it?',
-    a: 'The report is the diagnosis. Fixing it is AEO, GEO, technical work on the site, or all three, depending on what it found. Our services page walks through what each of those actually involves.',
+    a: 'The report is the diagnosis. Fixing it is AEO, GEO, technical work on the site, or all three, depending on what it found. The services page walks through what each of those actually involves.',
   },
 ];
 
@@ -144,7 +144,7 @@ export default function UseCasesPage() {
           <div className="wrap">
             <Reveal className="page-hero-in">
               <span className="eyebrow">Use cases</span>
-              <h1>Wherever your customers ask AI, you should be the answer.</h1>
+              <h1>Wherever your customers search, you should be the answer.</h1>
               <p className="lead">
                 The report is the same for everyone. What it finds is not. Here is what businesses
                 like yours tend to discover when they run it for the first time.
@@ -166,7 +166,7 @@ export default function UseCasesPage() {
               <p className="hero-alt">
                 Already know what needs fixing?{' '}
                 <Link to="/services">
-                  See what we build <ArrowRight className="lucide svg" />
+                  See what I do <ArrowRight className="lucide svg" />
                 </Link>
               </p>
             </Reveal>

@@ -55,7 +55,7 @@ export default function Journey() {
             <h4>
               We fix it <ArrowRight className="lucide svg go" />
             </h4>
-            <p>AI Search Optimisation, chatbots or automation. Book a call and we get to work.</p>
+            <p>SEO, AEO and GEO work on your site. Book a call and I get to work.</p>
           </div>
         </Reveal>
       </div>

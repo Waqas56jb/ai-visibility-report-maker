@@ -62,7 +62,7 @@ export default function Dashboard() {
           <h2>Your AI visibility at a glance</h2>
           <p className="muted">Your scores, businesses and latest ChatGPT tests, all in one place.</p>
         </div>
-        <Link to="/app/new" className="btn btn-grad">
+        <Link to="/app/new" className="btn btn-grad btn-lead">
           <Sparkles className="lucide svg" /> Run new report
         </Link>
       </div>

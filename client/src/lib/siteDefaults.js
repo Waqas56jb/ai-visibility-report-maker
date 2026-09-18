@@ -1,11 +1,11 @@
 export const DEFAULT_THEME = {
-  ink: '#160C51',
-  ink2: '#3A3374',
-  paper: '#F5F6FF',
-  text: '#160C51',
-  cyan: '#5B6EF0',
-  indigo: '#7287FA',
-  violet: '#7C3AED',
+  ink: '#0A0A0A',
+  ink2: '#3D3D3D',
+  paper: '#F0F0F0',
+  text: '#0A0A0A',
+  cyan: '#2A2AE8',
+  indigo: '#3C4BFF',
+  violet: '#7B5CFF',
   coral: '#E0544A',
   amber: '#D08A1F',
   mint: '#16A34A',
@@ -13,21 +13,21 @@ export const DEFAULT_THEME = {
 
 export const DEFAULT_CONTENT = {
   brandName: 'MakeFlow',
-  documentTitle: 'MakeFlow | AI Automation & AI Visibility for Australian Businesses',
-  navCta: 'Check my visibility',
+  documentTitle: 'MakeFlow | SEO Agency for Australian Businesses: Google, AI Overviews & ChatGPT',
+  navCta: 'Free SEO check',
   bookCall: {
     label: 'Book a call',
     url: 'https://cal.com/isuruabhishek/30min',
   },
-  strip: 'Tested against ChatGPT, the assistant your customers actually use',
+  strip: 'SEO for Google, AI Overviews and ChatGPT',
   cities: ['Brisbane', 'Sydney', 'Melbourne', 'Perth', 'Adelaide', 'Gold Coast', 'Newcastle', 'Canberra'],
   hero: {
-    eyebrow: 'Free AI Visibility Report · Tested against ChatGPT',
+    eyebrow: 'SEO agency · Australia',
     headline: 'When customers ask ChatGPT, does it',
     highlight: 'say your name?',
     lead:
-      'Every day, customers ask AI who they should trust. MakeFlow finds where AI leaves you out, fills the gaps with the right content, and keeps you in the answer, across every engine, every day.',
-    ctaPrimary: 'Run my free report',
+      'MakeFlow is an SEO agency. We get Australian businesses ranked on Google, cited in AI Overviews and named by ChatGPT, starting with a free visibility report that shows exactly where you stand.',
+    ctaPrimary: 'Get my free report',
     stat1n: '40+',
     stat1l: 'real questions tested',
     stat2n: '2 modes',
@@ -36,101 +36,90 @@ export const DEFAULT_CONTENT = {
     stat3l: 'to your score & PDF',
   },
   checker: {
-    eyebrow: 'Run the check',
+    eyebrow: 'Free visibility report',
     title: 'Three details and you have your score',
     lead:
-      'Tell us who you are and where your site lives. We crawl it, test real customer questions against ChatGPT, then send your AI visibility report. Free.',
-    formTitle: 'Check your AI visibility',
+      'Tell us who you are and where your site lives. We crawl it, test real customer questions against ChatGPT, then send your visibility report. Free.',
+    formTitle: 'Check your search visibility',
     formSub: 'Takes about 3 minutes. One free report per email every 30 days.',
-    submit: 'Run my free report',
+    submit: 'Get my free report',
   },
-  servicesEyebrow: 'How MakeFlow helps',
-  servicesTitle: 'Every gap maps to a fix we deliver',
-  servicesLead: 'Your report ends with a plan. These are the services behind that plan.',
+  servicesEyebrow: 'What we do',
+  servicesTitle: 'SEO for how people search now',
+  servicesLead: 'Your report ends with a plan. These are the SEO services behind it.',
   services: [
     {
-      title: 'AI Search Optimisation',
-      body: 'Schema, llms.txt, crawler access, FAQ and service pages written so AI systems can read, trust and cite you.',
+      title: 'Technical SEO',
+      body: 'Speed, crawlability, indexing, schema and site structure fixed so Google and AI crawlers can read every page.',
+      img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+    },
+    {
+      title: 'Local SEO',
+      body: 'Google Business Profile, local pages, reviews and citations that put you in the map pack for your suburb and city.',
+      img: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80',
+    },
+    {
+      title: 'AEO & GEO',
+      body: 'Answer-first content and a consistent entity across the web, so AI Overviews and ChatGPT cite you by name.',
       img: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      title: 'AI Chatbots',
-      body: 'Custom assistants on your site and WhatsApp that answer questions, qualify leads and take bookings, trained on your own content.',
-      img: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      title: 'AI Automation',
-      body: 'Lead routing, review collection and content pipelines that keep your visibility improving without manual work.',
-      img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
     },
   ],
   servicesPage: {
-    eyebrow: 'What we do',
-    title: 'Nine ways we put AI to work for you',
+    eyebrow: 'SEO services',
+    title: 'SEO for Google, and for the AI answers above it',
     lead:
-      'The visibility report tells you where you stand. These are the services behind the fix: answer engine optimisation, generative engine optimisation, automation and the sites we build them on.',
+      'We are an SEO agency and that is all we do. Technical, local, content, AEO and GEO: the work that gets you ranked, cited and recommended, measured before and after.',
     ctaEyebrow: 'Where to next',
-    ctaTitle: 'Tell us what you need built',
+    ctaTitle: 'Let’s look at your search visibility',
     ctaBody:
-      'A short call is enough to work out which of these fits, what it would cost and how long it takes. No pitch deck.',
+      'A 30-minute call is enough to walk your report, agree what to fix first and what it would cost. No pitch deck.',
     ctaButton: 'Book a call',
     items: [
       {
-        title: 'AI Visibility',
+        title: 'SEO Audit & AI Visibility',
         body:
-          'Get recommended by ChatGPT, Gemini and AI Overviews, not just ranked on Google. We measure where you stand today with the same report you can run for free, then fix what it finds.',
+          'Every engagement starts with evidence. A full technical and content audit, plus the same AI visibility report you can run for free, turned into one ranked fix list.',
+      },
+      {
+        title: 'Technical SEO',
+        body:
+          'The foundations search engines and AI crawlers depend on: speed, Core Web Vitals, crawlability, indexing, redirects, schema and clean site structure.',
+      },
+      {
+        title: 'Local SEO',
+        body:
+          'For businesses that serve a place. Google Business Profile, suburb and service-area pages, reviews and consistent citations that win the map pack.',
+      },
+      {
+        title: 'Content & On-page SEO',
+        body:
+          'Service pages, FAQs and articles written from your real expertise, mapped to the searches that bring in customers, with titles, headings and internal links done properly.',
       },
       {
         title: 'AEO: Answer Engine Optimisation',
         body:
-          'Search used to send you traffic. Answer engines just reply. AEO is the work of making your site the source that reply gets built from: clear, quotable answers to the questions your customers actually ask.',
+          'Search used to send you traffic. Answer engines just reply. AEO makes your site the source that reply is built from: clear, quotable answers to the questions your customers actually ask.',
       },
       {
         title: 'GEO: Generative Engine Optimisation',
         body:
-          'A generative model does not read one website, it reads the web\u2019s opinion of you. GEO is the wider game: a consistent entity, credible third-party mentions and a citation footprint that lands you inside the generated answer.',
-      },
-      {
-        title: 'AI Workflow Automation',
-        body:
-          'The repetitive work your team does by hand every week, running itself, connected end to end with AI-powered no-code tooling.',
-      },
-      {
-        title: 'AI Voice Agents',
-        body:
-          'A phone agent that picks up every call, answers the usual questions and books the appointment. Day, night and weekends.',
-      },
-      {
-        title: 'AI Chatbots',
-        body:
-          'Chat on your website and social channels that answers questions instantly and captures the lead before they click away.',
-      },
-      {
-        title: 'Lead & CRM Automation',
-        body:
-          'No enquiry slips through. Every lead is captured, followed up on a schedule, and logged in your CRM without anyone remembering to do it.',
-      },
-      {
-        title: 'Web Design & Development',
-        body:
-          'A fast, modern site built to be read by people and machines alike. Clean structure, real content in real HTML, schema from day one, so the AEO and GEO work has something solid to stand on.',
-      },
-      {
-        title: 'AI Integration & Custom Development',
-        body:
-          'AI built directly into the product you already have, or a new one built from scratch around it. Our deepest, most tailored engagement.',
+          'A generative model does not read one website, it reads the web’s opinion of you. GEO builds a consistent entity, credible third-party mentions and a citation footprint that lands you inside the answer.',
       },
     ],
   },
   faqEyebrow: 'FAQ',
-  faqTitle: 'Questions before you run it',
+  faqTitle: 'Questions before you start',
   faqs: [
     {
-      q: 'Which AI is this tested against?',
-      a: 'ChatGPT only, in two modes: with web browsing on, and from its own knowledge. We report both separately, so you can see which one carries you.',
+      q: 'What does MakeFlow actually do?',
+      a: 'SEO, and only SEO. Technical SEO, local SEO, content and on-page work, plus AEO and GEO so you show up in AI Overviews and ChatGPT as well as the normal Google results.',
     },
     {
-      q: 'How long does it take?',
+      q: 'Which AI is the free report tested against?',
+      a: 'ChatGPT, in two modes: with web browsing on, and from its own knowledge. We report both separately, so you can see which one carries you.',
+    },
+    {
+      q: 'How long does the report take?',
       a: 'Usually 2 to 3 minutes. We crawl your site, write 30 to 50 questions, run each one twice and score the answers. You watch it happen live, and we email you the link if you want it.',
     },
     {
@@ -138,20 +127,16 @@ export const DEFAULT_CONTENT = {
       a: 'Yes, a little. AI answers are never identical twice. Treat each score as a snapshot and watch the trend across runs rather than reading too much into one number.',
     },
     {
-      q: 'What if my site blocks crawlers?',
-      a: 'We still run the visibility test. The readiness score reflects what we could actually see, and the report names the crawler rules that are shutting AI systems out.',
-    },
-    {
       q: 'Is it really free?',
-      a: "Yes. One free report per email every 30 days. Fixing what it finds, whether that is schema, pages, listings or a chatbot, is MakeFlow's paid work.",
+      a: "Yes. One free report per email every 30 days. Fixing what it finds, whether that is technical SEO, content, local listings or schema, is MakeFlow's paid work.",
     },
     {
       q: 'What does the PDF include?',
-      a: 'Overall score, mention rate, position, citations, readiness, score by mode and category, competitor share of voice, your biggest gaps, what to do about them in order, and how MakeFlow can do that work. Set up for A4.',
+      a: 'Overall score, mention rate, position, citations, website readiness, score by mode and category, competitor share of voice, your biggest gaps and what to do about them in order. Set up for A4.',
     },
     {
-      q: 'Do you test Google, Perplexity or Gemini?',
-      a: 'Not in this product. We would rather do one engine properly than spread a thin score across five. ChatGPT is the one most Australian businesses hear about from their customers.',
+      q: 'How long does SEO take to work?',
+      a: 'Technical fixes and Google Business Profile changes often show within weeks. Content and authority build over months. AI knowledge mode is the slowest, because it depends on model training, and nobody can honestly promise a date for it.',
     },
     {
       q: 'Will you spam my email?',
@@ -160,12 +145,12 @@ export const DEFAULT_CONTENT = {
   ],
   cta: {
     eyebrow: 'Ready?',
-    title: 'Find out what ChatGPT says about you',
-    body: 'About two minutes to fill in the form and three to get your score back.',
-    button: 'Run my free report',
+    title: 'Find out where you stand in search',
+    body: 'Run the free report, or book a call and we will walk you through what to fix first.',
+    button: 'Get my free report',
   },
   footerBlurb:
-    'Australian AI studio. We make businesses visible in AI search, then build the chatbots and automations that turn it into customers.',
+    'Australian SEO agency. We get businesses ranked on Google, cited in AI Overviews and named by ChatGPT.',
 };
 
 export function defaultSite() {

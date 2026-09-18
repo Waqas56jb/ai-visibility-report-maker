@@ -1,23 +1,25 @@
+// SEO only. Keys are what the recommendations model tags each fix with; the
+// admin panel can rename a service but not add non-SEO ones (see applySaved).
 export const SERVICES = {
+  technical: {
+    name: 'Technical SEO',
+    description: 'Crawling, indexing, speed and schema fixed so Google and AI crawlers can read every page.',
+    cta: 'https://makeflow.com.au/services',
+  },
+  local: {
+    name: 'Local SEO',
+    description: 'Google Business Profile, reviews and suburb pages that win the map pack.',
+    cta: 'https://makeflow.com.au/services',
+  },
+  content: {
+    name: 'On-page & content SEO',
+    description: 'Service pages, FAQs and on-page structure written around what customers actually search.',
+    cta: 'https://makeflow.com.au/services',
+  },
   aiso: {
-    name: 'AI Search Optimisation',
-    description: 'Make your site readable, trustworthy and citable by AI systems.',
-    cta: 'https://makeflow.com.au/contact?s=aiso',
-  },
-  chatbot: {
-    name: 'AI Chatbots',
-    description: 'Turn AI-referred visitors into booked calls.',
-    cta: 'https://makeflow.com.au/contact?s=chatbot',
-  },
-  automation: {
-    name: 'AI Automation',
-    description: 'Reviews, listings and content on autopilot.',
-    cta: 'https://makeflow.com.au/contact?s=automation',
-  },
-  custom: {
-    name: 'Custom AI Solutions',
-    description: 'Anything else the report uncovered.',
-    cta: 'https://makeflow.com.au/contact',
+    name: 'AEO & GEO',
+    description: 'Get named in AI Overviews, ChatGPT and Perplexity answers, not just ranked on Google.',
+    cta: 'https://makeflow.com.au/services',
   },
 };
 

@@ -10,6 +10,7 @@ import TermsPage from './pages/TermsPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import CheckerModal from './components/CheckerModal.jsx';
 import ChatWidget from './components/ChatWidget.jsx';
+import Motion3D from './components/Motion3D.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
 import ForgotPassword from './pages/ForgotPassword.jsx';
@@ -69,6 +70,7 @@ export default function App() {
       <BrowserRouter>
         <AuthBoot />
         <ScrollToTop />
+        <Motion3D />
         <a className="skip-link" href="#main">Skip to content</a>
         <Routes>
           <Route path="/" element={<PageFade><Landing /></PageFade>} />

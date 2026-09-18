@@ -3,7 +3,6 @@ import api from '../../api/index.js';
 import Button from '../../components/ui/Button.jsx';
 import Input from '../../components/ui/Input.jsx';
 import Select from '../../components/ui/Select.jsx';
-import Skeleton from '../../components/ui/Skeleton.jsx';
 import EmptyState from '../../components/ui/EmptyState.jsx';
 import CompetitorTable from '../../components/report/CompetitorTable.jsx';
 import { useToast } from '../../lib/toast.jsx';

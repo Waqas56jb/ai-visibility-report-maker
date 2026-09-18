@@ -177,7 +177,7 @@ export default function CheckerForm({ autoFocus = false, onLeave }) {
             </div>
           </div>
         </div>
-        <button className="btn btn-grad form-submit" type="submit">
+        <button className="btn btn-grad form-submit btn-lead" type="submit">
           <Zap className="lucide svg" /> Generate my report
         </button>
         <p className="fine">

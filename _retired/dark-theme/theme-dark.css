@@ -1,0 +1,125 @@
+/* Deep-ink marketing theme.
+   The whole public site takes the look of the final CTA card: ink-navy
+   ground, a soft blue glow, white type, white pill buttons and glassy cards.
+   Scoped to html.mf-dark (set by ThemeScope in App.jsx), so the app, auth
+   screens and shared reports keep the light theme underneath. */
+
+html.mf-dark{
+  --mf-bg:#0F0A3A; --mf-card:rgba(255,255,255,.045); --mf-card-2:rgba(255,255,255,.07);
+  --mf-ink:#FFFFFF; --mf-body:#B9B6DD; --mf-mute:#8F8BBA;
+  --mf-line:rgba(255,255,255,.09); --mf-line-2:rgba(255,255,255,.14);
+  --mf-blue:#A5B1FF; --mf-violet:#8B9BFB;
+  --mf-sh:inset 0 0 0 1px rgba(255,255,255,.08),0 24px 60px -30px rgba(0,0,0,.6);
+  --mf-sh-lg:inset 0 0 0 1px rgba(255,255,255,.1),0 40px 90px -40px rgba(0,0,0,.7);
+  --tint:rgba(255,255,255,.05); --tint-2:rgba(255,255,255,.08);
+  --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.14);
+  --text-2:#B9B6DD; --text-3:#8F8BBA; --ordinal:#A5B1FF; --ordinal-strong:#A5B1FF;
+  --glass:rgba(255,255,255,.045);
+  --glass-line:rgba(255,255,255,.1);
+  color-scheme:dark;
+  background:#0F0A3A;
+  scrollbar-color:#3A3374 #0F0A3A;
+}
+html.mf-dark body{
+  color:#fff;
+  background:
+    radial-gradient(60% 50% at 85% 0%,rgba(91,110,240,.28),transparent 70%),
+    radial-gradient(50% 40% at 0% 35%,rgba(114,135,250,.16),transparent 70%),
+    radial-gradient(55% 45% at 100% 70%,rgba(91,110,240,.18),transparent 70%),
+    linear-gradient(180deg,#140C4E 0%,#0F0A3A 40%,#0C0831 100%);
+  background-attachment:fixed;
+}
+html.mf-dark ::selection{background:#C5CBFF;color:#160C51}
+
+/* Section grounds go transparent so the one page glow runs behind everything. */
+html.mf-dark :is(.hero,.page-hero,.plans-hero,.uc-hero,.sv-hero,.about-hero,.nf-hero,.legal-hero,
+  .why-ai,.checker,.faq-i,.sv-disciplines,.sv-catalog,.sv-process,.sv-faq,.sv-cta-sec,
+  .about-story,.about-beliefs,.about-cta-sec,.section){background:transparent}
+
+/* Type */
+html.mf-dark :is(h1,h2,h3,h4){color:#fff}
+html.mf-dark .hl{color:#C5CBFF}
+html.mf-dark :is(p,li){color:inherit}
+html.mf-dark :is(.muted,.section-head p,.pf-lead,.pf-role){color:var(--mf-body)}
+html.mf-dark .pf-role b{color:#fff}
+
+/* Glass cards: every white panel becomes a faint white-on-ink card. */
+html.mf-dark :is(.badge,.pf-status,.pf-skill,.pf-step,.pf-q-card,.hero-chips-track span,
+  .call-card,.check-band,.faq-item,.faq details,.plan,.plan-card,.sv-disc,.uc-card,.about-card,
+  .work-tags span,.page-hero .hero-pills span){
+  background:var(--glass);color:#fff;box-shadow:inset 0 0 0 1px var(--glass-line);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+}
+html.mf-dark .pf-svc:hover{background:rgba(255,255,255,.04)}
+html.mf-dark .eyebrow{background:rgba(255,255,255,.08);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+html.mf-dark .pf-step::before{background:linear-gradient(90deg,#C5CBFF,#5B6EF0)}
+html.mf-dark .pf-step-n,html.mf-dark .pf-weight{color:#A5B1FF}
+
+/* Hero portrait: a halo of the brand gradient behind the photo. */
+html.mf-dark .portrait{box-shadow:0 0 0 1px rgba(255,255,255,.14),0 50px 120px -30px rgba(91,110,240,.55)}
+html.mf-dark .pf-skill{color:#fff}
+
+/* The rotating-question card reads as a spotlight, like the CTA. */
+html.mf-dark .pf-q-card{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 50px 110px -50px rgba(0,0,0,.8)}
+html.mf-dark .pf-q-card::before{background:radial-gradient(50% 50% at 50% 50%,rgba(91,110,240,.45),transparent 70%)}
+html.mf-dark .pf-q{color:#fff}
+html.mf-dark .pf-slot-hl{color:#A5B1FF}
+
+/* Comparison: the "them" card fades back, "me" gets the gradient glow. */
+html.mf-dark .pf-cmp{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 50px 110px -50px rgba(0,0,0,.8)}
+html.mf-dark .pf-cmp-row>span,html.mf-dark .pf-cmp-row{border-color:rgba(255,255,255,.09)}
+html.mf-dark .pf-cmp-them-h,html.mf-dark .pf-cmp-them{color:#9E9AC8}
+html.mf-dark .pf-cmp-area{color:rgba(255,255,255,.6)}
+html.mf-dark .pf-cmp-me-h{background:rgba(165,177,255,.16)}
+html.mf-dark .pf-cmp-me{background:rgba(165,177,255,.08);color:#fff}
+html.mf-dark .pf-cmp-row>.pf-cmp-me{border-top-color:rgba(165,177,255,.14)}
+html.mf-dark .pf-cmp-them .lucide{background:rgba(255,255,255,.06);color:rgba(255,255,255,.45)}
+
+
+/* Lines and dividers */
+html.mf-dark :is(.pf-why,.pf-measure) .pf-svc-list,html.mf-dark .pf-svc{border-color:rgba(255,255,255,.1)}
+
+/* Navigation */
+html.mf-dark :is(.nav,.navbar,header.site-nav){color:#fff}
+
+html.mf-dark .nav{color:#fff}
+html.mf-dark .nav .wrap,html.mf-dark .nav.scrolled .wrap{background:rgba(22,12,81,.62);border-color:rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 18px 50px -24px rgba(0,0,0,.6)}
+html.mf-dark .nav .logo .logo-ink{opacity:0;pointer-events:none}
+html.mf-dark .nav .logo .logo-light{opacity:1;pointer-events:auto}
+html.mf-dark .nav-links a{color:rgba(255,255,255,.78)}
+html.mf-dark .nav-links a:hover{color:#fff}
+html.mf-dark .burger{color:#fff}
+html.mf-dark .mobile-menu{background:rgba(22,12,81,.96);border-color:rgba(255,255,255,.1);box-shadow:0 24px 60px -28px rgba(0,0,0,.7);color:#fff}
+html.mf-dark .mobile-menu a,html.mf-dark .mobile-menu button:not(.btn){color:#fff;border-color:rgba(255,255,255,.1)}
+html.mf-dark .mobile-menu .btn-grad{color:#160C51}
+
+/* Text that the light theme paints with --ink. */
+html.mf-dark :is(.faq summary,.plan-scope,.plan-inherits,.uc-out h3,.uc-case>p strong,.about-belief h3,.mock-bar-row b){color:#fff}
+html.mf-dark .faq summary:hover{color:#C5CBFF}
+html.mf-dark .faq-i{background:rgba(255,255,255,.08);color:#fff}
+html.mf-dark .faq summary:hover .faq-i{background:rgba(255,255,255,.16)}
+html.mf-dark .faq details[open] .faq-i{background:#fff;color:#160C51}
+
+/* Checker form and modal: a deep-ink card with glass fields. */
+html.mf-dark .form-card{background:linear-gradient(160deg,#211870 0%,#170E57 60%,#120B45 100%);color:#fff;border-color:rgba(255,255,255,.12);box-shadow:0 0 0 1px rgba(165,177,255,.12),0 40px 100px -30px rgba(0,0,0,.8)}
+html.mf-dark .form-card h3{color:#fff}
+html.mf-dark .form-card .sub{color:#B9B6DD}
+html.mf-dark :is(.field label,.field label span,.fine,.fine .svg,.input-icon>.svg){color:#A9A5D4}
+html.mf-dark :is(.field input,.field select){background:rgba(255,255,255,.06);color:#fff;border-color:rgba(255,255,255,.16);box-shadow:none}
+html.mf-dark .field input::placeholder{color:rgba(255,255,255,.42)}
+html.mf-dark :is(.field input,.field select):hover{border-color:rgba(165,177,255,.5)}
+html.mf-dark :is(.field input,.field select):focus{border-color:#A5B1FF;box-shadow:0 0 0 3px rgba(165,177,255,.22)}
+html.mf-dark .field select option{background:#160C51;color:#fff}
+html.mf-dark .input-icon:focus-within>.svg{color:#C5CBFF}
+html.mf-dark .fine{border-color:rgba(255,255,255,.1)}
+html.mf-dark .optional-toggle{color:#C5CBFF}
+html.mf-dark .optional-toggle:hover{color:#fff}
+html.mf-dark .checker-modal-close{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14);color:#fff}
+html.mf-dark .checker-modal-close:hover{background:rgba(255,255,255,.16);color:#fff}
+
+/* Founder note card */
+html.mf-dark .pf-note{background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.02));box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 50px 110px -50px rgba(0,0,0,.8)}
+html.mf-dark .pf-note::before{background:radial-gradient(closest-side,rgba(91,110,240,.4),transparent)}
+html.mf-dark .pf-sign img{box-shadow:0 0 0 3px #1B1263,0 0 0 4px rgba(165,177,255,.4)}
+html.mf-dark .pf-creds li{background:rgba(255,255,255,.06);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+html.mf-dark .pf-creds .lucide{background:rgba(165,177,255,.18);color:#C5CBFF;box-shadow:none}
