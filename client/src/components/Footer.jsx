@@ -38,8 +38,7 @@ export default function Footer() {
               <h4>Product</h4>
               <ul>
                 <li><a href="#check">Free SEO &amp; AI visibility report</a></li>
-                                <li><Link to="/plans">Plans</Link></li>
-                <li><Link to="/use-cases">Use cases</Link></li>
+                <li><Link to="/plans">Plans</Link></li>
               </ul>
             </div>
 

@@ -10,7 +10,6 @@ import { useSite } from '../store/site.jsx';
 const ROUTES = [
   { to: '/services', label: 'Services', note: 'Every SEO service I offer' },
   { to: '/plans', label: 'Plans', note: 'What it costs' },
-  { to: '/use-cases', label: 'Use cases', note: 'Where SEO pays off' },
   { to: '/about', label: 'About', note: 'Who you would be working with' },
 ];
 

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Briefcase,
-  Building2,
   CalendarCheck,
   Gem,
   LayoutDashboard,
@@ -65,7 +64,7 @@ export default function Navbar({ variant = 'landing' }) {
           <nav className="nav-links">
             <Link to="/#measure">AI Visibility</Link>
             <Link to="/services">Services</Link>
-            <Link to="/use-cases">Use cases</Link>
+            <Link to="/plans">Plans</Link>
             <Link to="/about">About</Link>
           </nav>
           <div className="nav-actions">
@@ -126,9 +125,6 @@ export default function Navbar({ variant = 'landing' }) {
         </Link>
         <Link to="/#measure" onClick={() => setOpen(false)}>
           <Briefcase className="lucide svg" /> AI Visibility
-        </Link>
-        <Link to="/use-cases">
-          <Building2 className="lucide svg" /> Use cases
         </Link>
         <Link to="/plans">
           <Gem className="lucide svg" /> Plans

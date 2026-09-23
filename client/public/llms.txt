@@ -33,7 +33,6 @@ customer asks who to use.
 
 - [Home](/): selected work and a free report.
 - [Services](/services): every SEO service in detail.
-- [Use cases](/use-cases): where SEO pays off, by business type.
 - [Plans](/plans): monthly SEO plans.
 - [About](/about): who does the work.
 

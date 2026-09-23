@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-route
 import Landing from './pages/Landing.jsx';
 import ServicesPage from './pages/ServicesPage.jsx';
 import PlansPage from './pages/PlansPage.jsx';
-import UseCasesPage from './pages/UseCasesPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage.jsx';
 import TermsPage from './pages/TermsPage.jsx';
@@ -76,7 +75,6 @@ export default function App() {
           <Route path="/" element={<PageFade><Landing /></PageFade>} />
           <Route path="/services" element={<PageFade><ServicesPage /></PageFade>} />
           <Route path="/plans" element={<PageFade><PlansPage /></PageFade>} />
-          <Route path="/use-cases" element={<PageFade><UseCasesPage /></PageFade>} />
           <Route path="/about" element={<PageFade><AboutPage /></PageFade>} />
           <Route path="/privacy-policy" element={<PageFade><PrivacyPolicyPage /></PageFade>} />
           <Route path="/terms-and-conditions" element={<PageFade><TermsPage /></PageFade>} />
