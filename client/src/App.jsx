@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import Landing from './pages/Landing.jsx';
 import ServicesPage from './pages/ServicesPage.jsx';
 import PlansPage from './pages/PlansPage.jsx';
@@ -30,8 +31,26 @@ import { ToastProvider } from './lib/toast.jsx';
 import { useAuth } from './store/auth.js';
 import { SiteProvider } from './store/site.jsx';
 
+const pageVariants = {
+  initial: { opacity: 0, y: 22 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -14 },
+};
+
+const pageTransition = { duration: 0.42, ease: [0.2, 0.7, 0.2, 1] };
+
 function PageFade({ children }) {
-  return <div className="page-enter">{children}</div>;
+  return (
+    <motion.div
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      transition={pageTransition}
+    >
+      {children}
+    </motion.div>
+  );
 }
 
 function ScrollToTop() {
@@ -62,46 +81,62 @@ function SiteChat() {
   return hidden ? null : <ChatWidget />;
 }
 
+// Nested /app/* navigation (dashboard -> reports, etc.) reuses one collapsed
+// key so AnimatePresence never remounts the persistent dashboard shell -
+// only top-level route changes get a page transition.
+function AppRoutes() {
+  const location = useLocation();
+  const transitionKey = location.pathname.startsWith('/app') ? '/app' : location.pathname;
+
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <Routes location={location} key={transitionKey}>
+        <Route path="/" element={<PageFade><Landing /></PageFade>} />
+        <Route path="/services" element={<PageFade><ServicesPage /></PageFade>} />
+        <Route path="/plans" element={<PageFade><PlansPage /></PageFade>} />
+        <Route path="/about" element={<PageFade><AboutPage /></PageFade>} />
+        <Route path="/privacy-policy" element={<PageFade><PrivacyPolicyPage /></PageFade>} />
+        <Route path="/terms-and-conditions" element={<PageFade><TermsPage /></PageFade>} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/reset-password" element={<ForgotPassword />} />
+        <Route path="/forgot-password" element={<Navigate to="/reset-password" replace />} />
+        <Route path="/reset-password/confirm" element={<ResetPasswordConfirm />} />
+        <Route path="/report/:id" element={<PageFade><PublicReport /></PageFade>} />
+        <Route path="/app" element={<PageFade><AppLayout /></PageFade>}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="new" element={<NewReport />} />
+          <Route path="reports" element={<Reports />} />
+          <Route path="reports/:id" element={<ReportDetail />} />
+          <Route path="businesses" element={<Businesses />} />
+          <Route path="competitors" element={<Competitors />} />
+          <Route path="history" element={<History />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="help" element={<Help />} />
+        </Route>
+        <Route path="*" element={<PageFade><NotFoundPage /></PageFade>} />
+      </Routes>
+    </AnimatePresence>
+  );
+}
+
 export default function App() {
   return (
     <ToastProvider>
       <SiteProvider>
+      <MotionConfig reducedMotion="user">
       <BrowserRouter>
         <AuthBoot />
         <ScrollToTop />
         <Motion3D />
         <a className="skip-link" href="#main">Skip to content</a>
-        <Routes>
-          <Route path="/" element={<PageFade><Landing /></PageFade>} />
-          <Route path="/services" element={<PageFade><ServicesPage /></PageFade>} />
-          <Route path="/plans" element={<PageFade><PlansPage /></PageFade>} />
-          <Route path="/about" element={<PageFade><AboutPage /></PageFade>} />
-          <Route path="/privacy-policy" element={<PageFade><PrivacyPolicyPage /></PageFade>} />
-          <Route path="/terms-and-conditions" element={<PageFade><TermsPage /></PageFade>} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/reset-password" element={<ForgotPassword />} />
-          <Route path="/forgot-password" element={<Navigate to="/reset-password" replace />} />
-          <Route path="/reset-password/confirm" element={<ResetPasswordConfirm />} />
-          <Route path="/report/:id" element={<PageFade><PublicReport /></PageFade>} />
-          <Route path="/app" element={<PageFade><AppLayout /></PageFade>}>
-            <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="new" element={<NewReport />} />
-            <Route path="reports" element={<Reports />} />
-            <Route path="reports/:id" element={<ReportDetail />} />
-            <Route path="businesses" element={<Businesses />} />
-            <Route path="competitors" element={<Competitors />} />
-            <Route path="history" element={<History />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="help" element={<Help />} />
-          </Route>
-          <Route path="*" element={<PageFade><NotFoundPage /></PageFade>} />
-        </Routes>
+        <AppRoutes />
         <CheckerModal />
         <SiteChat />
       </BrowserRouter>
+      </MotionConfig>
       </SiteProvider>
     </ToastProvider>
   );
